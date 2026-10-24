@@ -1,10 +1,9 @@
 {
-  apiKey: "AIzaSyATeYa7rdZP0jCcag_gxxSFVB8fs7b_zQg",
-  authDomain: "splitledger-3f099.firebaseapp.com",
-  databaseURL: "https://splitledger-3f099-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "splitledger-3f099",
-  storageBucket: "splitledger-3f099.firebasestorage.app",
-  messagingSenderId: "921192539202",
-  appId: "1:921192539202:web:6531740d829f6f6511b9db",
-  measurementId: "G-6W0D1Z4H3L"
-};
+  "apiKey": "AIzaSyATeYa7rdZP0jCcag_gxxSFVB8fs7b_zQg",
+  "authDomain": "splitledger-3f099.firebaseapp.com",
+  "databaseURL": "https://splitledger-3f099-default-rtdb.asia-southeast1.firebasedatabase.app",
+  "projectId": "splitledger-3f099",
+  "storageBucket": "splitledger-3f099.firebasestorage.app",
+  "messagingSenderId": "921192539202",
+  "appId": "1:921192539202:web:6531740d829f6f6511b9db"
+}
