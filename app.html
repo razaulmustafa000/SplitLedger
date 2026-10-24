@@ -83,24 +83,62 @@ textarea{width:100%;border-radius:12px;border:1px solid var(--ln);background:var
 .kv{display:flex;justify-content:space-between;gap:8px;font-size:.85em;padding:3px 0}.kv span{color:var(--sub)}
 .fl .stt{align-self:flex-start}.seg button.on:disabled{opacity:1}
 
+
 #app.gate #top,#app.gate #nav{display:none}
 .gw{flex:1;display:flex;flex-direction:column;justify-content:center;gap:14px;padding:6px 4px;min-height:0}
-.logo{width:68px;height:68px;border-radius:20px;background:#14180F;display:grid;place-items:center;margin:0 auto;box-shadow:0 10px 30px rgba(184,240,62,.15)}
+.logo{width:68px;height:68px;border-radius:20px;background:#14180F;display:grid;place-items:center;margin:0 auto;box-shadow:0 10px 30px rgba(184,240,62,.15);flex:none}
 .logo svg{width:38px;height:38px}
 .gt{font-size:1.9em;font-weight:800;text-align:center;letter-spacing:-.02em;color:var(--tx)}
 .gs{text-align:center;color:var(--sub);font-size:.9em;line-height:1.5}
-.gbtn{display:flex;align-items:center;justify-content:center;gap:10px;height:52px;border-radius:14px;background:#fff!important;color:#1F1F1F!important;border:1px solid #DADCE0!important;font-weight:700;font-size:1em;box-shadow:var(--sh)}
+.gbtn{display:flex;align-items:center;justify-content:center;gap:10px;height:52px;border-radius:14px;background:#fff!important;color:#1F1F1F!important;border:1px solid #DADCE0!important;font-weight:700;font-size:1em;box-shadow:var(--sh);flex:none}
 .gbtn svg{width:20px;height:20px}
 .mac{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end;max-width:46%}
 .mini{font-size:.72em;font-weight:700;padding:6px 10px;border-radius:99px;background:var(--chip);color:var(--tx);white-space:nowrap}
 .mini.ok{background:var(--pri);color:var(--on)}.mini.dng{color:var(--r)}
 button.mc{text-align:left}
+/* ===== motion ===== */
+:root{--ease:cubic-bezier(.22,.8,.24,1)}
+#main.in-r>*{animation:inR .34s var(--ease) both}
+#main.in-l>*{animation:inL .34s var(--ease) both}
+#main.in-f>*{animation:inF .3s var(--ease) both}
+#main.in-s>*:not(.hd):not(.seg):not(.chips):not(input){animation:inF .26s var(--ease) both}
+#main.in-r>*:nth-child(2),#main.in-l>*:nth-child(2),#main.in-f>*:nth-child(2),#main.in-s>*:nth-child(2){animation-delay:.03s}
+#main.in-r>*:nth-child(3),#main.in-l>*:nth-child(3),#main.in-f>*:nth-child(3),#main.in-s>*:nth-child(3){animation-delay:.06s}
+#main.in-r>*:nth-child(n+4),#main.in-l>*:nth-child(n+4),#main.in-f>*:nth-child(n+4),#main.in-s>*:nth-child(n+4){animation-delay:.09s}
+@keyframes inR{from{opacity:0;transform:translateX(24px)}}
+@keyframes inL{from{opacity:0;transform:translateX(-24px)}}
+@keyframes inF{from{opacity:0;transform:translateY(8px)}}
+#ov{display:flex;visibility:hidden;opacity:0;transition:opacity .28s var(--ease),visibility 0s linear .34s}
+#ov.show{visibility:visible;opacity:1;transition:opacity .28s var(--ease),visibility 0s}
+.sh{animation:none;transform:translateY(105%);transition:transform .34s var(--ease)}
+#ov.show .sh{transform:none}
+.sh.swp>*:not(h3){animation:inF .24s var(--ease) both}
+.nb{transition:background-color .3s var(--ease),color .3s var(--ease),padding .34s var(--ease),gap .34s var(--ease);gap:0}
+.nb span{display:inline-block!important;max-width:0;opacity:0;overflow:hidden;white-space:nowrap;transition:max-width .34s var(--ease),opacity .22s var(--ease)}
+.nb.on{gap:6px}
+.nb.on span{max-width:110px;opacity:1}
+[data-v=glass] .nb.on span{max-width:0;opacity:0}
+[data-v=glass] .nb.on::before{animation:inF .3s var(--ease)}
+#ts{transition:opacity .25s var(--ease),transform .25s var(--ease);transform:translate(-50%,-6px)}
+#ts.show{transform:translate(-50%,0)}
+.sc,.chip,.btn,.opt,.fld,.ib,.mini,.li{transition:transform .15s var(--ease),background-color .25s var(--ease),border-color .25s var(--ease)}
+.sc:active,.chip:active,.btn:active,.opt:active,.fld:active,.ib:active,.mini:active{transform:scale(.97)}
+@media (prefers-reduced-motion:reduce){#main>*,.sh.swp>*{animation:none!important}#ov,.sh,.nb,.nb span,#ts{transition:none!important}}
+/* developer contact */
+.dev{display:flex;flex-direction:column;align-items:center;gap:8px;margin-top:6px;padding-top:12px;border-top:1px solid var(--ln)}
+.dev>span{font-size:.72em;color:var(--sub);font-weight:600;letter-spacing:.02em}
+.devi{display:flex;gap:12px}
+.dv{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;color:#fff;box-shadow:var(--sh);transition:transform .15s var(--ease)}
+.dv:active{transform:scale(.92)}
+.dv svg{width:20px;height:20px}
+.dv.wa{background:#25D366}.dv.li2{background:#0A66C2}.dv.pf2{background:var(--pri);color:var(--on)}
+.sh .dev{margin-top:10px}
 </style></head><body><div id="app"><div id="top"></div><div id="main"></div><nav id="nav"></nav><div id="ov"></div><div id="ts" role="status" aria-live="polite"></div></div><script>
 'use strict';
 const I={help:'<circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 2.5-3 4M12 17h.01"/>',bell:'<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.9 1.9 0 0 0 3.4 0"/>',moon:'<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>',sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',gear:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/>',link:'<path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/>',list:'<path d="M5 3h14v18l-3-2-2 2-2-2-2 2-2-2-3 2ZM9 8h6M9 12h6"/>',swap:'<path d="M7 4 3 8l4 4M3 8h14M17 20l4-4-4-4M21 16H7"/>',grid:'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',plus:'<path d="M12 5v14M5 12h14"/>',chart:'<path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/>',edit:'<path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/>',trash:'<path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/>',l:'<path d="m15 18-6-6 6-6"/>',r:'<path d="m9 18 6-6-6-6"/>',d:'<path d="m6 9 6 6 6-6"/>',ok:'<path d="m5 12 5 5L20 7"/>',x:'<path d="M18 6 6 18M6 6l12 12"/>',cam:'<path d="M4 8h3l2-3h6l2 3h3v11H4Z"/><circle cx="12" cy="13" r="3.5"/>',wifi:'<path d="M2 9a15 15 0 0 1 20 0M5 12.5a10 10 0 0 1 14 0M8.5 16a5 5 0 0 1 7 0M12 19.5h.01"/>',users:'<circle cx="9" cy="8" r="3.5"/><path d="M2 20a7 7 0 0 1 14 0M17 4.5a3.5 3.5 0 0 1 0 7M22 20a7 7 0 0 0-4-6.3"/>',user:'<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',bolt:'<path d="M13 2 4 14h7l-1 8 9-12h-7Z"/>',cart:'<circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2 3h3l2.7 12.4a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.5L21 8H6"/>',home:'<path d="m3 11 9-8 9 8M5 10v10h14V10"/>',tag:'<path d="M3 12V3h9l9 9-9 9Z"/><circle cx="7.5" cy="7.5" r="1"/>',lock:'<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',warn:'<circle cx="12" cy="12" r="10"/><path d="M12 8v5M12 16h.01"/>',layout:'<rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18M9 21V9"/>',cloud:'<path d="M17.5 19a4.5 4.5 0 1 0-1.4-8.8A6 6 0 0 0 4.5 13 3 3 0 0 0 6 19Z"/>',refresh:'<path d="M21 12a9 9 0 1 1-2.6-6.4L21 8M21 3v5h-5"/>',copy:'<rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/>'};
-/* ===== SplitLedger v2.0 ===== */
+/* ===== SplitLedger v2.1 ===== */
 /* Optional: paste your server link here so nobody has to type it. Example: 'https://yourname.github.io/splitledger' */
-const SERVER = '';
+const SERVER = 'https://razaulmustafa000.github.io/SplitLedger';
 const ADMIN = 'razaunar000@gmail.com';
 
 const $ = s => document.querySelector(s);
@@ -316,28 +354,37 @@ function topbar() {
 }
 function myName() { const m = MB[ME.ek]; return (m && (m.name || '').trim()) || (V.auth && V.auth.name) || String(ME.email).split('@')[0] || 'Me'; }
 const NV = [['ledger', 'Ledger', 'list'], ['debts', 'Debts', 'swap'], ['dash', 'Dashboard', 'grid'], ['add', 'Add', 'plus'], ['ins', 'Insights', 'chart']];
-const nav = () => NV.map(([k, l, i]) => `<button class="nb${tab == k ? ' on' : ''}" onclick="go('${k}')" aria-label="${l}">${ic(i)}<span>${l}</span></button>`).join('');
+const nav = () => NV.map(([k, l, i]) => `<button class="nb${tab == k ? ' on' : ''}" data-k="${k}" onclick="go('${k}')" aria-label="${l}">${ic(i)}<span>${l}</span></button>`).join('');
 
 function render() {
   const h = document.documentElement, app = $('#app');
   h.dataset.t = V.th; h.dataset.fs = V.fs; h.dataset.v = V.vw == 'g' ? 'glass' : 'classic';
   const g = gateView();
   app.classList.toggle('gate', !!g);
-  if (g) { $('#top').innerHTML = ''; $('#nav').innerHTML = ''; $('#main').innerHTML = H(g); }
+  const main = $('#main'), vk = g ? 'gate:' + g.length : [tab, isub, pg, dpg, tpg, mpg, hpg, cf, pf, V.vw, F.edit].join('|');
+  let anim = '';
+  if (g || _ltab == 'gate') { if (vk != _vk) anim = 'in-f'; }
+  else if (tab != _ltab) anim = NV.findIndex(x => x[0] == tab) > NV.findIndex(x => x[0] == _ltab) ? 'in-r' : 'in-l';
+  else if (vk != _vk) anim = 'in-s';
+  if (g) { $('#top').innerHTML = ''; $('#nav').innerHTML = ''; main.innerHTML = H(g); }
   else {
     $('#top').innerHTML = H(topbar());
-    $('#main').innerHTML = H(({ dash, ledger, debts, add, ins })[tab]());
-    $('#nav').innerHTML = H(nav());
+    main.innerHTML = H(({ dash, ledger, debts, add, ins })[tab]());
+    const nb = $('#nav').querySelectorAll('.nb');
+    if (nb.length == NV.length) nb.forEach(b => b.classList.toggle('on', b.dataset.k == tab));
+    else $('#nav').innerHTML = H(nav());
     if (tab == 'add') pv();
     if (tab !== _lt) { _lt = tab; if (!_pp) try { history.pushState({ tab }, ''); } catch (e) { } }
   }
+  if (anim) { main.classList.remove('in-r', 'in-l', 'in-s', 'in-f'); void main.offsetWidth; main.classList.add(anim); }
+  _ltab = g ? 'gate' : tab; _vk = vk;
   _pend = 0;
   const m = document.querySelector('meta[name=theme-color]');
   if (m) m.content = getComputedStyle(h).getPropertyValue('--bg').trim() || '#0D100A';
 }
 function topR() { if (!$('#app').classList.contains('gate')) $('#top').innerHTML = H(topbar()); }
 /* re-render without kicking someone out of a field they are typing in */
-var _pend = 0;
+var _pend = 0, _ltab = 'dash', _vk = '';
 function soft() {
   const a = document.activeElement;
   if (tab == 'add' || (a && /^(INPUT|TEXTAREA)$/.test(a.tagName) && a.closest('#main'))) { _pend = 1; topR(); }
@@ -351,8 +398,14 @@ function go(k) {
   tab = k; pg = 0; dpg = 0; tpg = 0; cf = 'all'; pf = null; sel = 'all'; qs = ''; render();
 }
 function toast(m) { const t = $('#ts'); t.textContent = m; t.classList.add('show'); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('show'), 2200); }
-function ov(h) { const o = $('#ov'); o.innerHTML = H(`<div class="sh">${h}</div>`); o.classList.add('show'); }
-function cl() { const o = $('#ov'); if (o.dataset.lk) return; o.style.background = ''; o.classList.remove('show'); }
+function ov(h) {
+  const o = $('#ov'), quick = Date.now() - (o._c || 0) < 120, open = o.classList.contains('show') || quick;
+  clearTimeout(o._t);
+  o.innerHTML = H(`<div class="sh${open ? ' swp' : ''}">${h}</div>`);
+  if (quick) o.classList.add('show');
+  else if (!open) { void o.offsetWidth; o.classList.add('show'); }
+}
+function cl() { const o = $('#ov'); if (o.dataset.lk) return; o._c = Date.now(); o.classList.remove('show'); clearTimeout(o._t); o._t = setTimeout(() => { o.style.background = ''; if (!o.classList.contains('show')) o.innerHTML = ''; }, 340); }
 $('#ov').addEventListener('click', e => { if (e.target.id == 'ov') cl(); });
 const X = `<button class="ib" onclick="cl()" aria-label="Close">${ic('x')}</button>`;
 function dd(t, o, cur, fn) {
@@ -369,13 +422,14 @@ function needOk() { if (approved()) return false; toast('Waiting for admin appro
 /* ===== Sign-in screens ===== */
 const LOGO = `<div class="logo"><svg viewBox="0 0 24 24"><path d="M5 3h14v18l-3-2-2 2-2-2-2 2-2-2-3 2Z" fill="#B8F03E"/><path d="M9 8h6M9 12h6M9 16h4" stroke="#14180F" stroke-width="1.9" stroke-linecap="round"/></svg></div>`;
 const GG = `<svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>`;
+const DEV = `<div class="dev"><span>Developed by Raza Ul Mustafa</span><div class="devi"><a class="dv wa" href="https://wa.me/923282879861" target="_blank" rel="noopener" aria-label="WhatsApp"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a9.9 9.9 0 0 0-8.5 15l-1.4 5 5.2-1.4A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3.1.8.8-3-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.4.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.1-1.2l-.4-.3Z"/></svg></a><a class="dv li2" href="https://www.linkedin.com/in/raza-ul-mustafa-575762363/" target="_blank" rel="noopener" aria-label="LinkedIn"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M20.4 20.5h-3.6v-5.6c0-1.3 0-3-1.8-3s-2.1 1.4-2.1 2.9v5.7H9.3V9h3.4v1.6h.1a3.8 3.8 0 0 1 3.4-1.9c3.6 0 4.3 2.4 4.3 5.5v6.3ZM5.3 7.4a2.1 2.1 0 1 1 0-4.2 2.1 2.1 0 0 1 0 4.2ZM7.1 20.5H3.5V9h3.6v11.5Z"/></svg></a><a class="dv pf2" href="https://rzaulmustafa.netlify.app/" target="_blank" rel="noopener" aria-label="Portfolio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg></a></div></div>`;
 function gateView() {
   if (DEMO) return '';
-  if (!srv() || !V.cfg) return `<div class="gw">${LOGO}<div class="gt">SplitLedger</div><div class="gs">Shared expenses for your room, settled fairly.</div><div><div class="lab">Server link from your admin</div><input id="srv" placeholder="https://yourname.github.io/splitledger" value="${esc(V.srv || SERVER)}" autocomplete="off" inputmode="url"></div><button class="btn" onclick="setSrv()">Continue</button>${SERVER ? '' : '<button class="lk" style="align-self:center" onclick="demo()">Explore a demo with sample data</button>'}</div>`;
-  if (!V.auth) return `<div class="gw">${LOGO}<div class="gt">SplitLedger</div><div class="gs">Sign in to see your room's ledger.<br>Only people invited by the admin can get in.</div><button class="gbtn" onclick="login()">${GG}Continue with Google</button>${V.lmsg ? `<div class="note">${esc(V.lmsg)}</div>` : ''}<div class="gs" style="font-size:.74em">${isApp ? 'Your browser opens to sign in. When it is done, tap Open SplitLedger to come back.' : ''}</div>${SERVER ? '' : `<button class="lk" style="align-self:center" onclick="chSrv()">Change server link</button>`}</div>`;
+  if (!srv() || !V.cfg) return `<div class="gw">${LOGO}<div class="gt">SplitLedger</div><div class="gs">Shared expenses for your room, settled fairly.</div><div><div class="lab">Server link from your admin</div><input id="srv" placeholder="https://yourname.github.io/splitledger" value="${esc(V.srv || SERVER)}" autocomplete="off" inputmode="url"></div><button class="btn" onclick="setSrv()">Continue</button>${SERVER ? '' : '<button class="lk" style="align-self:center" onclick="demo()">Explore a demo with sample data</button>'}${DEV}</div>`;
+  if (!V.auth) return `<div class="gw">${LOGO}<div class="gt">SplitLedger</div><div class="gs">Sign in to see your room's ledger.<br>Only people invited by the admin can get in.</div><button class="gbtn" onclick="login()">${GG}Continue with Google</button>${V.lmsg ? `<div class="note">${esc(V.lmsg)}</div>` : ''}<div class="gs" style="font-size:.74em">${isApp ? 'Your browser opens to sign in. When it is done, tap Open SplitLedger to come back.' : ''}</div>${SERVER ? '' : `<button class="lk" style="align-self:center" onclick="chSrv()">Change server link</button>`}${DEV}</div>`;
   if (ME.status == 'loading' || !ME.status) return `<div class="gw">${LOGO}<div class="gs">Checking your access…</div></div>`;
   if (ME.status == 'error') return `<div class="gw">${LOGO}<div class="gt" style="font-size:1.3em">Can't reach the server</div><div class="gs">${esc(ME.err || 'Check the internet connection and try again.')}</div><button class="btn" onclick="checkMember()">${ic('refresh')}Try again</button><button class="btn gh" onclick="signOutAsk()">Sign out</button></div>`;
-  if (ME.status == 'none') return `<div class="gw">${LOGO}<div class="gt" style="font-size:1.3em">This account isn't invited</div><div class="gs">You signed in as <b>${esc(ME.email)}</b>.<br>Ask the admin to add this email in SplitLedger. This screen opens the app by itself once you are added.</div><button class="btn gh" onclick="signOutLocal()">Use another Google account</button></div>`;
+  if (ME.status == 'none') return `<div class="gw">${LOGO}<div class="gt" style="font-size:1.3em">This account isn't invited</div><div class="gs">You signed in as <b>${esc(ME.email)}</b>.<br>Ask the admin to add this email in SplitLedger. This screen opens the app by itself once you are added.</div><button class="btn gh" onclick="signOutLocal()">Use another Google account</button>${DEV}</div>`;
   return '';
 }
 
@@ -736,7 +790,7 @@ function guide() {
     ['Month end', 'Admin opens Insights, Admin, Close month. Entries and payments move to History, where each month can be opened and exported.'],
     ['Safety', 'Risky actions ask first. Admin can see every action in the Activity log. You can set an app lock PIN in Settings, Advanced.']
   ];
-  return S.map(([t, d], i) => `<div class="opt" style="align-items:flex-start"><span class="ci" style="width:26px;height:26px;border-radius:50%;font-weight:800">${i + 1}</span><div class="fl"><b>${t}</b><i style="white-space:normal">${esc(d)}</i></div></div>`).join('');
+  return S.map(([t, d], i) => `<div class="opt" style="align-items:flex-start"><span class="ci" style="width:26px;height:26px;border-radius:50%;font-weight:800">${i + 1}</span><div class="fl"><b>${t}</b><i style="white-space:normal">${esc(d)}</i></div></div>`).join('') + DEV;
 }
 
 /* ===== Activity log and CSV ===== */
@@ -772,10 +826,10 @@ function hp(s) { let h = 5381; for (const c of 'sl' + s) h = ((h * 33) ^ c.charC
 function lockScreen() {
   const o = $('#ov');
   o.innerHTML = H(`<div class="sh"><h3>Enter your app PIN</h3><input id="pn" type="password" inputmode="numeric" maxlength="6" placeholder="PIN" autocomplete="off"><button class="btn" onclick="ul()">Unlock</button><button class="btn gh" onclick="forgotPin()">Forgot PIN? Sign out</button></div>`);
-  o.dataset.lk = 1; o.style.background = 'var(--bg)'; o.classList.add('show');
+  o.dataset.lk = 1; o.style.background = 'var(--bg)'; void o.offsetWidth; o.classList.add('show');
   setTimeout(() => { const p = $('#pn'); if (p) p.focus(); }, 50);
 }
-function unlock() { const o = $('#ov'); delete o.dataset.lk; o.style.background = ''; cl(); }
+function unlock() { const o = $('#ov'); delete o.dataset.lk; cl(); }
 function ul() {
   const r = V.pl || { n: 0, u: 0 };
   if (Date.now() < r.u) return toast(`Too many tries. Wait ${Math.ceil((r.u - Date.now()) / 1000)} seconds`);
