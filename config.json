@@ -1,4 +1,4 @@
-const firebaseConfig = {
+{
   apiKey: "AIzaSyATeYa7rdZP0jCcag_gxxSFVB8fs7b_zQg",
   authDomain: "splitledger-3f099.firebaseapp.com",
   databaseURL: "https://splitledger-3f099-default-rtdb.asia-southeast1.firebasedatabase.app",
