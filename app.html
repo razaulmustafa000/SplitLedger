@@ -1,0 +1,1224 @@
+<!DOCTYPE html><html lang="en" data-t="indigo" data-fs="n"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>SplitLedger</title><meta name="theme-color" content="#0D100A"><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"><style>
+
+:root,:root[data-t=indigo]{--on:#fff;--bg:#EEF0FA;--card:#fff;--tx:#14142B;--sub:#5F647C;--ln:#E4E6F2;--pri:#4F46E5;--soft:#EDEEFF;--h1:#1E1B4B;--h2:#312E81;--g:#087F5B;--r:#D61F45;--gb:#DDF5EA;--chip:#F0F1F8;--sh:0 2px 10px rgba(30,27,75,.07);--glow:rgba(79,70,229,.4);--am:#B45309}
+:root[data-t=light]{--bg:#fff;--soft:#F0F4FF;--chip:#F3F4F6;--ln:#E5E7EB;--h2:#4338CA}
+:root[data-t=fb]{--bg:#F0F2F5;--tx:#050505;--sub:#65676B;--ln:#DADDE1;--pri:#1877F2;--soft:#E7F1FF;--h1:#0A4FB8;--h2:#1877F2;--glow:rgba(24,119,242,.4);--chip:#F0F2F5}
+:root[data-t=wa]{--bg:#F5F6F6;--tx:#111B21;--sub:#54656F;--ln:#E1E5E8;--pri:#008069;--soft:#DDF6EE;--h1:#005C4B;--h2:#008069;--glow:rgba(0,128,105,.4);--chip:#EEF1F2;--g:#00704F}
+:root[data-t=amoled]{--bg:#000;--card:#101014;--tx:#F4F4F8;--sub:#A3A6BA;--ln:#25252D;--pri:#8B5CF6;--soft:#1D1535;--h1:#150B33;--h2:#3B1D8F;--g:#34D399;--r:#FB7185;--gb:#0B2B21;--chip:#1A1A21;--sh:none;--glow:rgba(139,92,246,.5);--am:#FBBF24}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden;background:var(--bg)}
+body{font-family:'Plus Jakarta Sans',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;color:var(--tx);font-variant-numeric:tabular-nums;display:flex;justify-content:center}
+#app{position:relative;width:100%;max-width:420px;height:100vh;height:100dvh;overflow:hidden!important;display:flex;flex-direction:column;background:var(--bg);font-size:13px;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+:root[data-fs=s] #app{font-size:12px}:root[data-fs=l] #app{font-size:14.5px}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;text-align:inherit}button:disabled{opacity:.4}
+input{font:inherit;color:var(--tx);background:var(--card);border:1px solid var(--ln);border-radius:12px;padding:.75em 1em;width:100%;outline:0}input:focus{border-color:var(--pri)}input.amt{font-size:1.7em;font-weight:800}
+svg.i{width:1.25em;height:1.25em;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;flex:none}
+#top{display:flex;justify-content:space-between;align-items:center;padding:8px 10px 6px;gap:6px;flex:none}
+.rt{display:flex;gap:4px;align-items:center}
+.pill{display:flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--ln);border-radius:99px;padding:3px 11px 3px 3px;box-shadow:var(--sh);min-width:0;flex:0 1 auto;max-width:150px}.pill span{font-weight:700;font-size:.85em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.av{border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:700;background-size:cover;background-position:center;flex:none}
+.live{display:flex;align-items:center;gap:3px;background:var(--gb);color:var(--g);font-weight:800;font-size:.66em;letter-spacing:.04em;padding:6px 8px;border-radius:99px;white-space:nowrap;margin-right:2px}.live.off{background:var(--chip);color:var(--sub)}.live.err{background:var(--chip);color:var(--r)}.live svg{width:1em;height:1em}
+.ib{width:34px;height:34px;border-radius:9px;background:var(--card);border:1px solid var(--ln);display:grid;place-items:center;position:relative;box-shadow:var(--sh);flex:none}
+.bd{position:absolute;top:-5px;right:-5px;background:var(--r);color:#fff;font-size:.62em;min-width:15px;height:15px;border-radius:9px;display:grid;place-items:center;font-weight:700;padding:0 3px;font-style:normal}
+#main{flex:1;min-height:0;padding:4px 10px 8px;display:flex;flex-direction:column;gap:8px;overflow:hidden}
+.card{background:var(--card);border-radius:16px;box-shadow:var(--sh);border:1px solid var(--ln)}.pad{padding:9px 11px}
+.hero{background:linear-gradient(135deg,var(--h1),var(--h2));color:#fff;border-radius:20px;padding:12px 14px;box-shadow:0 10px 24px -10px var(--glow);flex:none}
+.hero .t{display:flex;justify-content:space-between;align-items:center;font-size:.68em;letter-spacing:.1em;font-weight:700;color:#E0E3FF}
+.mp{background:rgba(45,212,191,.2);color:#5EEAD4;padding:3px 8px;border-radius:99px;font-size:.95em}
+.hero .big{font-size:2.1em;font-weight:800;margin:4px 0 8px;letter-spacing:-.02em}
+.hero .row{display:flex;border-top:1px solid rgba(255,255,255,.18);padding-top:8px}.hero .row>div{flex:1}.hero small{display:block;font-size:.72em;color:#D4D8FF}.hero .row b{font-size:1.05em}.in{color:#4ADE80}.out{color:#FDA4AF}
+.g6{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(3,1fr);gap:8px}
+.sc{background:var(--card);border:1px solid var(--ln);border-radius:14px;padding:6px 10px;display:flex;flex-direction:column;justify-content:center;box-shadow:var(--sh);min-height:0;position:relative;overflow:hidden}
+.sc.on{border:1.5px solid var(--pri);background:var(--soft)}.sc .sl{font-size:.72em;color:var(--sub);font-weight:600}.sc b{font-size:1.1em;font-weight:800}.sc i,.sub{font-style:normal;font-size:.7em;color:var(--sub)}.si{position:absolute;top:7px;right:8px;color:var(--pri)}
+.pos{color:var(--g)}.neg{color:var(--r)}
+.bar{height:8px;border-radius:9px;background:var(--chip);overflow:hidden}.bar>i{display:block;height:100%;border-radius:9px;background:linear-gradient(90deg,var(--pri),#A78BFA);transition:width .5s}
+.bh{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}.bh b{font-size:.85em}.bh span{font-size:.8em;font-weight:700}
+.sync{flex:1.15;min-height:0;display:flex;flex-direction:column;padding:9px 10px;gap:6px}.g4{flex:1;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:6px;min-height:0}
+.mc{background:var(--chip);border-radius:12px;padding:6px 9px;display:flex;flex-direction:column;justify-content:center;gap:2px;min-height:0}.mh{display:flex;align-items:center;gap:6px}.dt{width:9px;height:9px;border-radius:50%;flex:none}
+.cn{align-self:flex-start;background:var(--gb);color:var(--g);font-size:.66em;font-weight:800;padding:2px 7px;border-radius:99px}.cn.pz{background:var(--soft);color:var(--sub)}
+.lk{color:var(--pri);font-weight:700;font-size:.8em;display:flex;align-items:center;gap:6px}
+#nav{display:flex;align-items:center;justify-content:space-between;gap:6px;background:var(--card);margin:0 10px 10px;padding:6px;border-radius:99px;border:1px solid var(--ln);flex:none;position:relative;z-index:5}
+.nb{display:flex;align-items:center;justify-content:center;gap:6px;height:44px;min-width:44px;border-radius:99px;background:var(--chip);color:var(--tx);font-size:.82em;font-weight:700}.nb span{display:none}.nb.on{background:var(--navon,var(--pri));color:var(--navc,var(--on));padding:0 16px}.nb.on span{display:inline}
+.hd{display:flex;flex-direction:column;align-items:flex-start;gap:1px}.hd b{font-size:1.55em;font-weight:700;letter-spacing:-.01em}
+.lab{font-size:.68em;color:var(--sub);font-weight:700;letter-spacing:.05em;margin:0 0 4px 2px;text-transform:uppercase}.nt{margin:4px 0 0 2px}
+.seg{display:flex;background:var(--chip);border-radius:12px;padding:3px;gap:3px}.seg button{flex:1;text-align:center;padding:.55em 0;border-radius:9px;font-weight:600;font-size:.85em;color:var(--sub)}.seg button.on{background:var(--card);color:var(--pri);box-shadow:var(--sh)}
+.chips{display:flex;flex-wrap:wrap;gap:5px}.chip,.tag{padding:.38em .8em;border-radius:99px;background:var(--card);border:1px solid var(--ln);font-size:.8em;font-weight:600;color:var(--sub);display:flex;align-items:center;gap:4px}.chip.on,.tag{background:var(--pri);border-color:var(--pri);color:var(--on)}.tag{align-self:flex-start}.tag svg{width:1em;height:1em}
+.lst{flex:1;min-height:0;display:flex;flex-direction:column;gap:6px}
+.li,.rw{display:flex;align-items:center;gap:9px}.li{background:var(--card);border:1px solid var(--ln);border-radius:14px;padding:8px 10px;box-shadow:var(--sh)}.rw{padding:5px 0}.li.ps{opacity:.5}
+.ci{width:34px;height:34px;border-radius:11px;background:var(--soft);color:var(--pri);display:grid;place-items:center;flex:none}
+.fl{flex:1;min-width:0;display:flex;flex-direction:column}.fl b,.fl span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.92em}.fl i{font-style:normal;font-size:.7em;color:var(--sub);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rg{text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:3px}.ac{display:flex;gap:10px;color:var(--sub)}.ac svg{width:1.05em;height:1.05em}
+.pg{display:flex;justify-content:space-between;align-items:center;flex:none}.pg button{display:flex;align-items:center;gap:2px;padding:.5em .8em;border-radius:10px;background:var(--card);border:1px solid var(--ln);font-weight:600;font-size:.85em}
+.em{text-align:center;color:var(--sub);padding:18px 0;font-size:.9em}
+.fld{width:100%;display:flex;justify-content:space-between;align-items:center;padding:.75em 1em;border:1px solid var(--ln);border-radius:12px;background:var(--card);font-weight:600}
+.btn{background:var(--pri);color:var(--on);border-radius:13px;padding:.8em 1em;text-align:center;font-weight:700;display:flex;justify-content:center;align-items:center;gap:6px;flex:none}.btn.gh{background:var(--chip);color:var(--tx)}.btn.dng{background:var(--r);color:#fff}[data-t=amoled] .btn.dng,[data-t=olive] .btn.dng{color:#000}
+#pv{display:flex;flex-wrap:wrap;gap:6px;align-items:center}#pv span{background:var(--chip);border-radius:99px;padding:.3em .7em;font-size:.8em;font-weight:600}
+#ov{position:absolute;inset:0;background:rgba(5,5,20,.55);display:none;align-items:flex-end;z-index:20}#ov.show{display:flex}
+.sh{width:100%;background:var(--card);border-radius:22px 22px 0 0;padding:14px 14px calc(16px + env(safe-area-inset-bottom,0px));max-height:90%;overflow:auto;display:flex;flex-direction:column;gap:7px;animation:up .22s ease}@keyframes up{from{transform:translateY(40px);opacity:0}}
+.sh h3{font-size:1.1em;display:flex;justify-content:space-between;align-items:center}
+.opt{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:12px;border:1px solid var(--ln);width:100%;color:var(--tx)}.opt.on{border-color:var(--pri);background:var(--soft)}.opt>svg{color:var(--pri)}
+.sw{width:22px;height:22px;border-radius:50%;border:1px solid var(--ln);flex:none}
+.pc{display:flex;align-items:center;gap:12px}.pc .btn{flex:1}.cap{display:flex;gap:8px;align-items:center}.cap input{flex:1}
+#ts{position:absolute;top:64px;left:50%;transform:translateX(-50%);background:var(--tx);color:var(--bg);padding:.6em 1.1em;border-radius:99px;font-weight:600;font-size:.85em;opacity:0;pointer-events:none;transition:.2s;z-index:30;white-space:nowrap}#ts.show{opacity:1}
+:root[data-t=olive]{--on:#101405;--bg:#0D100A;--card:#1B1D18;--tx:#F3F5EC;--sub:#A2A99A;--ln:#2A2D25;--pri:#B8F03E;--soft:#252B19;--h1:#1F3A0E;--h2:#4F8A1E;--g:#B8F03E;--r:#FF9AA2;--gb:#26301A;--chip:#272922;--sh:none;--glow:rgba(184,240,62,.3);--navon:#F4F5EF;--navc:#111;--am:#FBBF24}
+[data-t=olive] #app{background:linear-gradient(180deg,#3A4A1C 0,#0D100A 36%,#0D100A 68%,#2B3A17 100%)}
+[data-t=olive] .seg{background:#1B1D18;border-radius:99px}[data-t=olive] .seg button{border-radius:99px}[data-t=olive] .seg button.on{background:var(--pri);color:var(--on);box-shadow:none}
+[data-t=olive] .ci{background:#F4F5EF;color:#111}[data-t=olive] .li,[data-t=olive] .card,[data-t=olive] .sc{border-color:transparent;border-radius:22px}[data-t=olive] .sc.on{border:1.5px solid var(--pri)}[data-t=olive] .li .rg>b{color:var(--g)}
+[data-t=olive] .pill,[data-t=olive] .ib{background:#272922;border-color:transparent}[data-t=olive] .hero{border-radius:26px}
+.ib.on{color:var(--pri);border-color:var(--pri)}
+:root[data-v=glass]{--on:#04121f;--bg:#08111f;--card:rgba(255,255,255,.08);--tx:#F2F7FF;--sub:#A9B8D0;--ln:rgba(255,255,255,.14);--pri:#4DB4FF;--soft:rgba(77,180,255,.18);--h1:#0E3F7A;--h2:#12907A;--g:#4ADE80;--r:#FF8F8F;--gb:rgba(74,222,128,.16);--chip:rgba(255,255,255,.08);--sh:none;--glow:rgba(45,212,191,.3);--navon:transparent;--navc:#4DB4FF;--am:#FBBF24}
+[data-v=glass] #app{background:radial-gradient(120% 60% at 95% 28%,rgba(16,185,129,.55),transparent 60%),linear-gradient(170deg,#0B2A66 0%,#0A1E40 35%,#08111f 78%)}
+[data-v=glass] .card,[data-v=glass] .sc,[data-v=glass] .li,[data-v=glass] .mc,[data-v=glass] .pill,[data-v=glass] .ib{background:rgba(255,255,255,.08);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.14);border-radius:20px}
+[data-v=glass] .ib{border-radius:10px}[data-v=glass] .pill{border-radius:99px}[data-v=glass] .ib.on{color:var(--pri);border-color:var(--pri)}[data-v=glass] .sc.on{border:1.5px solid var(--pri);background:var(--soft)}
+[data-v=glass] .ci{background:rgba(255,255,255,.1);color:var(--pri);border-radius:12px}[data-v=glass] .li .rg>b{color:var(--tx)}[data-v=glass] .seg{background:rgba(255,255,255,.08)}[data-v=glass] .hero{border-radius:22px}
+[data-v=glass] .sh{background:#0F1B2E}[data-v=glass] input{background:rgba(255,255,255,.06)}[data-v=glass] .btn.dng{color:#04121f}
+[data-v=glass] #nav{margin:0;padding:6px 6px 8px;border-radius:0;border:0;border-top:1px solid rgba(255,255,255,.12);background:rgba(8,17,31,.78);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);justify-content:space-around}
+[data-v=glass] .nb{flex:1;background:none;color:var(--sub);border-radius:0;position:relative}[data-v=glass] .nb.on{background:none;color:var(--pri);padding:0}[data-v=glass] .nb.on span{display:none}[data-v=glass] .nb.on::before{content:"";position:absolute;top:-6px;left:20%;right:20%;height:2px;border-radius:2px;background:linear-gradient(90deg,#3FA9FF,#2DD4BF)}
+.li.gl{flex-direction:column;align-items:stretch;gap:8px;padding:10px 12px}.gl .r1{display:flex;align-items:center;gap:10px}.gl .tt{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.gl .r2{display:grid;grid-template-columns:1fr 1fr auto;align-items:end;gap:8px}.gl small{display:block;font-size:.72em;color:var(--sub);margin-bottom:3px}.gl .ab{display:flex;align-items:center;gap:6px;font-weight:600}.gl .ab svg{color:var(--sub)}.st{display:flex;align-items:center;gap:4px;font-weight:700;color:var(--am)}.st.ok{color:var(--g)}.st svg{width:1.15em;height:1.15em}
+
+.stt{display:inline-flex;align-items:center;gap:3px;font-size:.68em;font-weight:700;color:var(--am);padding:1px 0}.stt.ok{color:var(--g)}.stt svg{width:1.05em;height:1.05em}
+.note{background:var(--soft);color:var(--tx);border-radius:12px;padding:.6em .8em;font-size:.8em;line-height:1.4}
+.code{font-size:1.35em;font-weight:800;letter-spacing:.08em;text-align:center;background:var(--chip);border-radius:12px;padding:.55em;user-select:all}
+textarea{width:100%;border-radius:12px;border:1px solid var(--ln);background:var(--chip);color:var(--tx);padding:10px;font:inherit;font-size:.78em;resize:none;outline:0}
+.kv{display:flex;justify-content:space-between;gap:8px;font-size:.85em;padding:3px 0}.kv span{color:var(--sub)}
+.fl .stt{align-self:flex-start}.seg button.on:disabled{opacity:1}
+
+#app.gate #top,#app.gate #nav{display:none}
+.gw{flex:1;display:flex;flex-direction:column;justify-content:center;gap:14px;padding:6px 4px;min-height:0}
+.logo{width:68px;height:68px;border-radius:20px;background:#14180F;display:grid;place-items:center;margin:0 auto;box-shadow:0 10px 30px rgba(184,240,62,.15)}
+.logo svg{width:38px;height:38px}
+.gt{font-size:1.9em;font-weight:800;text-align:center;letter-spacing:-.02em;color:var(--tx)}
+.gs{text-align:center;color:var(--sub);font-size:.9em;line-height:1.5}
+.gbtn{display:flex;align-items:center;justify-content:center;gap:10px;height:52px;border-radius:14px;background:#fff!important;color:#1F1F1F!important;border:1px solid #DADCE0!important;font-weight:700;font-size:1em;box-shadow:var(--sh)}
+.gbtn svg{width:20px;height:20px}
+.mac{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end;max-width:46%}
+.mini{font-size:.72em;font-weight:700;padding:6px 10px;border-radius:99px;background:var(--chip);color:var(--tx);white-space:nowrap}
+.mini.ok{background:var(--pri);color:var(--on)}.mini.dng{color:var(--r)}
+button.mc{text-align:left}
+</style></head><body><div id="app"><div id="top"></div><div id="main"></div><nav id="nav"></nav><div id="ov"></div><div id="ts" role="status" aria-live="polite"></div></div><script>
+'use strict';
+const I={help:'<circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 2.5-3 4M12 17h.01"/>',bell:'<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.9 1.9 0 0 0 3.4 0"/>',moon:'<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>',sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',gear:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/>',link:'<path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/>',list:'<path d="M5 3h14v18l-3-2-2 2-2-2-2 2-2-2-3 2ZM9 8h6M9 12h6"/>',swap:'<path d="M7 4 3 8l4 4M3 8h14M17 20l4-4-4-4M21 16H7"/>',grid:'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',plus:'<path d="M12 5v14M5 12h14"/>',chart:'<path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/>',edit:'<path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/>',trash:'<path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/>',l:'<path d="m15 18-6-6 6-6"/>',r:'<path d="m9 18 6-6-6-6"/>',d:'<path d="m6 9 6 6 6-6"/>',ok:'<path d="m5 12 5 5L20 7"/>',x:'<path d="M18 6 6 18M6 6l12 12"/>',cam:'<path d="M4 8h3l2-3h6l2 3h3v11H4Z"/><circle cx="12" cy="13" r="3.5"/>',wifi:'<path d="M2 9a15 15 0 0 1 20 0M5 12.5a10 10 0 0 1 14 0M8.5 16a5 5 0 0 1 7 0M12 19.5h.01"/>',users:'<circle cx="9" cy="8" r="3.5"/><path d="M2 20a7 7 0 0 1 14 0M17 4.5a3.5 3.5 0 0 1 0 7M22 20a7 7 0 0 0-4-6.3"/>',user:'<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',bolt:'<path d="M13 2 4 14h7l-1 8 9-12h-7Z"/>',cart:'<circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2 3h3l2.7 12.4a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.5L21 8H6"/>',home:'<path d="m3 11 9-8 9 8M5 10v10h14V10"/>',tag:'<path d="M3 12V3h9l9 9-9 9Z"/><circle cx="7.5" cy="7.5" r="1"/>',lock:'<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',warn:'<circle cx="12" cy="12" r="10"/><path d="M12 8v5M12 16h.01"/>',layout:'<rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18M9 21V9"/>',cloud:'<path d="M17.5 19a4.5 4.5 0 1 0-1.4-8.8A6 6 0 0 0 4.5 13 3 3 0 0 0 6 19Z"/>',refresh:'<path d="M21 12a9 9 0 1 1-2.6-6.4L21 8M21 3v5h-5"/>',copy:'<rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/>'};
+/* ===== SplitLedger v2.0 ===== */
+/* Optional: paste your server link here so nobody has to type it. Example: 'https://yourname.github.io/splitledger' */
+const SERVER = '';
+const ADMIN = 'razaunar000@gmail.com';
+
+const $ = s => document.querySelector(s);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const fm = n => (V.cur || 'Rs.') + ' ' + (Math.round(Math.abs(n)) || 0).toLocaleString('en-IN');
+const num = s => parseFloat(String(s == null ? '' : s).replace(/[,\s]/g, ''));
+const uid = () => Date.now() * 1000 + Math.floor(Math.random() * 1000);
+const ic = n => `<svg class="i" viewBox="0 0 24 24">${I[n] || ''}</svg>`;
+const ekey = e => String(e || '').trim().toLowerCase().replace(/\./g, ',');
+const EMRX = /^[^\s@,#$\[\]\/]+@[^\s@,#$\[\]\/]+\.[a-z]{2,}$/i;
+const rnd = n => { const A = 'abcdefghjkmnpqrstuvwxyz23456789', r = new Uint32Array(n); crypto.getRandomValues(r); return Array.from(r, x => A[x % A.length]).join(''); };
+
+const CATS = ['Grocery', 'Wi-Fi Bill', 'Utilities', 'Rent', 'Other'];
+const CI = { Grocery: 'cart', 'Wi-Fi Bill': 'wifi', Utilities: 'bolt', Rent: 'home', Other: 'tag' };
+const CC = ['#FF9AA2', '#FFE08A', '#B5EAB0', '#A8B8FF', '#D58BFF', '#9AD9E8'];
+const PAL = ['#6366F1', '#D97706', '#059669', '#DB2777', '#0891B2', '#7C3AED', '#65A30D', '#DC2626'];
+const TH = [['olive', 'Olive Lime', '#B8F03E'], ['indigo', 'Fintech Indigo', '#312E81'], ['light', 'Clean White', '#FFFFFF'], ['fb', 'Facebook Native', '#1877F2'], ['wa', 'WhatsApp Native', '#008069'], ['amoled', 'AMOLED Dark', '#000000']];
+const METH = { entry: 'By Entry', eq: 'Equal Split' };
+
+/* ----- device settings ----- */
+var V = { th: 'olive', fs: 'n', vw: 'c', seen: {} };
+try { Object.assign(V, JSON.parse(localStorage.getItem('sl_v') || '{}')); } catch (e) { }
+if (!V.seen || typeof V.seen != 'object') V.seen = {};
+
+/* ----- who am I ----- */
+var ME = { status: '', email: '', ek: '', key: '', admin: false };
+var DEMO = 0;
+/* members from the server, by email key */
+var MB = {}, PK = {};
+function people() {
+  return Object.values(MB).filter(m => m && m.status == 'approved' && m.key)
+    .sort((a, b) => (b.key == 'adm') - (a.key == 'adm') || (a.approvedAt || 0) - (b.approvedAt || 0) || String(a.email).localeCompare(b.email));
+}
+function reindex() {
+  PK = {};
+  people().forEach((p, i) => { p._i = i; PK[p.key] = p; });
+  const mine = MB[ME.ek];
+  if (mine && mine.key) ME.key = mine.key;
+}
+const anyKey = k => PK[k] || Object.values(MB).find(m => m && m.key == k);
+function N(k) {
+  const p = anyKey(k);
+  if (p) return (p.name || '').trim() || String(p.email || '').split('@')[0] || 'Member';
+  for (const h of (D && D.hist) || []) if (h.nm && h.nm[k]) return h.nm[k];
+  return 'Former member';
+}
+const S1 = k => N(k).split(/\s+/)[0];
+const colr = k => PAL[(PK[k] ? PK[k]._i : 7) % PAL.length];
+const act = () => people().filter(p => !p.paused).map(p => p.key);
+const me = () => ME.key;
+const adm = () => !!ME.admin;
+const approved = () => DEMO || ME.status == 'approved';
+
+/* splits are stored as 'key1,key2' */
+const spk = e => String(e.sp || '').split(',').filter(Boolean);
+function splLabel(keys) {
+  const a = act();
+  if (keys.length > 1 && keys.length == a.length && a.every(k => keys.includes(k))) return `Everyone (${keys.length})`;
+  if (!keys.length) return 'Nobody selected';
+  if (keys.length == 1) return keys[0] == me() ? 'Only me (100%)' : `Only ${S1(keys[0])} (100%)`;
+  if (keys.length <= 3) return keys.map(S1).join(' + ');
+  return `${keys.length} people`;
+}
+
+/* dates */
+const DM = { day: '2-digit', month: 'short' };
+function dlab(e, yr) {
+  if (!e.ts) return e.t || '';
+  const d = new Date(e.ts), o = Object.assign({}, DM);
+  if (yr || d.getFullYear() != new Date().getFullYear()) o.year = 'numeric';
+  return d.toLocaleDateString('en-GB', o);
+}
+const tm = t => new Date(t).toLocaleString('en-GB', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
+
+/* ----- the ledger ----- */
+const COLS = ['ex', 'pay', 'nt', 'log', 'hist'];
+function blank() { return { ex: [], pay: [], nt: [], log: [], hist: [], sm: 'entry', bud: 20000, ba: 0, wifi: '' }; }
+function migrate(o) {
+  const d = Object.assign(blank(), o || {});
+  COLS.forEach(k => {
+    if (!Array.isArray(d[k])) d[k] = d[k] && typeof d[k] == 'object' ? Object.values(d[k]) : [];
+    d[k] = d[k].filter(x => x && typeof x == 'object' && x.id);
+  });
+  d.ex = d.ex.filter(e => e.by && typeof e.sp == 'string' && e.sp && num(e.amt) > 0);
+  d.ex.forEach(e => { e.amt = num(e.amt); if (!CATS.includes(e.cat)) e.cat = 'Other'; });
+  if (!METH[d.sm]) d.sm = 'entry';
+  d.bud = Math.max(1, num(d.bud) || 20000);
+  d.ba = d.ba ? 1 : 0;
+  if (typeof d.wifi != 'string') d.wifi = '';
+  return d;
+}
+var D = blank();
+
+/* ui state (var: read and written by the click interpreter) */
+var qs = '', tab = 'dash', pg = 0, cf = 'all', pf = null, sel = 'all', isub = 'ch', stab = 'g', lu = 'all', lpg = 0, hpg = 0, mpg = 0, dpg = 0, tpg = 0;
+var _cb, _cf = 0, _pf = null, _lt = 'dash', _pp = 0, _sel = [];
+var F;
+function newF() {
+  const a = act();
+  F = { amt: '', desc: '', cat: V.dcat || 'Grocery', cc: '', by: me(), sp: V.dsp == 'me' && me() ? [me()] : a.slice(), edit: null };
+}
+
+/* ----- money logic ----- */
+/* who shares an entry; null = left out (payer paused or no longer a member) */
+function part(e) {
+  if (!PK[e.by] || PK[e.by].paused) return null;
+  const p = spk(e).filter(k => PK[k] && !PK[k].paused);
+  return p.length ? p : null;
+}
+function calc() {
+  const m = D.sm == 'eq' ? 'eq' : 'entry', M = act();
+  const z = () => { const o = {}; M.forEach(k => o[k] = 0); return o; };
+  const paid = z(), sh = z(), spent = z(), share = z();
+  let tot = 0, base = 0, held = 0, heldN = 0, setN = 0;
+  D.ex.forEach(e => {
+    const p = part(e);
+    if (!p) { held += e.amt; heldN++; return; }
+    tot += e.amt; spent[e.by] += e.amt;
+    if (m == 'entry') p.forEach(x => share[x] += e.amt / p.length);
+    if (e.st) { setN++; return; }                      // settled directly: out of the debts
+    base += e.amt; paid[e.by] += e.amt;
+    if (m == 'entry') p.forEach(x => sh[x] += e.amt / p.length);
+  });
+  if (m == 'eq' && M.length) M.forEach(x => { sh[x] = base / M.length; share[x] = tot / M.length; });
+  const net = {};
+  M.forEach(x => net[x] = paid[x] - sh[x]);
+  D.pay.forEach(p => { if (net[p.f] != null && net[p.t] != null) { net[p.f] += p.a; net[p.t] -= p.a; } });
+  return { paid, sh, net, tot, base, M, spent, share, held, heldN, setN, m };
+}
+/* fewest transfers that settle everyone */
+function tx(net) {
+  const d = [], c = [];
+  for (const k in net) { if (net[k] < -.5) d.push([k, -net[k]]); else if (net[k] > .5) c.push([k, net[k]]); }
+  d.sort((a, b) => b[1] - a[1]); c.sort((a, b) => b[1] - a[1]);
+  const o = []; let i = 0, j = 0;
+  while (i < d.length && j < c.length) {
+    const m = Math.min(d[i][1], c[j][1]);
+    o.push([d[i][0], c[j][0], m]); d[i][1] -= m; c[j][1] -= m;
+    if (d[i][1] < .5) i++; if (c[j][1] < .5) j++;
+  }
+  return o;
+}
+/* budget alert fires once when the line is crossed, re-arms if spending drops back */
+function chkBud() {
+  const c = calc(), line = D.bud * (V.thr || 90) / 100;
+  if (c.tot >= line && !D.ba) {
+    D.ba = 1;
+    D.nt.push({ id: uid(), by: me(), tx: `Budget alert: ${Math.round(c.tot / D.bud * 100)}% of the monthly budget is used.` });
+  } else if (c.tot < line && D.ba) D.ba = 0;
+  trimNt();
+}
+/* only the admin trims shared lists (members may only add to them) */
+function trimNt() { if (!adm()) return; D.nt.sort((a, b) => a.id - b.id); while (D.nt.length > 30) D.nt.shift(); }
+function lg(a) {
+  if (!approved() || !me()) return;
+  D.log.push({ id: uid(), t: Date.now(), u: me(), a });
+  if (adm()) { D.log.sort((x, y) => x.id - y.id); while (D.log.length > 300) D.log.shift(); }
+}
+function monthLabel(list) {
+  const cnt = {};
+  list.forEach(e => { if (e.ts) { const d = new Date(e.ts), k = d.getFullYear() * 12 + d.getMonth(); cnt[k] = (cnt[k] || 0) + 1; } });
+  const ks = Object.keys(cnt).sort((a, b) => cnt[b] - cnt[a]);
+  const d = ks.length ? new Date(Math.floor(ks[0] / 12), ks[0] % 12, 1) : new Date();
+  return d.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
+}
+
+/* ----- local cache (per signed-in account) ----- */
+function saveLocal() {
+  if (DEMO) return;
+  try {
+    localStorage.setItem('sl_v', JSON.stringify(V));
+    if (ME.email && approved()) { localStorage.setItem('sl_d', JSON.stringify(D)); localStorage.setItem('sl_who', ME.email); }
+    if (ME.email) localStorage.setItem('sl_m', JSON.stringify(MB));
+  } catch (e) { toast('Phone storage is full'); }
+}
+function save() { saveLocal(); qflush(); }
+function wipeLocal() { ['sl_d', 'sl_m', 'sl_s', 'sl_who'].forEach(k => localStorage.removeItem(k)); }
+
+/* demo with sample data (only before a server is set) */
+function demoData() {
+  const t = Date.now(), mk = (k, n, e, extra) => Object.assign({ key: k, name: n, email: e, status: 'approved', approvedAt: t }, extra || {});
+  MB = { a: mk('adm', 'Raza Ul Mustafa', ADMIN), b: mk('m1', 'Arshad', 'arshad@example.com'), c: mk('m2', 'Javed', 'javed@example.com'), d: { key: 'm3', name: 'Bilal', email: 'bilal@example.com', status: 'pending' } };
+  ME = { status: 'approved', email: ADMIN, ek: 'a', key: 'adm', admin: true };
+  reindex();
+  const y = new Date().getFullYear(), m = new Date().getMonth(), at = d => new Date(y, m, Math.min(d, new Date().getDate())).getTime();
+  D = blank(); D.wifi = 'm1';
+  D.ex = [
+    { by: 'adm', amt: 900, cat: 'Grocery', d: 'Sabzi & rashan', sp: 'adm,m1,m2', ts: at(3) },
+    { by: 'adm', amt: 1500, cat: 'Wi-Fi Bill', d: 'Monthly Wi-Fi', sp: 'm1', ts: at(8) },
+    { by: 'm2', amt: 1200, cat: 'Utilities', d: 'Gas cylinder', sp: 'adm,m1,m2', ts: at(15) },
+    { by: 'm1', amt: 600, cat: 'Grocery', d: 'Fruits & milk', sp: 'adm,m1', ts: at(20) }
+  ].map((e, i) => Object.assign(e, { id: uid() + i }));
+}
+
+/* ===== shell ===== */
+function av(k, s = 26) {
+  const p = anyKey(k), pic = p && p.pic;
+  const bg = pic ? `background-image:url(&quot;${esc(pic)}&quot;)` : `background:${colr(k)}`;
+  return `<span class="av" style="width:${s}px;height:${s}px;font-size:${Math.round(s * .42)}px;${bg}">${pic ? '' : esc(N(k)[0] || '?')}</span>`;
+}
+const pending = () => adm() ? Object.entries(MB).filter(([, m]) => m && m.status == 'pending') : [];
+const unread = () => D.nt.filter(n => n.by != me() && n.id > (V.seen[ME.email] || 0)).length + pending().length;
+function badge() {
+  let t;
+  if (DEMO) t = ['off', 'DEMO', 'grid'];
+  else if (ME.status == 'pending') t = ['off', 'WAITING', 'lock'];
+  else t = { live: ['', 'LIVE SYNC', 'bolt'], sync: ['', 'SYNCING', 'refresh'], conn: ['off', 'CONNECTING', 'cloud'], err: ['err', 'OFFLINE', 'cloud'], off: ['off', 'OFFLINE', 'cloud'] }[SY.st] || ['off', 'CONNECTING', 'cloud'];
+  return `<button class="live ${t[0]}" onclick="openAcct()" aria-label="Connection status">${ic(t[2])}${t[1]}</button>`;
+}
+function topbar() {
+  const n = unread();
+  return `<button class="pill" onclick="profile()">${av(me())}<span>${esc(myName())}</span></button><div class="rt">${badge()}<button class="ib${V.vw == 'g' ? ' on' : ''}" onclick="tv()" aria-label="Switch view">${ic('layout')}</button><button class="ib" onclick="bell()" aria-label="Notifications">${ic('bell')}${n ? `<i class="bd">${n > 9 ? '9+' : n}</i>` : ''}</button><button class="ib" onclick="moon()" aria-label="Theme">${ic(V.th == 'amoled' && V.vw != 'g' ? 'sun' : 'moon')}</button><button class="ib" onclick="settings()" aria-label="Settings">${ic('gear')}</button></div>`;
+}
+function myName() { const m = MB[ME.ek]; return (m && (m.name || '').trim()) || (V.auth && V.auth.name) || String(ME.email).split('@')[0] || 'Me'; }
+const NV = [['ledger', 'Ledger', 'list'], ['debts', 'Debts', 'swap'], ['dash', 'Dashboard', 'grid'], ['add', 'Add', 'plus'], ['ins', 'Insights', 'chart']];
+const nav = () => NV.map(([k, l, i]) => `<button class="nb${tab == k ? ' on' : ''}" onclick="go('${k}')" aria-label="${l}">${ic(i)}<span>${l}</span></button>`).join('');
+
+function render() {
+  const h = document.documentElement, app = $('#app');
+  h.dataset.t = V.th; h.dataset.fs = V.fs; h.dataset.v = V.vw == 'g' ? 'glass' : 'classic';
+  const g = gateView();
+  app.classList.toggle('gate', !!g);
+  if (g) { $('#top').innerHTML = ''; $('#nav').innerHTML = ''; $('#main').innerHTML = H(g); }
+  else {
+    $('#top').innerHTML = H(topbar());
+    $('#main').innerHTML = H(({ dash, ledger, debts, add, ins })[tab]());
+    $('#nav').innerHTML = H(nav());
+    if (tab == 'add') pv();
+    if (tab !== _lt) { _lt = tab; if (!_pp) try { history.pushState({ tab }, ''); } catch (e) { } }
+  }
+  _pend = 0;
+  const m = document.querySelector('meta[name=theme-color]');
+  if (m) m.content = getComputedStyle(h).getPropertyValue('--bg').trim() || '#0D100A';
+}
+function topR() { if (!$('#app').classList.contains('gate')) $('#top').innerHTML = H(topbar()); }
+/* re-render without kicking someone out of a field they are typing in */
+var _pend = 0;
+function soft() {
+  const a = document.activeElement;
+  if (tab == 'add' || (a && /^(INPUT|TEXTAREA)$/.test(a.tagName) && a.closest('#main'))) { _pend = 1; topR(); }
+  else render();
+}
+document.addEventListener('focusout', () => setTimeout(() => { if (_pend && tab != 'add') render(); }, 0));
+
+function go(k) {
+  if (F.edit && !(k == 'add' && tab == 'add')) newF();
+  if (k == 'add' && !F.edit && !F.amt) newF();
+  tab = k; pg = 0; dpg = 0; tpg = 0; cf = 'all'; pf = null; sel = 'all'; qs = ''; render();
+}
+function toast(m) { const t = $('#ts'); t.textContent = m; t.classList.add('show'); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('show'), 2200); }
+function ov(h) { const o = $('#ov'); o.innerHTML = H(`<div class="sh">${h}</div>`); o.classList.add('show'); }
+function cl() { const o = $('#ov'); if (o.dataset.lk) return; o.style.background = ''; o.classList.remove('show'); }
+$('#ov').addEventListener('click', e => { if (e.target.id == 'ov') cl(); });
+const X = `<button class="ib" onclick="cl()" aria-label="Close">${ic('x')}</button>`;
+function dd(t, o, cur, fn) {
+  _cb = k => { cl(); fn(k); };
+  ov(`<h3>${esc(t)}${X}</h3>` + o.map(x => `<button class="opt${x.k == cur ? ' on' : ''}" onclick="_cb('${x.k}')">${x.a || ''}<div class="fl"><b>${esc(x.l)}</b>${x.s ? `<i>${esc(x.s)}</i>` : ''}</div>${x.k == cur ? ic('ok') : ''}</button>`).join(''));
+}
+function ask(m, fn, yes) {
+  _cb = () => { cl(); fn(); };
+  ov(`<h3>Are you sure?</h3><div class="sub" style="font-size:.95em;white-space:normal">${esc(m)}</div><div class="cap"><button class="btn gh" style="flex:1" onclick="cl()">No</button><button class="btn dng" style="flex:1" onclick="_cb()">${esc(yes || 'Yes, do it')}</button></div>`);
+}
+function deny() { toast('Only the admin can do this'); }
+function needOk() { if (approved()) return false; toast('Waiting for admin approval'); return true; }
+
+/* ===== Sign-in screens ===== */
+const LOGO = `<div class="logo"><svg viewBox="0 0 24 24"><path d="M5 3h14v18l-3-2-2 2-2-2-2 2-2-2-3 2Z" fill="#B8F03E"/><path d="M9 8h6M9 12h6M9 16h4" stroke="#14180F" stroke-width="1.9" stroke-linecap="round"/></svg></div>`;
+const GG = `<svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>`;
+function gateView() {
+  if (DEMO) return '';
+  if (!srv() || !V.cfg) return `<div class="gw">${LOGO}<div class="gt">SplitLedger</div><div class="gs">Shared expenses for your room, settled fairly.</div><div><div class="lab">Server link from your admin</div><input id="srv" placeholder="https://yourname.github.io/splitledger" value="${esc(V.srv || SERVER)}" autocomplete="off" inputmode="url"></div><button class="btn" onclick="setSrv()">Continue</button>${SERVER ? '' : '<button class="lk" style="align-self:center" onclick="demo()">Explore a demo with sample data</button>'}</div>`;
+  if (!V.auth) return `<div class="gw">${LOGO}<div class="gt">SplitLedger</div><div class="gs">Sign in to see your room's ledger.<br>Only people invited by the admin can get in.</div><button class="gbtn" onclick="login()">${GG}Continue with Google</button>${V.lmsg ? `<div class="note">${esc(V.lmsg)}</div>` : ''}<div class="gs" style="font-size:.74em">${isApp ? 'Your browser opens to sign in. When it is done, tap Open SplitLedger to come back.' : ''}</div>${SERVER ? '' : `<button class="lk" style="align-self:center" onclick="chSrv()">Change server link</button>`}</div>`;
+  if (ME.status == 'loading' || !ME.status) return `<div class="gw">${LOGO}<div class="gs">Checking your access…</div></div>`;
+  if (ME.status == 'error') return `<div class="gw">${LOGO}<div class="gt" style="font-size:1.3em">Can't reach the server</div><div class="gs">${esc(ME.err || 'Check the internet connection and try again.')}</div><button class="btn" onclick="checkMember()">${ic('refresh')}Try again</button><button class="btn gh" onclick="signOutAsk()">Sign out</button></div>`;
+  if (ME.status == 'none') return `<div class="gw">${LOGO}<div class="gt" style="font-size:1.3em">This account isn't invited</div><div class="gs">You signed in as <b>${esc(ME.email)}</b>.<br>Ask the admin to add this email in SplitLedger. This screen opens the app by itself once you are added.</div><button class="btn gh" onclick="signOutLocal()">Use another Google account</button></div>`;
+  return '';
+}
+
+/* ===== Dashboard ===== */
+function pick(id) {
+  if (id == 'mem' || id == 'req') { tab = 'ins'; isub = 'mb'; mpg = 0; return render(); }
+  if (id == 'meth') return go('debts');
+  sel = id; pf = id == 'me' ? me() : null; cf = id == 'wifi' ? 'Wi-Fi Bill' : 'all'; pg = 0; tab = 'ledger'; render();
+}
+function dash() {
+  const c = calc(), k = me(), on = c.M.includes(k), a = act();
+  const wf = D.ex.reduce((s, e) => s + (e.cat == 'Wi-Fi Bill' && part(e) ? e.amt : 0), 0);
+  const pc = D.bud ? Math.min(100, Math.round(c.tot / D.bud * 100)) : 0;
+  const sc = (id, i, lb, v, s, cls = '') => `<button class="sc${sel == id ? ' on' : ''}" onclick="pick('${id}')"><span class="si">${ic(i)}</span><span class="sl">${lb}</span><b class="${cls}">${v}</b><i>${s}</i></button>`;
+  const v = on ? c.net[k] : 0;
+  const six = adm() ? sc('req', 'bell', 'Join Requests', String(pending().length), pending().length ? 'Waiting for you' : 'None waiting', pending().length ? 'neg' : '')
+    : sc('me', 'user', 'Your Share', fm(on ? c.share[k] : 0), 'This month');
+  return `<div class="hero"><div class="t"><span>ROOM TOTAL EXPENSE</span><span class="mp">${a.length} ACTIVE MEMBER${a.length == 1 ? '' : 'S'}</span></div><div class="big">${fm(c.tot)}</div><div class="row"><div><small>Inflow (You Paid)</small><b class="in">+ ${fm(on ? c.spent[k] : 0)}</b></div><div><small>Outflow (Your Share)</small><b class="out">- ${fm(on ? c.share[k] : 0)}</b></div></div></div>
+<div class="g6">${sc('all', 'list', 'All Room Expenses', fm(c.tot), D.ex.length + ' entries')}${sc('me', 'user', 'Your Net Balance', (v >= 0 ? '+ ' : '- ') + fm(v), v >= 0 ? 'Lene hain' : 'Dene hain', v >= 0 ? 'pos' : 'neg')}${sc('wifi', 'wifi', 'Wi-Fi Bill Total', fm(wf), D.wifi && PK[D.wifi] ? '100% on ' + esc(S1(D.wifi)) : 'Split normally')}${sc('mem', 'users', 'Members', a.length + ' active', people().length + ' in room')}${sc('meth', 'swap', 'Hisab Method', METH[c.m], adm() ? 'Tap to manage' : 'Set by admin')}${six}</div>
+<div class="card pad" style="flex:none"><div class="bh"><b>Monthly Target Budget</b><span>${fm(c.tot)} / ${fm(D.bud)}</span></div><div class="bar"><i style="width:${pc}%;${pc >= (V.thr || 90) ? 'background:var(--r)' : ''}"></i></div><div class="sub" style="margin-top:5px">${pc}% used · ${D.bud > c.tot ? fm(D.bud - c.tot) + ' left' : 'Over budget by ' + fm(c.tot - D.bud)}</div></div>
+${syncCard(c)}`;
+}
+function syncCard(c) {
+  if (!approved()) return `<div class="card sync"><div class="bh" style="margin:0"><b style="display:flex;gap:6px;align-items:center">${ic('lock')}Waiting for approval</b></div><div class="note">You are signed in as ${esc(ME.email)}. The admin has been told you joined. Everything shows 0 until the admin accepts you, then your room's ledger appears here by itself.</div></div>`;
+  const P = people(), show = P.slice(0, 3);
+  return `<div class="card sync"><div class="bh" style="margin:0"><b style="display:flex;gap:6px;align-items:center">${ic('link')}Roommates Sync Status</b><button class="lk" onclick="pick('mem')">View Details</button></div><div class="g4">${show.map(p => mc(p)).join('')}${P.length > 3 ? `<button class="mc" onclick="pick('mem')"><div class="mh"><b>+${P.length - 3} more</b></div><i class="sub">Tap to see everyone</i><span class="cn pz">• MEMBERS</span></button>` : hc(c)}${P.length < 3 ? '<div></div>'.repeat(3 - P.length) : ''}</div></div>`;
+}
+function mc(p) {
+  const s = presence(p.key);
+  return `<div class="mc"><div class="mh"><span class="dt" style="background:${colr(p.key)}"></span><b>${esc(S1(p.key))}</b></div><i class="sub">${p.key == 'adm' ? 'Admin' : p.paused ? 'Paused' : 'Member'}</i><span class="cn${s[1] ? '' : ' pz'}">• ${s[0]}</span></div>`;
+}
+function hc(c) {
+  const n = tx(c.net).length;
+  return `<div class="mc"><div class="mh"><span class="dt" style="background:var(--pri)"></span><b>Month-End Hisab</b></div><i class="sub">${METH[c.m]}</i><span class="cn${n ? ' pz' : ''}">• ${n ? n + ' PENDING' : 'ALL SETTLED'}</span></div>`;
+}
+
+/* ===== Ledger ===== */
+function stBtn(e, cls) { return `<button class="${cls}${e.st ? ' ok' : ''}" onclick="tg(${e.id})" aria-label="Change status">${ic(e.st ? 'ok' : 'warn')}${e.st ? 'Settled' : 'Pending'}</button>`; }
+function acts(e) { return adm() ? `<div class="ac"><button onclick="edit(${e.id})" aria-label="Edit">${ic('edit')}</button><button onclick="del(${e.id})" aria-label="Delete">${ic('trash')}</button></div>` : ''; }
+const title = e => esc(e.d || e.cc || e.cat);
+function grow(e) {
+  const z = !part(e), n = spk(e).length, who = e.by == me() ? 'You' : esc(S1(e.by));
+  return `<div class="li gl${z ? ' ps' : ''}"><div class="r1"><div class="ci">${ic(CI[e.cat])}</div><b class="tt">${title(e)}</b><div class="rg"><b>${fm(e.amt)}</b>${acts(e)}</div></div><div class="r2"><div><small>Paid by · ${dlab(e)}</small><div class="ab">${av(e.by, 20)}${who}</div></div><div><small>Split by</small><div class="ab">${ic('users')}${n}</div></div>${stBtn(e, 'st')}</div></div>`;
+}
+function row(e) {
+  if (V.vw == 'g') return grow(e);
+  return `<div class="li${part(e) ? '' : ' ps'}"><div class="ci">${ic(CI[e.cat])}</div><div class="fl"><b>${title(e)}</b><i>${e.cc ? esc(e.cc) + ' · ' : ''}${esc(S1(e.by))} paid · ${dlab(e)} · ${esc(splLabel(spk(e)))}</i>${stBtn(e, 'stt')}</div><div class="rg"><b>${fm(e.amt)}</b>${acts(e)}</div></div>`;
+}
+function ledger() {
+  const L = D.ex.slice().sort((x, y) => (y.ts || 0) - (x.ts || 0) || y.id - x.id).filter(e => (cf == 'all' || e.cat == cf) && (!pf || e.by == pf || spk(e).includes(pf)) && (!qs || [e.d, e.cc, e.cat].join(' ').toLowerCase().includes(qs)));
+  const PS = (V.vw == 'g' || innerHeight < 760) ? 3 : 4, n = Math.max(1, Math.ceil(L.length / PS));
+  pg = Math.max(0, Math.min(pg, n - 1));
+  return `<div class="hd"><b>${V.vw == 'g' ? 'Shared Expenses' : 'Ledger'}</b><span class="sub">${L.length} entries · ${fm(L.reduce((s, e) => s + e.amt, 0))}</span></div>${pf ? `<button class="tag" onclick="go('ledger')">Showing ${pf == me() ? 'you' : esc(S1(pf))} ${ic('x')}</button>` : ''}<input id="qs" placeholder="Search entries" value="${esc(qs)}" oninput="sq(this)" autocomplete="off"><div class="chips">${['all', ...CATS].map(c => `<button class="chip${cf == c ? ' on' : ''}" onclick="cf='${c}';pg=0;render()">${c == 'all' ? 'All' : c == 'Wi-Fi Bill' ? 'Wi-Fi' : c}</button>`).join('')}</div><div class="lst">${L.slice(pg * PS, pg * PS + PS).map(row).join('') || `<div class="em">${!approved() ? 'The ledger appears once the admin accepts you.' : D.ex.length ? 'No entries match this filter.' : 'No entries yet. Tap Add to log an expense.'}</div>`}</div><div class="pg"><button ${pg ? '' : 'disabled'} onclick="pg--;render()">${ic('l')}Prev</button><span class="sub">${pg + 1} / ${n}</span><button ${pg < n - 1 ? '' : 'disabled'} onclick="pg++;render()">Next${ic('r')}</button></div>`;
+}
+function sq(el) { qs = el.value.toLowerCase().trim(); pg = 0; render(); const i = $('#qs'); i.focus(); const l = i.value.length; i.setSelectionRange(l, l); }
+const getE = id => D.ex.find(x => x.id == id);
+function gone() { toast('That entry was removed on another phone'); render(); }
+function tg(id) {
+  const e = getE(id); if (!e) return gone();
+  if (!adm() && e.by != me()) return toast('Only the admin or the payer can change this');
+  ask(e.st ? 'Mark this entry as Pending? It will count in the Debts again.' : 'Mark this entry as Settled? It means everyone already squared up for it, so it leaves the Debts. It still counts in the room total.', () => {
+    const x = getE(id); if (!x) return gone();
+    x.st = !x.st; lg(`Marked "${x.d || x.cc || x.cat}" as ${x.st ? 'Settled' : 'Pending'}`); save(); render();
+  });
+}
+function del(id) {
+  if (!adm()) return deny();
+  ask('Delete this entry? This cannot be undone.', () => {
+    const x = getE(id); if (!x) return gone();
+    lg(`Deleted entry: ${x.d || x.cc || x.cat} ${fm(x.amt)}`);
+    D.ex = D.ex.filter(e => e.id != id); chkBud(); save(); render(); toast('Entry deleted');
+  });
+}
+function edit(id) {
+  if (!adm()) return deny();
+  const e = getE(id); if (!e) return gone();
+  F = { amt: String(e.amt), desc: e.d || '', cat: e.cat, cc: e.cc || '', by: e.by, sp: spk(e), edit: id };
+  tab = 'add'; render();
+}
+
+/* ===== Debts ===== */
+function setSm(k) {
+  if (k == D.sm) return;
+  if (!adm()) return deny();
+  const g2 = () => { D.sm = k; lg('Changed hisab method to ' + METH[k]); save(); render(); };
+  if (D.pay.length) ask(`Switch the hisab to ${METH[k]}? ${D.pay.length} recorded payment(s) stay as they are, so check the new balances.`, g2); else g2();
+}
+function pager(v, n, cur) { return n > 1 ? `<div class="pg" style="margin-top:4px"><button ${cur ? '' : 'disabled'} onclick="${v}--;render()">${ic('l')}</button><span class="sub">${cur + 1} / ${n}</span><button ${cur < n - 1 ? '' : 'disabled'} onclick="${v}++;render()">${ic('r')}</button></div>` : ''; }
+function debts() {
+  const c = calc(), t = tx(c.net), canPay = (f, o) => adm() || me() == f || me() == o;
+  const bn = Math.max(1, Math.ceil(c.M.length / 3)), tn = Math.max(1, Math.ceil(t.length / 3));
+  dpg = Math.min(dpg, bn - 1); tpg = Math.min(tpg, tn - 1);
+  let note = '';
+  if (c.heldN) note += `${c.heldN} entr${c.heldN > 1 ? 'ies' : 'y'} (${fm(c.held)}) involving paused or former members ${c.heldN > 1 ? 'are' : 'is'} on hold. `;
+  if (c.setN) note += `${c.setN} settled entr${c.setN > 1 ? 'ies are' : 'y is'} not counted here. `;
+  return `<div class="hd"><b>Month-End Hisab</b><span class="sub">To settle ${fm(c.base)}${D.pay.length ? ' · ' + D.pay.length + ' payment(s) recorded' : ''}</span></div><div class="seg">${Object.keys(METH).map(k => `<button class="${c.m == k ? 'on' : ''}" onclick="setSm('${k}')">${METH[k]}</button>`).join('')}</div><div><div class="lab">Paid, share and balance</div><div class="card pad">${c.M.slice(dpg * 3, dpg * 3 + 3).map(k => { const n = c.net[k]; return `<div class="rw">${av(k, 30)}<div class="fl"><b>${esc(N(k))}${k == me() ? ' (you)' : ''}</b><i>Paid ${fm(c.paid[k])} · Share ${fm(c.sh[k])}</i></div><b class="${n >= 0 ? 'pos' : 'neg'}">${n >= 0 ? '+' : '-'} ${fm(n)}</b></div>`; }).join('') || '<div class="em">No active members yet.</div>'}${pager('dpg', bn, dpg)}</div></div><div><div class="lab">Who pays whom${D.pay.length && adm() ? ` <button class="lk" style="display:inline" onclick="up()">Undo last payment</button>` : ''}</div><div class="card pad">${t.length ? t.slice(tpg * 3, tpg * 3 + 3).map(([f, o, m]) => `<div class="rw">${av(f, 26)}<span class="fl" style="flex:0 1 auto;max-width:28%"><b>${esc(S1(f))}</b></span>${ic('r')}${av(o, 26)}<span class="fl"><b>${esc(S1(o))}</b></span><b style="white-space:nowrap">${fm(m)}</b>${canPay(f, o) ? `<button class="chip on" onclick="mp('${f}','${o}',${Math.round(m)})">Paid</button>` : ''}</div>`).join('') : '<div class="em">All settled. Nobody owes anything.</div>'}${pager('tpg', tn, tpg)}</div></div><button class="btn" onclick="sm()">${ic('link')}Share month-end summary</button><div class="sub" style="white-space:normal">${note || (adm() ? 'Tap a method above to change how the hisab is worked out for everyone.' : 'Only the admin can change the method.')}</div>`;
+}
+function mp(f, o, a) {
+  if (needOk()) return;
+  if (!adm() && me() != f && me() != o) return toast('Only the admin or the people involved can record this');
+  ask(`Record that ${N(f)} paid ${N(o)} ${fm(a)}? Balances will change. Tap No if this was a mistake.`, () => {
+    D.pay.push({ id: uid(), f, t: o, a, ts: Date.now() });
+    D.nt.push({ id: uid(), by: me(), tx: `${S1(f)} paid ${S1(o)} ${fm(a)} to settle up.` }); trimNt();
+    lg(`Recorded payment ${N(f)} to ${N(o)} ${fm(a)}`); save(); render(); toast('Payment recorded');
+  });
+}
+function up() {
+  if (!adm()) return deny();
+  ask('Undo the last recorded payment? Balances will change.', () => {
+    D.pay.sort((a, b) => a.id - b.id); const p = D.pay.pop();
+    if (p) lg(`Undid payment ${N(p.f)} to ${N(p.t)} ${fm(p.a)}`); save(); render();
+  });
+}
+function summaryText(c, label) {
+  const t = tx(c.net);
+  return [`SplitLedger Hisab - ${label}`, `Method: ${METH[c.m]}`, `Room total: ${fm(c.tot)}`, '']
+    .concat(c.M.map(k => `${N(k)}: paid ${fm(c.paid[k])}, share ${fm(c.sh[k])}, ${c.net[k] >= 0 ? 'gets' : 'owes'} ${fm(c.net[k])}`),
+      ['', t.length ? 'Settle up:' : 'All settled.'], t.map(([f, o, m]) => `${N(f)} pays ${N(o)} ${fm(m)}`)).join('\n');
+}
+function sm() { share('Month-end summary', summaryText(calc(), monthLabel(D.ex))); }
+function share(h, s) { ov(`<h3>${esc(h)}${X}</h3><textarea id="bt" rows="9" readonly>${esc(s)}</textarea><button class="btn" onclick="cp()">${ic('copy')}Share or copy</button>`); }
+function cp() {
+  const s = $('#bt').value;
+  const f = () => { try { $('#bt').select(); toast(document.execCommand('copy') ? 'Copied' : 'Select and copy the text'); } catch (e) { toast('Select and copy the text'); } };
+  if (navigator.share) navigator.share({ text: s }).catch(f); else f();
+}
+
+/* ===== Add / Edit ===== */
+const wifiKey = () => D.wifi && PK[D.wifi] && !PK[D.wifi].paused ? D.wifi : '';
+const defSp = () => V.dsp == 'me' && me() ? [me()] : act();
+function pc() {
+  dd('Category', CATS.map(c => ({ k: c, l: c })), F.cat, k => {
+    const was = F.cat; F.cat = k;
+    if (k == 'Wi-Fi Bill' && wifiKey()) F.sp = [wifiKey()]; else if (was == 'Wi-Fi Bill') F.sp = defSp();
+    render();
+  });
+}
+function pb() { dd('Paid by', act().map(k => ({ k, l: N(k), a: av(k, 26) })), F.by, k => { F.by = k; render(); }); }
+function ps() { _sel = F.sp.filter(k => PK[k]); spSheet(); }
+function spSheet() {
+  const a = num(F.amt) || 0, n = _sel.length, all = act();
+  ov(`<h3>Split between${X}</h3><button class="opt${n == all.length ? ' on' : ''}" onclick="spAll()">${ic('users')}<div class="fl"><b>Everyone (${all.length})</b><i>${a && all.length ? fm(a / all.length) + ' each' : 'All active members'}</i></div>${n == all.length ? ic('ok') : ''}</button>${all.map(k => `<button class="opt${_sel.includes(k) ? ' on' : ''}" onclick="spT('${k}')">${av(k, 26)}<div class="fl"><b>${esc(N(k))}${k == me() ? ' (you)' : ''}</b><i>${_sel.includes(k) && a ? fm(a / n) : 'Not included'}</i></div>${_sel.includes(k) ? ic('ok') : ''}</button>`).join('')}<button class="btn" onclick="spDone()">Done · ${n} selected</button>`);
+}
+function spAll() { const a = act(); _sel = _sel.length == a.length ? [] : a.slice(); spSheet(); }
+function spT(k) { _sel = _sel.includes(k) ? _sel.filter(x => x != k) : _sel.concat(k); spSheet(); }
+function spDone() { if (!_sel.length) return toast('Pick at least one person'); F.sp = act().filter(k => _sel.includes(k)); cl(); render(); }
+function add() {
+  if (!approved()) return `<div class="hd"><b>New expense</b><span class="sub">Waiting for admin approval</span></div><div class="card pad em">${ic('lock')}<br>You can add expenses once the admin accepts you.</div>`;
+  const a = adm(), w = F.cat == 'Wi-Fi Bill' && wifiKey();
+  if (!a || !PK[F.by]) F.by = me();
+  F.sp = F.sp.filter(k => PK[k]); if (!F.sp.length) F.sp = defSp();
+  const sp = w ? [wifiKey()] : F.sp;
+  return `<div class="hd"><b>${F.edit ? 'Edit expense' : 'New expense'}</b><span class="sub">${F.edit ? '<button class="lk" style="display:inline" onclick="cancelEdit()">Cancel edit</button>' : 'Log who paid and who shares'}</span></div><div><div class="lab">Amount (${esc(V.cur || 'Rs.')})</div><input class="amt" inputmode="decimal" placeholder="0" value="${esc(F.amt)}" oninput="F.amt=this.value;pv()" autocomplete="off"></div><div><div class="lab">Description</div><input placeholder="e.g. Sabzi, rashan" maxlength="40" value="${esc(F.desc)}" oninput="F.desc=this.value" autocomplete="off"></div><div><div class="lab">Category</div>${F.cat == 'Other' ? `<div class="cap"><button class="fld" style="width:40%;flex:none" onclick="pc()"><span>Other</span>${ic('d')}</button><input placeholder="Type custom, e.g. Fuel" maxlength="24" value="${esc(F.cc)}" oninput="F.cc=this.value" autocomplete="off"></div>` : `<button class="fld" onclick="pc()"><span>${F.cat}</span>${ic('d')}</button>`}</div><div class="cap"><div style="flex:1;min-width:0"><div class="lab">Paid by</div><button class="fld" ${a ? 'onclick="pb()"' : ''}><span>${esc(F.by == me() ? 'Me' : S1(F.by))}</span>${a ? ic('d') : ic('lock')}</button></div><div style="flex:1.4;min-width:0"><div class="lab">Split between</div><button class="fld" ${w ? '' : 'onclick="ps()"'}><span>${esc(splLabel(sp))}</span>${w ? ic('lock') : ic('d')}</button></div></div>${w ? `<div class="sub nt">Wi-Fi bill is charged 100% to ${esc(S1(wifiKey()))} automatically.</div>` : ''}<div class="card pad" id="pv"></div><button class="btn" onclick="saveE()">${ic('ok')}${F.edit ? 'Update' : 'Save'} expense</button>`;
+}
+function cancelEdit() { newF(); render(); }
+function pv() {
+  const e = $('#pv'); if (!e) return;
+  const w = F.cat == 'Wi-Fi Bill' && wifiKey(), p = w ? [wifiKey()] : F.sp, a = num(F.amt) || 0, by = adm() ? F.by : me();
+  const shown = p.slice(0, 4);
+  e.innerHTML = shown.map(x => `<span>${esc(x == me() ? 'You' : S1(x))} ${fm(a / p.length)}</span>`).join('') + (p.length > 4 ? `<i class="sub">+${p.length - 4} more</i>` : '') + (p.length == 1 && p[0] == by ? '<i class="sub">Personal expense</i>' : '');
+}
+function saveE() {
+  if (needOk()) return;
+  const a = num(F.amt);
+  if (!(a > 0)) return toast('Enter an amount greater than 0');
+  if (a > 10000000) return toast('That amount looks too large');
+  if (F.cat == 'Other' && !(F.cc || '').trim() && !F.desc.trim()) return toast('Type a category or a description');
+  if (F.edit && !getE(F.edit)) { newF(); return gone(); }
+  const w = F.cat == 'Wi-Fi Bill' && wifiKey(), sp = (w ? [wifiKey()] : F.sp).filter(k => PK[k]);
+  if (!sp.length) return toast('Pick who shares this expense');
+  if (F.edit && !_cf) return ask('Update this entry? Totals and balances will change.', () => { _cf = 1; saveE(); _cf = 0; });
+  const by = adm() && PK[F.by] ? F.by : me(), d = F.desc.trim(), cc = F.cat == 'Other' ? (F.cc || '').trim() : '';
+  if (F.edit) {
+    if (!adm()) return deny();
+    Object.assign(getE(F.edit), { amt: a, cat: F.cat, cc, d, sp: sp.join(','), by });
+  } else {
+    const id = uid(), o = sp.filter(x => x != by), each = fm(a / sp.length);
+    D.ex.push({ id, by, amt: a, cat: F.cat, cc, d, sp: sp.join(','), ts: Date.now(), st: false });
+    D.nt.push({ id, by: me(), tx: `${S1(by)} paid ${fm(a)} for ${d || cc || F.cat}. ` + (!o.length ? 'Personal expense.' : o.length <= 3 ? o.map(x => `${S1(x)} owes ${S1(by)} ${each}`).join(', ') + '.' : `${o.length} people owe ${S1(by)} ${each} each.`) });
+  }
+  lg(`${F.edit ? 'Updated' : 'Added'} entry: ${d || cc || F.cat} ${fm(a)}`);
+  chkBud(); newF(); save(); go('ledger'); toast('Expense saved');
+}
+
+/* ===== Insights ===== */
+function ins() {
+  const tabs = [['ch', 'Charts'], ['mb', 'Members'], ['ad', 'Admin'], ['hi', 'History']];
+  let h = `<div class="hd"><b>Insights</b><span class="sub">Spending, members and history</span></div><div class="seg">${tabs.map(([k, l]) => `<button class="${isub == k ? 'on' : ''}" onclick="isub='${k}';hpg=0;mpg=0;render()">${l}</button>`).join('')}</div>`;
+  if (isub == 'mb') return h + members();
+  if (isub == 'hi') return h + hist();
+  if (isub == 'ad') {
+    if (!adm()) return h + `<div class="card pad em">${ic('lock')}<br>Only the admin can use these controls.</div>`;
+    return h + `<div class="card pad"><div class="lab">Monthly target budget (${esc(V.cur || 'Rs.')})</div><div class="cap"><input id="bu" inputmode="numeric" value="${D.bud}" autocomplete="off"><button class="btn" onclick="sb()">Save</button></div></div><div class="card pad"><div class="lab">Wi-Fi bill is always charged to</div><button class="fld" onclick="wifiPick()"><span>${D.wifi && PK[D.wifi] ? esc(N(D.wifi)) : 'Nobody (split it normally)'}</span>${ic('d')}</button></div><div class="cap"><button class="btn gh" style="flex:1" onclick="bk()">${ic('list')}Backup</button><button class="btn dng" style="flex:1" onclick="closeAsk()">${ic('trash')}Close month</button></div>`;
+  }
+  const T = {};
+  D.ex.forEach(e => { if (part(e)) { const k = e.cat == 'Other' && e.cc ? e.cc : e.cat; T[k] = (T[k] || 0) + e.amt; } });
+  let K = Object.keys(T).sort((a, b) => T[b] - T[a]);
+  if (K.length > 6) { T['More'] = K.slice(5).reduce((s, k) => s + T[k], 0); K = K.slice(0, 5).concat('More'); }
+  const tot = K.reduce((s, k) => s + T[k], 0); let o = 0;
+  const seg = K.map((k, i) => {
+    const p = tot ? T[k] / tot * 100 : 0, gap = K.length > 1 ? Math.min(5, p * .4) : 0, d = Math.max(p - gap, .01);
+    const s = p > 0 ? `<circle r="15.9" cx="18" cy="18" fill="none" stroke="${CC[i % CC.length]}" stroke-width="4" stroke-linecap="${K.length > 1 ? 'round' : 'butt'}" stroke-dasharray="${d} ${100 - d}" stroke-dashoffset="${-(o + gap / 2)}"/>` : '';
+    o += p; return s;
+  }).join('');
+  return h + `<div class="card pad" style="display:flex;justify-content:center"><svg viewBox="0 0 36 36" width="132" height="132" role="img" aria-label="Spending by category"><circle r="15.9" cx="18" cy="18" fill="none" stroke="var(--chip)" stroke-width="4"/><g transform="rotate(-90 18 18)">${seg}</g><text x="18" y="17.5" text-anchor="middle" font-size="2.6" fill="var(--sub)">Total</text><text x="18" y="21.6" text-anchor="middle" font-size="3.2" font-weight="800" fill="var(--tx)">${esc(fm(tot))}</text></svg></div><div class="card pad">${K.length ? K.map((k, i) => `<div class="rw"><span class="dt" style="background:${CC[i % CC.length]}"></span><b class="fl"><span>${esc(k)}</span></b><span class="sub">${tot ? Math.round(T[k] / tot * 100) : 0}%</span><b style="min-width:84px;text-align:right">${fm(T[k])}</b></div>`).join('') : '<div class="em">No spending yet this month.</div>'}</div>`;
+}
+function wifiPick() {
+  if (!adm()) return deny();
+  dd('Wi-Fi bill is charged to', [{ k: 'none', l: 'Nobody (split it normally)' }].concat(act().map(k => ({ k, l: N(k), a: av(k, 26) }))), D.wifi || 'none', k => {
+    D.wifi = k == 'none' ? '' : k; lg('Set Wi-Fi bill payer to ' + (D.wifi ? N(D.wifi) : 'nobody')); save(); render();
+  });
+}
+function sb() {
+  if (!adm()) return deny();
+  const n = Math.round(num($('#bu').value));
+  if (!(n >= 1)) return toast('Enter a budget greater than 0');
+  if (n != D.bud) lg(`Changed budget ${fm(D.bud)} to ${fm(n)}`);
+  D.bud = n; chkBud(); save(); toast('Budget saved'); render();
+}
+function closeAsk() {
+  if (!adm()) return deny();
+  if (!D.ex.length && !D.pay.length) return toast('Nothing to close yet');
+  ask(`Close ${monthLabel(D.ex)}? Entries and payments move to History, nothing is deleted, and a fresh month starts for everyone.`, rst);
+}
+function rst() {
+  if (!adm()) return deny();
+  const c = calc(), lab = monthLabel(D.ex), nm = {};
+  new Set(D.ex.flatMap(e => [e.by].concat(spk(e))).concat(c.M)).forEach(k => nm[k] = N(k));
+  D.hist.push({ id: uid(), m: lab, t: c.tot, n: D.ex.length, p: c.spent, nm, sm: c.m, ex: D.ex, pay: D.pay, tr: tx(c.net).map(([f, o, m]) => ({ f, t: o, a: Math.round(m) })), ts: Date.now() });
+  D.hist.sort((a, b) => a.id - b.id); while (D.hist.length > 24) D.hist.shift();
+  lg(`Closed ${lab}: ${fm(c.tot)} and ${D.ex.length} entries archived`);
+  D.ex = []; D.pay = []; D.nt = [{ id: uid(), by: me(), tx: `${S1(me())} closed ${lab}. A fresh month has started.` }]; D.ba = 0;
+  save(); render(); toast('Month archived to History');
+}
+function hist() {
+  const L = D.hist.slice().sort((a, b) => b.id - a.id), n = Math.max(1, Math.ceil(L.length / 4));
+  hpg = Math.max(0, Math.min(hpg, n - 1));
+  const nm = (x, k) => (x.nm && x.nm[k]) || N(k);
+  return `<div class="card pad">${L.length ? L.slice(hpg * 4, hpg * 4 + 4).map(x => `<button class="rw" style="width:100%" onclick="hshow(${x.id})"><div class="ci">${ic('list')}</div><div class="fl"><b>${esc(x.m)}</b><i>${x.n} entries · ${Object.keys(x.p || {}).slice(0, 3).map(k => esc(nm(x, k).split(' ')[0]) + ' ' + fm(x.p[k])).join(' · ')}</i></div><b>${fm(x.t)}</b></button>`).join('') : `<div class="em">No closed months yet.${adm() ? ' Close a month from the Admin tab.' : ''}</div>`}</div>${L.length > 4 ? `<div class="pg"><button ${hpg ? '' : 'disabled'} onclick="hpg--;render()">${ic('l')}Prev</button><span class="sub">${hpg + 1} / ${n}</span><button ${hpg < n - 1 ? '' : 'disabled'} onclick="hpg++;render()">Next${ic('r')}</button></div>` : ''}`;
+}
+const arr = v => Array.isArray(v) ? v : Object.values(v || {});
+function hshow(id) {
+  const x = D.hist.find(h => h.id == id); if (!x) return;
+  const tr = arr(x.tr), nm = k => (x.nm && x.nm[k]) || N(k);
+  ov(`<h3>${esc(x.m)}${X}</h3><div class="card pad"><div class="kv"><span>Room total</span><b>${fm(x.t)}</b></div><div class="kv"><span>Entries</span><b>${x.n}</b></div><div class="kv"><span>Method</span><b>${METH[x.sm] || 'By Entry'}</b></div>${Object.keys(x.p || {}).map(k => `<div class="kv"><span>${esc(nm(k))} paid</span><b>${fm(x.p[k])}</b></div>`).join('')}</div><div class="lab">Settle-up at closing</div><div class="card pad">${tr.length ? tr.map(t => `<div class="kv"><span>${esc(nm(t.f).split(' ')[0])} pays ${esc(nm(t.t).split(' ')[0])}</span><b>${fm(t.a)}</b></div>`).join('') : '<div class="sub">All settled.</div>'}</div>${arr(x.ex).length ? `<button class="btn gh" onclick="hcsv(${x.id})">${ic('chart')}Export this month as CSV</button>` : ''}`);
+}
+function hcsv(id) { const x = D.hist.find(h => h.id == id); if (x) share(x.m + ' CSV', csvOf(arr(x.ex), x.nm)); }
+
+/* ===== Members ===== */
+const ST = { approved: 'ACTIVE', pending: 'WAITING', invited: 'INVITED', removed: 'REMOVED' };
+function members() {
+  const A = adm();
+  const L = Object.entries(MB).filter(([, m]) => m && m.email && m.status != 'removed' && (A || m.status == 'approved'))
+    .sort(([, a], [, b]) => (b.key == 'adm') - (a.key == 'adm') || (b.status == 'pending') - (a.status == 'pending') || String(a.email).localeCompare(b.email));
+  const PS = A ? 3 : 4, n = Math.max(1, Math.ceil(L.length / PS));
+  mpg = Math.max(0, Math.min(mpg, n - 1));
+  const rowM = ([k, m]) => {
+    const isA = m.key == 'adm', st = isA ? 'ADMIN' : m.paused && m.status == 'approved' ? 'PAUSED' : ST[m.status];
+    let b = '';
+    if (A && !isA) {
+      if (m.status == 'pending') b = `<button class="mini ok" onclick="accept('${k}')">Accept</button><button class="mini dng" onclick="rejectM('${k}')">Reject</button>`;
+      else if (m.status == 'approved') b = `<button class="mini" onclick="pauseM('${k}')">${m.paused ? 'Resume' : 'Pause'}</button><button class="mini dng" onclick="removeM('${k}')">Remove</button>`;
+      else if (m.status == 'invited') b = `<button class="mini dng" onclick="cancelInv('${k}')">Cancel</button>`;
+    }
+    return `<div class="rw">${m.key && m.status == 'approved' ? av(m.key, 30) : `<span class="av" style="width:30px;height:30px;font-size:13px;background:var(--chip);color:var(--sub)">${ic('user')}</span>`}<div class="fl"><b>${esc((m.name || '').trim() || m.email.split('@')[0])}${k == ME.ek ? ' (you)' : ''}</b><i>${esc(m.email)}</i><span class="cn${st == 'ACTIVE' || st == 'ADMIN' ? '' : ' pz'}" style="align-self:flex-start;margin-top:2px">• ${st}</span></div><div class="mac">${b}</div></div>`;
+  };
+  return `${A ? `<div class="card pad"><div class="lab">Add a roommate by email</div><div class="cap"><input id="nem" type="email" placeholder="name@gmail.com" autocomplete="off" inputmode="email"><button class="btn" onclick="addM()">Add</button></div><div class="sub" style="white-space:normal;margin-top:4px">Only added emails can sign in. When they do, you get a notification to accept them.</div></div>` : ''}<div class="card pad">${L.slice(mpg * PS, mpg * PS + PS).map(rowM).join('') || '<div class="em">No members yet.</div>'}${pager('mpg', n, mpg)}</div>`;
+}
+
+/* ===== Top bar actions ===== */
+function tv() { V.vw = V.vw == 'g' ? 'c' : 'g'; pg = 0; saveLocal(); render(); toast(V.vw == 'g' ? 'Glass view on' : 'Classic view on'); }
+function moon() {
+  if (V.vw == 'g') { V.vw = 'c'; saveLocal(); render(); return toast('Classic view on. Tap again for dark mode'); }
+  if (V.th == 'amoled') V.th = V.prev && V.prev != 'amoled' ? V.prev : 'olive'; else { V.prev = V.th; V.th = 'amoled'; }
+  saveLocal(); render();
+}
+function bell() {
+  const P = pending(), L = D.nt.slice().sort((a, b) => b.id - a.id).slice(0, P.length ? 4 : 6), seen = V.seen[ME.email] || 0;
+  ov(`<h3>Notifications${X}</h3>` + P.map(([k, m]) => `<div class="opt on"><span class="av" style="width:30px;height:30px;font-size:13px;background:var(--pri);color:var(--on)">${ic('user')}</span><div class="fl"><span style="white-space:normal"><b>${esc(m.name || m.email)}</b> signed in and wants to join.</span><i>${esc(m.email)}</i></div><div class="mac"><button class="mini ok" onclick="accept('${k}')">Accept</button><button class="mini dng" onclick="rejectM('${k}')">Reject</button></div></div>`).join('')
+    + L.map(n => `<div class="opt${n.by != me() && n.id > seen ? ' on' : ''}">${av(n.by, 30)}<div class="fl"><span style="white-space:normal">${esc(n.tx)}</span></div></div>`).join('')
+    + (P.length || L.length ? '' : `<div class="em">${approved() ? 'Nothing new. Entries by roommates show up here.' : 'Notifications appear once the admin accepts you.'}</div>`)
+    + `<button class="btn gh" onclick="mar()">${ic('ok')}Mark all as read</button>`);
+}
+function mar() { V.seen[ME.email] = D.nt.reduce((m, n) => Math.max(m, n.id), 0); saveLocal(); bell(); topR(); }
+
+/* ===== Profile ===== */
+function profile() {
+  const m = MB[ME.ek] || {};
+  ov(`<h3>Profile${X}</h3><div class="pc">${av(me(), 56)}<button class="btn gh" onclick="pfc()">${ic('cam')}Change photo</button><input type="file" id="pf" accept="image/*" hidden onchange="photo(this)"></div><div><div class="lab">Display name</div><input id="dn" maxlength="24" value="${esc(myName())}" autocomplete="off"><div class="sub nt">${esc(ME.email)} · ${adm() ? 'Admin' : ST[m.status] ? ST[m.status].toLowerCase() : 'member'} (locked)</div></div><button class="btn" onclick="saveP()">Save profile</button><button class="btn gh" onclick="signOutAsk()">Sign out</button>`);
+}
+function pfc() { $('#pf').click(); }
+function saveMe(patch, okMsg) {
+  if (DEMO) { Object.assign(MB[ME.ek], patch); reindex(); render(); return toast(okMsg); }
+  Object.assign(MB[ME.ek] = MB[ME.ek] || {}, patch); reindex(); saveLocal(); render();
+  rest('/members/' + ME.ek, 'PATCH', patch).then(() => toast(okMsg)).catch(e => toast(e.message));
+}
+function saveP() {
+  const v = $('#dn').value.replace(/\s+/g, ' ').trim().slice(0, 24);
+  cl();
+  if (v && v != myName()) { lg(`Changed display name to ${v}`); save(); saveMe({ name: v }, 'Profile saved'); } else toast('Profile saved');
+}
+function photo(i) {
+  const f = i.files && i.files[0]; if (!f) return;
+  if (!/^image\//.test(f.type)) return toast('Pick an image file');
+  const r = new FileReader();
+  r.onerror = () => toast('Could not read that photo');
+  r.onload = () => {
+    const im = new Image();
+    im.onerror = () => toast('Could not read that photo');
+    im.onload = () => {
+      const c = document.createElement('canvas'); c.width = c.height = 96;
+      const s = Math.min(im.width, im.height);
+      c.getContext('2d').drawImage(im, (im.width - s) / 2, (im.height - s) / 2, s, s, 0, 0, 96, 96);
+      cl(); saveMe({ pic: c.toDataURL('image/jpeg', .8) }, 'Photo updated');
+    };
+    im.src = r.result;
+  };
+  r.readAsDataURL(f);
+}
+
+/* ===== Settings ===== */
+function settings() {
+  ov(`<h3>Settings${X}</h3><div class="seg">${[['g', 'General'], ['a', 'Advanced'], ['s', 'Account'], ['u', 'Guide']].map(([k, l]) => `<button class="${stab == k ? 'on' : ''}" onclick="stab='${k}';settings()">${l}</button>`).join('')}</div>${({ g: genH, a: advH, s: acctH, u: guide })[stab]()}`);
+}
+function openAcct() { stab = 's'; settings(); }
+function genH() {
+  return `<div class="lab">View style</div><div class="seg">${[['c', 'Classic'], ['g', 'Glass']].map(([k, l]) => `<button class="${(V.vw || 'c') == k ? 'on' : ''}" onclick="svw('${k}')">${l}</button>`).join('')}</div><div class="lab">Theme${V.vw == 'g' ? ' (switch to Classic view to see it)' : ''}</div>${TH.map(([k, l, c]) => `<button class="opt${V.th == k ? ' on' : ''}" onclick="sth('${k}')"><span class="sw" style="background:${c}"></span><b class="fl"><span>${l}</span></b>${V.th == k ? ic('ok') : ''}</button>`).join('')}<div class="lab">Font size</div><div class="seg">${[['s', 'Small'], ['n', 'Normal'], ['l', 'Large']].map(([k, l]) => `<button class="${V.fs == k ? 'on' : ''}" onclick="sfs('${k}')">${l}</button>`).join('')}</div>`;
+}
+function svw(k) { V.vw = k; pg = 0; saveLocal(); render(); settings(); }
+function sth(k) { V.th = k; saveLocal(); render(); settings(); }
+function sfs(k) { V.fs = k; saveLocal(); render(); settings(); }
+function scu(c) { V.cur = c; saveLocal(); render(); settings(); }
+function sth2(n) { V.thr = n; saveLocal(); if (approved()) { chkBud(); save(); } settings(); }
+function hap(v) { V.hap = v; saveLocal(); settings(); }
+function dsp() { dd('Default split', [{ k: 'all', l: 'Everyone' }, { k: 'me', l: 'Only me' }], V.dsp || 'all', k => { V.dsp = k; if (!F.edit && F.cat != 'Wi-Fi Bill') F.sp = defSp(); saveLocal(); settings(); }); }
+function dct() { dd('Default category', CATS.filter(c => c != 'Wi-Fi Bill').map(c => ({ k: c, l: c })), V.dcat || 'Grocery', k => { V.dcat = k; if (!F.edit) { F.cat = k; F.sp = defSp(); } saveLocal(); settings(); }); }
+function advH() {
+  const a = adm(), old = localStorage.getItem('rk_d');
+  return `<div class="lab">Currency label</div><div class="seg">${['Rs.', 'PKR', '$'].map(c => `<button class="${(V.cur || 'Rs.') == c ? 'on' : ''}" onclick="scu('${c}')">${c}</button>`).join('')}</div><div class="lab">Defaults for new entries</div><button class="fld" onclick="dsp()"><span>${V.dsp == 'me' ? 'Only me' : 'Everyone'}</span>${ic('d')}</button><button class="fld" onclick="dct()"><span>${V.dcat || 'Grocery'}</span>${ic('d')}</button><div class="lab">Budget alert at</div><div class="seg">${[80, 90, 100].map(n => `<button class="${(V.thr || 90) == n ? 'on' : ''}" onclick="sth2(${n})">${n}%</button>`).join('')}</div><div class="lab">Vibration on tap</div><div class="seg"><button class="${V.hap ? 'on' : ''}" onclick="hap(1)">On</button><button class="${V.hap ? '' : 'on'}" onclick="hap(0)">Off</button></div><div class="lab">Security and data</div><button class="opt" onclick="pinui()">${ic('lock')}<b class="fl"><span>${V.pin ? 'Change or remove app lock PIN' : 'Set an app lock PIN'}</span></b></button>${a ? `<button class="opt" onclick="logv()">${ic('list')}<b class="fl"><span>Activity log</span></b></button><button class="opt" onclick="mraAsk()">${ic('bell')}<b class="fl"><span>Clear notifications</span></b></button>` : ''}<button class="opt" onclick="csv()">${ic('chart')}<b class="fl"><span>Export entries as CSV</span></b></button><button class="opt" onclick="bk()">${ic('swap')}<b class="fl"><span>${a ? 'Backup and restore' : 'Backup'}</span></b></button>${old ? `<button class="opt" onclick="oldData()">${ic('list')}<b class="fl"><span>Old RoomKhata data on this phone</span></b></button>` : ''}`;
+}
+function oldData() { share('Old RoomKhata data (backup text)', localStorage.getItem('rk_d') || ''); }
+function mraAsk() { if (!adm()) return deny(); ask('Clear all notifications for everyone?', mra); }
+function mra() { if (!adm()) return deny(); D.nt = []; lg('Cleared all notifications'); save(); render(); }
+function acctH() {
+  if (DEMO) return `<div class="note">This is a demo with sample data. Nothing here is saved or shared.</div><button class="btn" onclick="exitDemo()">Exit demo</button>`;
+  const s = SY.st, lab = { live: 'Connected and up to date', sync: 'Sending changes', conn: 'Connecting', err: 'Offline', off: 'Offline' }[s] || 'Connecting';
+  return `<div id="acctbox"></div><div class="card pad"><div class="rw">${av(me(), 34)}<div class="fl"><b>${esc(myName())}</b><i>${esc(ME.email)}</i></div><span class="cn${approved() ? '' : ' pz'}">• ${adm() ? 'ADMIN' : approved() ? 'MEMBER' : 'WAITING'}</span></div><div class="kv"><span>Sync</span><b class="${s == 'live' ? 'pos' : s == 'err' ? 'neg' : ''}">${approved() ? lab : 'Starts after approval'}</b></div>${s == 'err' && SY.err ? `<div class="sub" style="white-space:normal">${esc(SY.err)}</div>` : ''}<div class="kv"><span>Server</span><b style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:62%">${esc(srv().replace(/^https:\/\//, ''))}</b></div></div>${adm() ? `<div class="lab">Email alerts for join requests</div><input id="hook" placeholder="Apps Script web app URL" value="${esc(V.hook || '')}" autocomplete="off" inputmode="url"><div class="cap"><button class="btn gh" style="flex:1" onclick="saveHook()">Save</button><button class="btn gh" style="flex:1" onclick="testHook()">Send test</button></div>` : ''}<div class="cap"><button class="btn gh" style="flex:1" onclick="resync()">${ic('refresh')}Sync now</button><button class="btn gh" style="flex:1" onclick="signOutAsk()">Sign out</button></div>`;
+}
+function guide() {
+  const S = [
+    ['Sign in', 'Tap Continue with Google. Only emails the admin has added can get in. New members wait until the admin accepts them.'],
+    ['Add an expense', 'Open Add. Enter the amount and a short note, pick the category, who paid and who shares it. Choose Other to type your own category.'],
+    ['Split rules', 'Split between everyone, any group of members, or one person only. The admin can set one member who always pays the Wi-Fi bill.'],
+    ['Ledger', 'Every entry is listed here. Use search and the category chips. Admin can edit and delete.'],
+    ['Pending and Settled', 'Mark an entry Settled when everyone already squared up for it in cash. It then leaves the Debts but still counts in the room total.'],
+    ['Debts', 'Shows who owes whom. Tap Paid when money is handed over. Admin picks By Entry or Equal Split for everyone.'],
+    ['Members', 'Admin adds roommates by email in Insights, Members, and accepts them when they sign in. Paused members are left out of the hisab.'],
+    ['Month end', 'Admin opens Insights, Admin, Close month. Entries and payments move to History, where each month can be opened and exported.'],
+    ['Safety', 'Risky actions ask first. Admin can see every action in the Activity log. You can set an app lock PIN in Settings, Advanced.']
+  ];
+  return S.map(([t, d], i) => `<div class="opt" style="align-items:flex-start"><span class="ci" style="width:26px;height:26px;border-radius:50%;font-weight:800">${i + 1}</span><div class="fl"><b>${t}</b><i style="white-space:normal">${esc(d)}</i></div></div>`).join('');
+}
+
+/* ===== Activity log and CSV ===== */
+function logv() {
+  if (!adm()) return;
+  const L = D.log.slice().sort((a, b) => b.id - a.id).filter(x => lu == 'all' || x.u == lu), n = Math.max(1, Math.ceil(L.length / 6));
+  lpg = Math.max(0, Math.min(lpg, n - 1));
+  const who = ['all'].concat(people().slice(0, 3).map(p => p.key));
+  ov(`<h3>Activity log${X}</h3><div class="seg">${who.map(k => `<button class="${lu == k ? 'on' : ''}" onclick="lu='${k}';lpg=0;logv()">${k == 'all' ? 'All' : esc(S1(k))}</button>`).join('')}</div>${L.slice(lpg * 6, lpg * 6 + 6).map(x => `<div class="rw">${av(x.u, 26)}<div class="fl"><span style="white-space:normal">${esc(x.a)}</span><i>${esc(S1(x.u))} · ${tm(x.t)}</i></div></div>`).join('') || '<div class="em">No activity yet.</div>'}<div class="pg"><button ${lpg ? '' : 'disabled'} onclick="lpg--;logv()">${ic('l')}Prev</button><span class="sub">${lpg + 1} / ${n}</span><button ${lpg < n - 1 ? '' : 'disabled'} onclick="lpg++;logv()">Next${ic('r')}</button></div><button class="btn gh" onclick="lcsv()">Export as CSV</button>`);
+}
+const qc = s => '"' + String(s == null ? '' : s).replace(/"/g, '""') + '"';
+function lcsv() { share('Activity log CSV', ['Time,User,Action'].concat(D.log.slice().sort((a, b) => a.id - b.id).filter(x => lu == 'all' || x.u == lu).map(x => [tm(x.t), N(x.u), x.a].map(qc).join(','))).join('\n')); }
+function csvOf(L, nm) {
+  const n = k => (nm && nm[k]) || N(k);
+  return ['Date,Paid by,Category,Description,Amount,Split between,Status'].concat(L.slice().sort((a, b) => (a.ts || 0) - (b.ts || 0) || a.id - b.id).map(e => [dlab(e, 1), n(e.by), e.cc || e.cat, e.d || '', e.amt, spk(e).map(n).join(' + '), e.st ? 'Settled' : 'Pending'].map(qc).join(','))).join('\n');
+}
+function csv() { share('Export entries', csvOf(D.ex)); }
+
+/* ===== Backup and restore ===== */
+function bk() {
+  ov(`<h3>${adm() ? 'Backup and restore' : 'Backup'}${X}</h3><div class="sub" style="white-space:normal">Copy this text and keep it somewhere safe.${adm() ? ' To restore, paste a saved backup here and tap Restore.' : ''}</div><textarea id="bt" rows="7" ${adm() ? '' : 'readonly'}>${esc(JSON.stringify(D))}</textarea><div class="cap"><button class="btn gh" style="flex:1" onclick="cp()">${ic('copy')}Copy</button>${adm() ? `<button class="btn" style="flex:1" onclick="rb()">Restore</button>` : ''}</div>`);
+}
+function rb() {
+  if (!adm()) return deny();
+  let o;
+  try { o = JSON.parse($('#bt').value); if (!o || !Array.isArray(o.ex) || o.ex.some(e => !e || typeof e.sp != 'string' || !e.by || !(num(e.amt) > 0))) throw 0; }
+  catch (e) { return toast('This is not a SplitLedger backup'); }
+  ask('Restore this backup? It replaces the current ledger for everyone in the room.', () => { D = migrate(o); lg('Restored a backup'); save(); render(); toast('Backup restored'); });
+}
+
+/* ===== App lock PIN (this device only) ===== */
+function hp(s) { let h = 5381; for (const c of 'sl' + s) h = ((h * 33) ^ c.charCodeAt(0)) >>> 0; return h; }
+function lockScreen() {
+  const o = $('#ov');
+  o.innerHTML = H(`<div class="sh"><h3>Enter your app PIN</h3><input id="pn" type="password" inputmode="numeric" maxlength="6" placeholder="PIN" autocomplete="off"><button class="btn" onclick="ul()">Unlock</button><button class="btn gh" onclick="forgotPin()">Forgot PIN? Sign out</button></div>`);
+  o.dataset.lk = 1; o.style.background = 'var(--bg)'; o.classList.add('show');
+  setTimeout(() => { const p = $('#pn'); if (p) p.focus(); }, 50);
+}
+function unlock() { const o = $('#ov'); delete o.dataset.lk; o.style.background = ''; cl(); }
+function ul() {
+  const r = V.pl || { n: 0, u: 0 };
+  if (Date.now() < r.u) return toast(`Too many tries. Wait ${Math.ceil((r.u - Date.now()) / 1000)} seconds`);
+  if (hp($('#pn').value) == V.pin) { delete V.pl; saveLocal(); unlock(); }
+  else { r.n++; if (r.n >= 5) r.u = Date.now() + 30000 * Math.pow(2, Math.min(4, r.n - 5)); V.pl = r; saveLocal(); $('#pn').value = ''; toast(r.n >= 5 ? 'Wrong PIN. Locked for a while' : 'Wrong PIN'); }
+}
+function forgotPin() { unlock(); delete V.pin; delete V.pl; signOutLocal('Signed out. Sign in again to continue'); }
+function pinui() {
+  ov(`<h3>${V.pin ? 'Change PIN' : 'Set PIN'}${X}</h3><div class="sub" style="white-space:normal">Use 4 to 6 digits. The app asks for it every time it opens on this phone. Do not reuse a bank PIN.</div><input id="pn" type="password" inputmode="numeric" maxlength="6" placeholder="New PIN" autocomplete="off"><button class="btn" onclick="pins()">Save PIN</button>${V.pin ? `<button class="btn dng" onclick="pinrm()">Remove PIN</button>` : ''}`);
+}
+function pins() { const v = $('#pn').value; if (!/^\d{4,6}$/.test(v)) return toast('Use 4 to 6 digits'); V.pin = hp(v); saveLocal(); cl(); toast('PIN saved'); }
+function pinrm() { delete V.pin; saveLocal(); cl(); toast('PIN removed'); }
+
+/* ===================== SERVER, SIGN-IN AND MEMBERS ===================== */
+const isApp = /SplitLedgerApp/.test(navigator.userAgent);
+var TOKURL = 'https://securetoken.googleapis.com/v1/token';
+const srv = () => (SERVER || V.srv || '').replace(/\/+$/, '');
+const okCfg = c => c && typeof c.apiKey == 'string' && c.apiKey.length > 10 && /^https:\/\/[^/]+\.(firebaseio\.com|firebasedatabase\.app)\/?$/.test(c.databaseURL || '');
+function fetchCfg(base) {
+  return fetch(base + '/config.json', { cache: 'no-store' }).then(r => { if (!r.ok) throw new Error('No SplitLedger server at that link'); return r.json(); })
+    .then(c => { if (!okCfg(c)) throw new Error('The server is not set up yet (config.json is empty)'); return c; });
+}
+function setSrv() {
+  let u = $('#srv').value.trim();
+  if (!u) return toast('Paste the server link');
+  if (!/^https?:\/\//i.test(u)) u = 'https://' + u;
+  try { u = new URL(u).href.replace(/[?#].*$/, '').replace(/\/(index\.html|app\.html|config\.json)$/, '').replace(/\/+$/, ''); } catch (e) { return toast('That link does not look right'); }
+  toast('Checking the server');
+  fetchCfg(u).then(c => { V.srv = u; V.cfg = c; saveLocal(); render(); }).catch(e => toast(e.message || 'Could not reach that link'));
+}
+function chSrv() { V.cfg = null; if (!SERVER) V.srv = ''; saveLocal(); render(); }
+function login() {
+  V.ast = rnd(16); V.lmsg = ''; saveLocal();
+  const ret = isApp ? 'app' : location.href.split('#')[0];
+  location.href = srv() + '/?st=' + V.ast + '&ret=' + encodeURIComponent(ret);
+}
+function jwt(t) { try { const p = t.split('.')[1].replace(/-/g, '+').replace(/_/g, '/'); return JSON.parse(decodeURIComponent(escape(atob(p + '==='.slice((p.length + 3) % 4))))); } catch (e) { return null; } }
+/* the sign-in page sends us back with #sl=st=..&id=..&rt=.. */
+function takeAuth() {
+  const h = location.hash;
+  if (!h.startsWith('#sl=')) return false;
+  try { history.replaceState(history.state, '', location.href.split('#')[0]); } catch (e) { }
+  const q = new URLSearchParams(h.slice(4)), st = q.get('st'), id = q.get('id'), rt = q.get('rt'), c = jwt(id || '');
+  if (!st || st !== V.ast) { V.lmsg = 'That sign-in link has expired. Please tap Continue with Google again.'; saveLocal(); render(); return true; }
+  if (!c || !c.email || !rt) { V.lmsg = 'Sign-in did not finish. Please try again.'; saveLocal(); render(); return true; }
+  V.ast = ''; V.lmsg = '';
+  const email = String(c.email).toLowerCase();
+  if (localStorage.getItem('sl_who') && localStorage.getItem('sl_who') != email) wipeLocal();
+  V.auth = { id, rt, exp: (c.exp || 0) * 1000, email, uid: c.user_id || c.sub, name: c.name || '', pic: c.picture || '', ver: c.email_verified !== false };
+  saveLocal(); start(); return true;
+}
+var _tokP = null;
+function token(force) {
+  const a = V.auth;
+  if (!a) return Promise.reject(new Error('Signed out'));
+  if (!force && a.exp - Date.now() > 300000) return Promise.resolve(a.id);
+  if (_tokP) return _tokP;
+  _tokP = fetch(TOKURL + '?key=' + encodeURIComponent(V.cfg.apiKey), { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: 'grant_type=refresh_token&refresh_token=' + encodeURIComponent(a.rt) })
+    .then(r => r.json().catch(() => ({})).then(j => {
+      if (!r.ok) {
+        const m = (j.error && j.error.message) || '';
+        if (/TOKEN_EXPIRED|USER_DISABLED|USER_NOT_FOUND|INVALID_REFRESH_TOKEN|INVALID_GRANT_TYPE|MISSING_REFRESH_TOKEN/.test(m)) signOutLocal('Your session ended. Please sign in again');
+        throw new Error('Could not refresh the sign-in');
+      }
+      if (!V.auth) throw new Error('Signed out');
+      V.auth.id = j.id_token; V.auth.rt = j.refresh_token || V.auth.rt; V.auth.exp = Date.now() + (+j.expires_in || 3600) * 1000; saveLocal();
+      return j.id_token;
+    }), () => { throw new Error('No internet'); })
+    .finally(() => { _tokP = null; });
+  return _tokP;
+}
+const dbu = () => V.cfg.databaseURL.replace(/\/+$/, '');
+/* REST call to the database; throws Error with .code 'denied' | 'net' | 'http' */
+function rest(path, method, body, retried) {
+  return token().then(t => fetch(dbu() + path + '.json?auth=' + encodeURIComponent(t), method ? { method, body: body === undefined ? undefined : JSON.stringify(body) } : {}))
+    .then(r => r.text().then(txt => {
+      if (r.ok) { try { return JSON.parse(txt); } catch (e) { return null; } }
+      if (r.status == 401 && /expired/i.test(txt) && !retried) return token(true).then(() => rest(path, method, body, 1));
+      const e = new Error(r.status == 401 || r.status == 403 ? 'Not allowed by the server' : 'Server error ' + r.status); e.code = r.status == 401 || r.status == 403 ? 'denied' : 'http'; throw e;
+    }), e => { if (e.code) throw e; const x = new Error(e.message == 'Signed out' ? 'Signed out' : 'No internet connection'); x.code = 'net'; throw x; });
+}
+
+/* after sign-in: who is this, and what may they see */
+function start() {
+  if (!V.auth || !V.cfg) return render();
+  ME = { email: V.auth.email, ek: ekey(V.auth.email), key: '', admin: V.auth.email == ADMIN && V.auth.ver, status: 'loading' };
+  if (localStorage.getItem('sl_who') == ME.email) {
+    try { MB = JSON.parse(localStorage.getItem('sl_m') || '{}') || {}; D = migrate(JSON.parse(localStorage.getItem('sl_d') || 'null')); SY.S = JSON.parse(localStorage.getItem('sl_s') || 'null'); } catch (e) { MB = {}; D = blank(); SY.S = null; }
+    reindex();
+    const m = MB[ME.ek];
+    if (m && m.status == 'approved') ME.status = 'approved';
+  }
+  newF(); render();
+  if (V.pin) lockScreen();
+  checkMember();
+}
+function checkMember() {
+  if (!V.auth) return;
+  if (ME.status == 'error') { ME.status = 'loading'; render(); }
+  const k = ME.ek, g = V.auth;
+  const p = ME.admin
+    ? rest('/members/' + k).then(m => {
+      const rec = { email: ME.email, key: 'adm', status: 'approved', role: 'admin' };
+      if (!m) Object.assign(rec, { name: g.name, pic: g.pic, invitedAt: { '.sv': 'timestamp' }, approvedAt: { '.sv': 'timestamp' } });
+      else { if (!m.name && g.name) rec.name = g.name; if (!m.pic && g.pic) rec.pic = g.pic; }
+      return rest('/members/' + k, 'PATCH', rec).then(() => { MB[k] = Object.assign(m || {}, rec); if (!m) MB[k].approvedAt = MB[k].invitedAt = Date.now(); onApproved(); });
+    })
+    : rest('/members/' + k).then(m => {
+      if (!m || m.status == 'removed') return onDenied();
+      if (m.status == 'invited') {
+        const patch = { status: 'pending', uid: g.uid, joinedAt: { '.sv': 'timestamp' } };
+        if (!m.name && g.name) patch.name = g.name; if (!m.pic && g.pic) patch.pic = g.pic;
+        return rest('/members/' + k, 'PATCH', patch).then(() => { MB = { [k]: Object.assign(m, patch, { joinedAt: Date.now() }) }; mailAdmin(); onPending(); });
+      }
+      MB[k] = m;
+      if (m.status == 'pending') return onPending();
+      if (m.status == 'approved') return onApproved();
+      onDenied();
+    });
+  p.catch(e => {
+    if (!V.auth) return;
+    if (ME.status == 'approved') { SY.st = 'err'; SY.err = e.message; topR(); return setTimeout(checkMember, 15000); }
+    if (e.code == 'denied' && !ME.admin) return onDenied();
+    ME.status = 'error'; ME.err = e.code == 'denied' ? 'The server rules blocked this account. The admin should check the database rules.' : e.message; render();
+  });
+}
+function onDenied() {
+  stopAll(); D = blank(); MB = {}; PK = {}; SY.S = null; wipeLocal();
+  ME.status = 'none'; ME.key = ''; render();
+  watchMembers('/members/' + ME.ek);
+}
+function onPending() {
+  stopData(); D = blank(); SY.S = null; ['sl_d', 'sl_s'].forEach(k => localStorage.removeItem(k));
+  ME.status = 'pending'; reindex(); newF(); saveLocal(); render();
+  watchMembers('/members/' + ME.ek);
+}
+function onApproved() {
+  const was = ME.status;
+  ME.status = 'approved'; reindex(); newF(); saveLocal(); render();
+  if (was == 'pending') toast('The admin accepted you. Welcome!');
+  watchMembers('/members');
+  connect();
+}
+/* the member's own Apps Script hook tells the admin by email */
+function mailAdmin() {
+  rest('/pub/hook').then(u => {
+    if (typeof u == 'string' && /^https:\/\/script\.google\.com\/macros\/s\/[\w-]+\/exec$/.test(u))
+      fetch(u, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ email: ME.email, name: (V.auth && V.auth.name) || '' }) }).catch(() => { });
+  }).catch(() => { });
+}
+function saveHook() {
+  if (!adm()) return deny();
+  const u = $('#hook').value.trim();
+  if (u && !/^https:\/\/script\.google\.com\/macros\/s\/[\w-]+\/exec$/.test(u)) return toast('Paste the Apps Script web app URL ending in /exec');
+  rest('/pub/hook', 'PUT', u || null).then(() => { V.hook = u; saveLocal(); toast(u ? 'Email alerts on' : 'Email alerts off'); }).catch(e => toast(e.message));
+}
+function testHook() {
+  const u = $('#hook').value.trim();
+  if (!/^https:\/\/script\.google\.com\/macros\/s\/[\w-]+\/exec$/.test(u)) return toast('Paste the Apps Script web app URL first');
+  fetch(u, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ email: 'test@example.com', name: 'Test (SplitLedger)' }) }).then(() => toast('Test sent. Check ' + ADMIN)).catch(() => toast('Could not send the test'));
+}
+
+/* live members list (whole list for members, own record while waiting) */
+var MS = { es: null, path: '', T: null };
+function watchMembers(path) {
+  if (DEMO) return;
+  stopMembers(); MS.path = path; MS.T = null;
+  token().then(t => {
+    if (MS.path != path || !V.auth) return;
+    const es = new EventSource(dbu() + path + '.json?auth=' + encodeURIComponent(t));
+    MS.es = es;
+    const on = (type, e) => {
+      let msg; try { msg = JSON.parse(e.data); } catch (x) { return; }
+      if (!msg || typeof msg.path != 'string') return;
+      if (type == 'put') MS.T = setAt(MS.T || {}, msg.path, msg.data);
+      else if (msg.data && typeof msg.data == 'object') for (const k in msg.data) MS.T = setAt(MS.T || {}, msg.path + '/' + k, msg.data[k]);
+      membersChanged(path == '/members' ? MS.T : (MS.T && Object.keys(MS.T).length ? { [ME.ek]: MS.T } : {}));
+    };
+    es.addEventListener('put', e => on('put', e));
+    es.addEventListener('patch', e => on('patch', e));
+    es.addEventListener('auth_revoked', () => { token(true).then(() => watchMembers(path)).catch(() => { }); });
+    es.addEventListener('cancel', () => { stopMembers(); checkMember(); });
+  }).catch(() => setTimeout(() => { if (MS.path == path && !MS.es) watchMembers(path); }, 15000));
+}
+function stopMembers() { if (MS.es) try { MS.es.close(); } catch (e) { } MS.es = null; }
+function membersChanged(T) {
+  const before = pending().map(([k]) => k);
+  MB = T || {}; reindex(); saveLocal();
+  const mine = MB[ME.ek], st = mine && mine.status;
+  if (ME.status == 'approved' && !ME.admin && st != 'approved') { toast('Your access was changed by the admin'); return st == 'pending' ? onPending() : onDenied(); }
+  if (ME.status == 'pending' && st == 'approved') return onApproved();
+  if (ME.status == 'none' && st == 'invited') { ME.status = 'loading'; render(); return checkMember(); }
+  if (ME.status == 'pending' && (!st || st == 'removed')) return onDenied();
+  if (adm()) { const fresh = pending().filter(([k]) => !before.includes(k)); if (fresh.length && before.length + fresh.length > 0 && MS.seenOnce) { toast(`${fresh[0][1].name || fresh[0][1].email} wants to join`); if (V.hap && navigator.vibrate) try { navigator.vibrate([60, 60, 60]); } catch (e) { } } }
+  MS.seenOnce = 1;
+  soft();
+}
+
+/* admin actions on members */
+function mset(k, patch) {
+  if (DEMO) {
+    if (patch === null) delete MB[k]; else MB[k] = Object.assign(MB[k] || {}, JSON.parse(JSON.stringify(patch), (x, v) => v && v['.sv'] ? Date.now() : v));
+    reindex(); render(); return Promise.resolve();
+  }
+  return rest('/members/' + k, patch === null ? 'DELETE' : 'PATCH', patch === null ? undefined : patch).then(() => {
+    if (patch === null) delete MB[k]; else MB[k] = Object.assign(MB[k] || {}, JSON.parse(JSON.stringify(patch), (x, v) => v && v['.sv'] ? Date.now() : v));
+    reindex(); saveLocal(); render();
+  });
+}
+function addM() {
+  if (!adm()) return deny();
+  const e = $('#nem').value.trim().toLowerCase();
+  if (!EMRX.test(e)) return toast('Type a full email address');
+  const k = ekey(e), m = MB[k];
+  if (e == ADMIN) return toast('That is the admin email');
+  if (m && m.status != 'removed') return toast('This email is already on the list');
+  const rec = { email: e, key: (m && m.key) || 'm' + rnd(6), status: 'invited', invitedAt: { '.sv': 'timestamp' } };
+  mset(k, rec).then(() => { lg('Invited ' + e); save(); toast('Added. They can now sign in with ' + e); }).catch(x => toast(x.message));
+}
+function accept(k) {
+  if (!adm()) return deny();
+  const m = MB[k]; if (!m) return;
+  mset(k, { status: 'approved', approvedAt: { '.sv': 'timestamp' } }).then(() => {
+    reindex(); cl();
+    D.nt.push({ id: uid(), by: me(), tx: `${(m.name || m.email.split('@')[0]).split(' ')[0]} joined the room.` }); trimNt();
+    lg('Accepted ' + m.email); save(); render(); toast('Accepted. ' + (m.name || m.email) + ' can now see the ledger');
+  }).catch(x => toast(x.message));
+}
+function rejectM(k) {
+  if (!adm()) return deny();
+  const m = MB[k]; if (!m) return;
+  ask(`Reject ${m.email}? They will not be able to get in unless you add the email again.`, () => mset(k, { status: 'removed' }).then(() => { lg('Rejected ' + m.email); save(); cl(); toast('Rejected'); }).catch(x => toast(x.message)), 'Reject');
+}
+function removeM(k) {
+  if (!adm()) return deny();
+  const m = MB[k]; if (!m) return;
+  ask(`Remove ${m.name || m.email} from the room? They lose access right away. Settle their balance first: their entries go on hold once they are removed.`, () => mset(k, { status: 'removed' }).then(() => { lg('Removed ' + m.email); save(); toast('Removed'); }).catch(x => toast(x.message)), 'Remove');
+}
+function pauseM(k) {
+  if (!adm()) return deny();
+  const m = MB[k]; if (!m) return;
+  ask(m.paused ? `Resume ${m.name || m.email}? They count in the hisab again.` : `Pause ${m.name || m.email}? They keep access, but are left out of the hisab until resumed.`, () => mset(k, { paused: !m.paused }).then(() => { lg((m.paused ? 'Paused ' : 'Resumed ') + m.email); save(); render(); }).catch(x => toast(x.message)), m.paused ? 'Resume' : 'Pause');
+}
+function cancelInv(k) {
+  if (!adm()) return deny();
+  const m = MB[k]; if (!m) return;
+  ask(`Cancel the invite for ${m.email}?`, () => mset(k, null).then(() => { lg('Cancelled invite for ' + m.email); save(); toast('Invite cancelled'); }).catch(x => toast(x.message)), 'Cancel invite');
+}
+
+function signOutAsk() { ask('Sign out of SplitLedger on this phone? Your data stays safe on the server.', () => signOutLocal('Signed out'), 'Sign out'); }
+function signOutLocal(msg) {
+  stopAll(); V.auth = null; ME = { status: '', email: '', ek: '', key: '', admin: false };
+  MB = {}; PK = {}; D = blank(); SY.S = null; wipeLocal(); newF(); saveLocal();
+  tab = 'dash'; cl(); render(); if (msg) toast(msg);
+}
+function stopAll() { stopData(); stopMembers(); MS.path = ''; }
+function demo() { DEMO = 1; demoData(); newF(); tab = 'dash'; render(); toast('Demo mode: sample data, nothing is saved'); }
+function exitDemo() { DEMO = 0; ME = { status: '', email: '', ek: '', key: '', admin: false }; MB = {}; PK = {}; D = blank(); cl(); render(); }
+
+/* ===================== LIVE DATA SYNC ===================== */
+var SY = { es: null, S: null, st: 'conn', busy: 0, fail: 0, t: 0, on: {}, hb: 0, err: '' };
+const dataUrl = () => dbu() + '/data';
+function saveS() { try { localStorage.setItem('sl_s', JSON.stringify(SY.S)); } catch (e) { } }
+function prune(v) {
+  if (Array.isArray(v)) { const a = v.map(prune).filter(x => x !== undefined); return a.length ? a : undefined; }
+  if (v && typeof v == 'object') { const o = {}; for (const k in v) { if (k[0] == '_') continue; const x = prune(v[k]); if (x !== undefined) o[k] = x; } return Object.keys(o).length ? o : undefined; }
+  return (v === null || v === undefined || v === '' || (typeof v == 'number' && !isFinite(v))) ? undefined : v;
+}
+function cs(v) {
+  if (v === null || v === undefined || typeof v != 'object') return JSON.stringify(v === undefined ? null : v);
+  if (Array.isArray(v)) return '[' + v.map(cs).join(',') + ']';
+  return '{' + Object.keys(v).sort().map(k => JSON.stringify(k) + ':' + cs(v[k])).join(',') + '}';
+}
+function toTree(d) {
+  const t = { meta: prune({ sm: d.sm, bud: d.bud, ba: d.ba, wifi: d.wifi }) || {} };
+  COLS.forEach(k => { const o = {}; d[k].forEach(x => { const p = prune(x); if (p) o[x.id] = p; }); t[k] = o; });
+  return t;
+}
+function fromTree(T) {
+  const vals = o => arr(o).filter(x => x && typeof x == 'object');
+  const m = (T && T.meta) || {}, o = { sm: m.sm, bud: m.bud, ba: m.ba || 0, wifi: m.wifi || '' };
+  COLS.forEach(k => o[k] = vals(T && T[k]).sort((a, b) => a.id - b.id));
+  return migrate(o);
+}
+const kids = o => Array.isArray(o) ? Object.assign({}, o) : (o || {});
+function diff(L, S) {
+  const u = {}, A = adm();
+  ['meta', ...COLS].forEach(tk => {
+    if (!A && tk == 'hist') return;
+    const a = kids(L[tk]), b = kids(S && S[tk]);
+    new Set([...Object.keys(a), ...Object.keys(b)]).forEach(k => {
+      if (!A && tk == 'meta' && k != 'ba') return;
+      const x = a[k], y = b[k];
+      if (x == null && y == null) return;
+      if (!A && x == null) return;
+      if (cs(x) != cs(y)) u[tk + '/' + k] = x == null ? null : x;
+    });
+  });
+  return u;
+}
+function setAt(root, path, val) {
+  const p = String(path).split('/').filter(Boolean);
+  if (!p.length) return val == null ? {} : val;
+  if (!root || typeof root != 'object') root = {};
+  let o = root;
+  for (let i = 0; i < p.length - 1; i++) { if (o[p[i]] == null || typeof o[p[i]] != 'object') o[p[i]] = {}; o = o[p[i]]; }
+  if (val == null) delete o[p[p.length - 1]]; else o[p[p.length - 1]] = val;
+  return root;
+}
+const clone = o => JSON.parse(JSON.stringify(o || {}));
+function setSt(s) { if (s) SY.st = s; topR(); if ($('#ov').classList.contains('show') && stab == 's' && $('#acctbox')) settings(); }
+function onEvent(type, e) {
+  let msg; try { msg = JSON.parse(e.data); } catch (x) { return; }
+  if (!msg || typeof msg.path != 'string') return;
+  const pend = SY.S ? diff(toTree(D), SY.S) : {};
+  if (!SY.S) SY.S = {};
+  if (type == 'put') SY.S = setAt(SY.S, msg.path, msg.data);
+  else if (msg.data && typeof msg.data == 'object') for (const k in msg.data) SY.S = setAt(SY.S, msg.path + '/' + k, msg.data[k]);
+  if (!SY.S || typeof SY.S != 'object') SY.S = {};
+  const T = clone(SY.S);
+  for (const k in pend) setAt(T, k, pend[k]);
+  const before = cs(toTree(D));
+  D = fromTree(T); SY.on = SY.S.on || {};
+  saveS(); saveLocal();
+  if (SY.st != 'sync') SY.st = 'live';
+  SY.fail = 0;
+  if (cs(toTree(D)) != before) soft(); else topR();
+  if (Object.keys(pend).length || adm()) qflush();
+}
+function connect() {
+  stopData();
+  if (DEMO || !V.auth || !approved()) return;
+  setSt('conn');
+  token().then(t => {
+    if (!approved() || !V.auth) return;
+    const es = new EventSource(dataUrl() + '.json?auth=' + encodeURIComponent(t));
+    SY.es = es;
+    es.addEventListener('put', e => onEvent('put', e));
+    es.addEventListener('patch', e => onEvent('patch', e));
+    es.addEventListener('auth_revoked', () => { token(true).then(connect).catch(() => { SY.err = 'Sign-in needs refreshing. Check the internet.'; setSt('err'); }); });
+    es.addEventListener('cancel', () => { stopData(); SY.err = 'The server stopped sharing the ledger with this account.'; setSt('err'); checkMember(); });
+    es.onerror = () => { if (SY.es === es) { SY.err = navigator.onLine === false ? 'No internet. Changes are saved and will sync later.' : 'Reconnecting.'; setSt(navigator.onLine === false ? 'err' : 'conn'); } };
+    if (!SY.S) SY.S = null;
+    beat(); clearInterval(SY.hb); SY.hb = setInterval(beat, 60000);
+    qflush();
+  }).catch(e => { SY.err = e.message; setSt('err'); SY.t = setTimeout(connect, 15000); });
+}
+function stopData() { if (SY.es) { try { SY.es.close(); } catch (e) { } } SY.es = null; clearInterval(SY.hb); clearTimeout(SY.t); }
+function qflush() { if (DEMO || !approved() || !V.auth) return; clearTimeout(SY.t); SY.t = setTimeout(flush, 400); }
+function flush() {
+  clearTimeout(SY.t);
+  if (DEMO || !V.auth || !approved() || SY.busy || !SY.S) return;
+  const u = diff(toTree(D), SY.S);
+  if (!adm()) {                                         // members: anything the server would refuse snaps back
+    const T = clone(SY.S); for (const k in u) setAt(T, k, u[k]);
+    const nd = fromTree(T);
+    if (cs(toTree(nd)) != cs(toTree(D))) { D = nd; saveLocal(); soft(); }
+  }
+  if (!Object.keys(u).length || cs(u) === SY.block) { if (SY.st == 'sync') setSt(SY.es ? 'live' : 'conn'); return; }
+  SY.block = '';
+  SY.busy = 1; setSt('sync');
+  const who = ME.email;
+  rest('/data', 'PATCH', u).then(() => {
+    SY.busy = 0; if (who != ME.email) return;
+    for (const k in u) SY.S = setAt(SY.S, k, u[k]);
+    saveS(); SY.fail = 0; SY.st = 'live'; flush(); topR();
+  }).catch(err => {
+    SY.busy = 0;
+    if (err.code == 'denied') {                         // the server refused: drop the local change
+      SY.block = cs(u); D = fromTree(clone(SY.S)); saveLocal(); render(); setSt(SY.es ? 'live' : 'conn');
+      return toast('That change was not allowed by the server');
+    }
+    SY.fail++; SY.err = 'Could not reach the server. Changes are saved on this phone and will sync later.';
+    setSt('err'); SY.t = setTimeout(flush, Math.min(60000, 3000 * SY.fail));
+  });
+}
+function beat() { if (!approved() || DEMO || document.hidden || !me()) return; rest('/data/on', 'PATCH', { [me()]: { '.sv': 'timestamp' } }).catch(() => { }); }
+function presence(k) {
+  if (PK[k] && PK[k].paused) return ['PAUSED', 0];
+  if (DEMO) return k == me() ? ['ONLINE', 1] : ['SEEN 1H AGO', 0];
+  const t = SY.on && SY.on[k];
+  if (k == me() && SY.st == 'live') return ['ONLINE', 1];
+  if (!t) return ['NOT SEEN YET', 0];
+  const m = (Date.now() - t) / 60000;
+  if (m < 3) return ['ONLINE', 1];
+  if (m < 60) return [`SEEN ${Math.round(m)}M AGO`, 0];
+  if (m < 1440) return [`SEEN ${Math.round(m / 60)}H AGO`, 0];
+  return [`SEEN ${Math.round(m / 1440)}D AGO`, 0];
+}
+function resync() { if (DEMO) return; checkMember(); if (approved()) { connect(); qflush(); } toast('Syncing'); }
+window.addEventListener('online', () => { if (V.auth && !DEMO) { checkMember(); if (approved()) connect(); } });
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden || !V.auth || DEMO) return;
+  if (approved() && (!SY.es || SY.es.readyState == 2)) connect(); else beat();
+  if (MS.path && (!MS.es || MS.es.readyState == 2)) watchMembers(MS.path);
+  topR();
+});
+setInterval(() => { if (approved() && tab == 'dash' && !document.hidden && $('#app') && !$('#app').classList.contains('gate')) soft(); }, 60000);
+
+/* ===== click interpreter (keeps the HTML free of inline handlers) ===== */
+function H(s) { return s.replace(/\son(click|input|change)="/g, ' data-$1="'); }
+function run(c, el) {
+  c.split(';').forEach(s => {
+    s = s.trim(); let m; if (!s) return;
+    if ((m = s.match(/^(\w+)(\+\+|--)$/))) window[m[1]] += (m[2] == '++' ? 1 : -1);
+    else if ((m = s.match(/^([\w.]+)=(.+)$/))) {
+      const p = m[1].split('.'), k = p.pop(); let o = window; p.forEach(x => o = o[x]);
+      const v = m[2]; o[k] = v == 'this.value' ? el.value : v[0] == "'" ? v.slice(1, -1) : +v;
+    } else if ((m = s.match(/^(\w+)\((.*)\)$/))) {
+      const a = (m[2].match(/'[^']*'|[\w.]+/g) || []).map(t => t[0] == "'" ? t.slice(1, -1) : t == 'this' ? el : isNaN(t) ? t : +t);
+      if (typeof window[m[1]] == 'function') window[m[1]].apply(null, a);
+    }
+  });
+}
+['click', 'input', 'change'].forEach(t => document.addEventListener(t, e => {
+  const el = e.target.closest && e.target.closest('[data-' + t + ']');
+  if (!el || el.disabled) return;
+  if (t == 'click' && V.hap && navigator.vibrate) try { navigator.vibrate(8); } catch (x) { }
+  run(el.getAttribute('data-' + t), el);
+}));
+document.addEventListener('keydown', e => {
+  if (e.key != 'Enter') return;
+  if (e.target.id == 'pn' && $('#ov').dataset.lk) ul();
+  else if (e.target.id == 'srv') setSrv();
+  else if (e.target.id == 'nem') addM();
+});
+
+/* ===== back button ===== */
+try { history.replaceState({ tab: 'dash' }, ''); } catch (e) { }
+window.addEventListener('popstate', e => {
+  const o = $('#ov');
+  if (o.classList.contains('show')) { if (!o.dataset.lk) cl(); try { history.pushState({ tab }, ''); } catch (x) { } return; }
+  _pp = 1; if (F.edit) newF();
+  tab = (e.state && e.state.tab) || 'dash'; pg = 0; cf = 'all'; pf = null; sel = 'all'; qs = '';
+  render(); _pp = 0;
+});
+window.addEventListener('hashchange', takeAuth);
+
+/* ===== start ===== */
+newF();
+if (!takeAuth()) {
+  if (V.auth && V.cfg) start(); else render();
+}
+/* keep the server settings fresh */
+if (srv() && !DEMO) fetchCfg(srv()).then(c => { const was = cs(V.cfg); V.cfg = c; saveLocal(); if (was != cs(c)) { if (V.auth) start(); else render(); } }).catch(() => { });
+</script></body></html>

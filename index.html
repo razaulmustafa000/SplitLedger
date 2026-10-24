@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0D100A">
+<meta name="robots" content="noindex">
+<title>Sign in · SplitLedger</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0}
+html,body{height:100%}
+body{font-family:'Plus Jakarta Sans',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;background:radial-gradient(120% 70% at 50% 0%,#2A3416 0%,#0D100A 60%);color:#F2F5EA;display:flex;align-items:center;justify-content:center;padding:24px}
+main{width:100%;max-width:360px;display:flex;flex-direction:column;gap:16px;text-align:center}
+.logo{width:68px;height:68px;border-radius:20px;background:#14180F;display:grid;place-items:center;margin:0 auto;box-shadow:0 10px 30px rgba(184,240,62,.15)}
+.logo svg{width:38px;height:38px}
+h1{font-size:2em;font-weight:800;letter-spacing:-.02em}
+p{color:#B4BBA6;font-size:.95em;line-height:1.5}
+button,a.btn{display:flex;align-items:center;justify-content:center;gap:10px;height:52px;border-radius:14px;font:inherit;font-weight:700;font-size:1em;cursor:pointer;text-decoration:none;border:0}
+#go{background:#fff;color:#1F1F1F;border:1px solid #DADCE0}
+#go svg{width:20px;height:20px}
+#back{background:#B8F03E;color:#0D100A}
+#msg{min-height:1.5em}
+small{color:#7E8672;font-size:.78em;line-height:1.5}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<main>
+  <div class="logo"><svg viewBox="0 0 24 24"><path d="M5 3h14v18l-3-2-2 2-2-2-2 2-2-2-3 2Z" fill="#B8F03E"/><path d="M9 8h6M9 12h6M9 16h4" stroke="#14180F" stroke-width="1.9" stroke-linecap="round"/></svg></div>
+  <h1>SplitLedger</h1>
+  <p id="msg">Loading…</p>
+  <button id="go" hidden><svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>Continue with Google</button>
+  <a id="back" class="btn" hidden>Open SplitLedger</a>
+  <small id="foot">Only people invited by the room admin can use SplitLedger.</small>
+</main>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var msg = function (t) { $('msg').textContent = t; };
+  var saved = sessionStorage.getItem('sl_q');
+  var q = new URLSearchParams(location.search || saved || '');
+  var st = q.get('st') || '', ret = q.get('ret') || '';
+  var auth = null;
+
+  var ERR = {
+    'auth/unauthorized-domain': 'This website is not on the Authorized domains list in Firebase. The admin needs to add it (see the setup guide).',
+    'auth/popup-closed-by-user': 'Sign-in was cancelled. Tap the button to try again.',
+    'auth/cancelled-popup-request': 'Sign-in was cancelled. Tap the button to try again.',
+    'auth/network-request-failed': 'No internet connection. Check it and try again.',
+    'auth/operation-not-allowed': 'Google sign-in is not turned on in Firebase yet (see the setup guide).',
+    'auth/invalid-api-key': 'config.json has a wrong apiKey. The admin needs to fix it.'
+  };
+  var err = function (e) { return ERR[e && e.code] || ('Sign-in failed: ' + ((e && e.message) || 'unknown error')); };
+
+  if (!/^[a-z0-9]{8,64}$/i.test(st)) {
+    msg('Open the SplitLedger app and tap Continue with Google there. This page finishes the sign-in for the app.');
+    return;
+  }
+  if (ret !== 'app') {
+    var r = null; try { r = new URL(ret); } catch (e) { }
+    if (!r || r.origin !== location.origin) { msg('This sign-in request did not come from SplitLedger.'); return; }
+  }
+
+  function done(u) {
+    msg('Finishing sign-in…');
+    return u.getIdToken(true).then(function (id) {
+      var frag = 'st=' + encodeURIComponent(st) + '&id=' + encodeURIComponent(id) + '&rt=' + encodeURIComponent(u.refreshToken);
+      var email = u.email;
+      sessionStorage.removeItem('sl_q');
+      return auth.signOut().then(function () {
+        if (ret === 'app') {
+          var intent = 'intent://auth?' + frag + '#Intent;scheme=splitledger;package=com.roomkhata.pro;end';
+          $('back').href = intent; $('back').hidden = false; $('go').hidden = true;
+          msg('Signed in as ' + email + '. Tap Open SplitLedger to go back to the app.');
+          $('foot').textContent = 'You can close this tab after the app opens.';
+          try { location.href = intent; } catch (e) { }
+        } else {
+          location.replace(ret.split('#')[0] + '#sl=' + frag);
+        }
+      });
+    });
+  }
+
+  fetch('config.json', { cache: 'no-store' }).then(function (r) { return r.json(); }).then(function (cfg) {
+    if (!cfg || !cfg.apiKey || /PASTE/.test(cfg.apiKey)) throw { code: 'setup', message: 'config.json is not filled in yet. The admin needs to paste the Firebase settings (see the setup guide).' };
+    firebase.initializeApp(cfg);
+    auth = firebase.auth();
+    return auth.setPersistence(firebase.auth.Auth.Persistence.SESSION).then(function () { return auth.getRedirectResult(); });
+  }).then(function (res) {
+    if (res && res.user) return done(res.user);
+    msg('Choose the Google account you use for SplitLedger.');
+    $('go').hidden = false;
+  }).catch(function (e) { msg(e && e.code === 'setup' ? e.message : err(e)); if (auth) $('go').hidden = false; });
+
+  $('go').onclick = function () {
+    var p = new firebase.auth.GoogleAuthProvider();
+    p.setCustomParameters({ prompt: 'select_account' });
+    msg('Opening Google…');
+    auth.signInWithPopup(p).then(function (res) { return done(res.user); }).catch(function (e) {
+      if (e && (e.code === 'auth/popup-blocked' || e.code === 'auth/operation-not-supported-in-this-environment')) {
+        sessionStorage.setItem('sl_q', location.search);
+        return auth.signInWithRedirect(p);
+      }
+      msg(err(e));
+    });
+  };
+})();
+</script>
+</body>
+</html>
