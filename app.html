@@ -213,13 +213,128 @@ button.mc{text-align:left}
 [data-t=olive] .pbt i{background:var(--g)}
 .pbr b{min-width:70px;text-align:right}
 .chs{display:flex;gap:4px;flex-wrap:wrap;margin-top:3px}
+
+/* ===== v2.3: top bar ===== */
+.ttl{flex:1;min-width:0;display:flex;align-items:center;gap:8px;padding:0 4px}
+.ttl b{font-size:1.06em;font-weight:800;letter-spacing:-.01em;white-space:nowrap}
+.ttl .live{margin:0}
+#top{gap:8px}
+/* ===== v2.3: glass surfaces ===== */
+#app{background:radial-gradient(120% 60% at 100% 0%,color-mix(in srgb,var(--pri) 16%,transparent),transparent 60%),radial-gradient(90% 50% at 0% 100%,color-mix(in srgb,var(--h2) 22%,transparent),transparent 60%),var(--bg)}
+.sc,.card,.stc{background:var(--card);background:color-mix(in srgb,var(--card) 74%,transparent);-webkit-backdrop-filter:blur(16px) saturate(140%);backdrop-filter:blur(16px) saturate(140%);border:1px solid color-mix(in srgb,var(--tx) 9%,transparent);box-shadow:inset 0 1px 0 color-mix(in srgb,#fff 9%,transparent),0 10px 28px -14px rgba(0,0,0,.45),0 2px 6px -2px rgba(0,0,0,.18)}
+.hero{position:relative;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 18px 40px -16px var(--glow)}
+.hero::after{content:"";position:absolute;width:220px;height:220px;right:-70px;top:-90px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.22),transparent 65%);pointer-events:none;animation:drift 9s ease-in-out infinite alternate}
+@keyframes drift{to{transform:translate(-30px,24px)}}
+.hero>*{position:relative;z-index:1}
+.hsub2{font-size:.68em;color:rgba(255,255,255,.75);margin-top:4px;font-weight:600}
+.hbar{height:6px;border-radius:99px;background:rgba(255,255,255,.18);overflow:hidden}
+.hbar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#fff,rgba(255,255,255,.7));transform-origin:left;animation:grow .9s var(--ease) both}
+@keyframes grow{from{transform:scaleX(0)}}
+/* ===== v2.3: dashboard grid ===== */
+.g6b{grid-template-rows:1.7fr 1fr 1fr}
+.sc{transition:transform .18s var(--ease),box-shadow .25s var(--ease)}
+.sc.bad b{color:var(--r)}.sc.good b{color:var(--g)}.sc.warn b{color:var(--am)}
+.pc{justify-content:flex-start;gap:2px;padding:8px 10px;text-align:left}
+.pch{display:flex;align-items:center;gap:7px;margin-bottom:3px}
+.pch b{flex:1;font-size:.95em;font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pch .i{width:14px;height:14px;color:var(--sub)}
+.pcr{display:flex;justify-content:space-between;gap:6px;font-size:.72em;line-height:1.45}
+.pcr span{color:var(--sub);font-weight:600}
+.pcr b{font-size:1em!important;font-weight:700;white-space:nowrap}
+.pcf{margin-top:auto;font-size:.72em;font-weight:800;padding:4px 8px;border-radius:9px;background:var(--chip);text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pcf.neg{color:var(--r);background:color-mix(in srgb,var(--r) 14%,transparent)}
+.pcf.pos{color:var(--g);background:color-mix(in srgb,var(--g) 14%,transparent)}
+.pcf.ok{color:var(--sub)}
+.pc.empty{align-items:flex-start;justify-content:center}
+.pc.empty .sl{font-weight:700}
+.mlink{align-self:center;font-size:.78em}
+/* ===== v2.3: working sheet ===== */
+.res{border-radius:14px;padding:10px 12px;display:flex;flex-direction:column;gap:2px;background:var(--chip)}
+.res b{font-size:1.05em;font-weight:800}
+.res i{font-style:normal;font-size:.74em;color:var(--sub)}
+.res.neg{background:color-mix(in srgb,var(--r) 14%,transparent)}.res.neg b{color:var(--r)}
+.res.pos{background:color-mix(in srgb,var(--g) 14%,transparent)}.res.pos b{color:var(--g)}
+.stp{display:flex;gap:10px;align-items:flex-start;padding:5px 0;font-size:.86em}
+.stp b{width:22px;height:22px;border-radius:50%;background:var(--pri);color:var(--on);display:grid;place-items:center;font-size:.78em;flex:none}
+.stp em{font-style:normal;font-weight:700}
+/* ===== v2.3: settle up ===== */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:8px;flex:none}
+.stc.bad b{color:var(--r)}.stc.good b{color:var(--g)}
+.prow{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid color-mix(in srgb,var(--tx) 7%,transparent)}
+.prow:last-of-type{border-bottom:0}
+.prm{flex:1;min-width:0;display:flex;align-items:center;gap:9px;text-align:left}
+.prb{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex:none}
+.prb .bw{font-size:.7em}
+/* ===== v2.3: sheets ===== */
+.sh.tall{height:86%;max-height:86%;justify-content:flex-start}
+.ck{display:flex;align-items:center;gap:9px;padding:5px 0}
+.ck>span .i{width:18px;height:18px}
+.ck.ok>span{color:var(--g)}.ck.bad>span{color:var(--r)}
+/* ===== v2.3: motion ===== */
+.sc:active,.prm:active,.pc:active{transform:scale(.965)}
+#main.in-r .g6>*,#main.in-l .g6>*,#main.in-f .g6>*{animation:pop .42s var(--ease) both}
+#main .g6>*:nth-child(2){animation-delay:.05s}#main .g6>*:nth-child(3){animation-delay:.09s}#main .g6>*:nth-child(4){animation-delay:.13s}#main .g6>*:nth-child(5){animation-delay:.17s}#main .g6>*:nth-child(6){animation-delay:.21s}
+@keyframes pop{from{opacity:0;transform:translateY(10px) scale(.97)}}
+#dr.show .dri,#dr.show .dlab{animation:inL .38s var(--ease) both}
+#dr.show .dri:nth-of-type(2){animation-delay:.03s}#dr.show .dri:nth-of-type(3){animation-delay:.06s}#dr.show .dri:nth-of-type(4){animation-delay:.09s}#dr.show .dri:nth-of-type(5){animation-delay:.12s}#dr.show .dri:nth-of-type(6){animation-delay:.15s}
+.bd{animation:bump .4s var(--ease)}
+@keyframes bump{40%{transform:scale(1.25)}}
+@media (prefers-reduced-motion:reduce){.hero::after,.hbar i,#main .g6>*,#dr.show .dri,#dr.show .dlab,.bd{animation:none!important}}
+.g6b .sc{justify-content:space-between;padding:10px 12px}
+.g6b .sc .sl{font-size:.74em}
+.g6b .sc>b{font-size:1.28em;line-height:1.2}
+.g6b .sc>i{font-size:.7em}
+.g6b .pc{justify-content:flex-start;gap:4px}
+.pch b{font-size:1.02em}
+.pcr{font-size:.8em}
+.pcf{font-size:.78em;padding:6px 8px}
+.pcf{white-space:normal;line-height:1.25}
+.g6b{grid-template-rows:1.35fr 1fr 1fr}
+.pc{align-items:stretch}
+.pc>*{align-self:stretch}
+.pcr{font-size:.84em}
+.g6b{grid-template-rows:minmax(min-content,1.35fr) minmax(0,1fr) minmax(0,1fr)}
+@media (max-width:340px){.pcf{font-size:.7em;padding:5px 6px}.pcr{font-size:.78em}.g6b .sc>b{font-size:1.12em}.g6b .sc{padding:8px 10px}}
+/* ===== v2.4: a card for every member, two or three per row ===== */
+.mg{flex:1;min-height:0;display:grid;gap:8px;grid-auto-rows:minmax(min-content,1fr)}
+.mg.c2{grid-template-columns:1fr 1fr}
+.mg.c3{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+.mg .pc{justify-content:flex-start;gap:3px;padding:9px 10px;min-width:0}
+.mg.c3 .pc{padding:8px 8px;gap:2px}
+.mg.c3 .pch{gap:5px}
+.mg.c3 .pch b{font-size:.9em}
+.mg.c3 .pch .i{display:none}
+.mg.c3 .pcr{font-size:.74em}
+.mg.c3 .pcf{font-size:.68em;padding:4px 5px}
+.mg .pc.me{border-color:color-mix(in srgb,var(--pri) 55%,var(--ln))}
+.mg .pc.wait{border-style:dashed}
+.mg .pc.psd{opacity:.62}
+.pcf.warn{color:#B7791F;background:color-mix(in srgb,#F6AD55 22%,transparent)}
+.g2d{flex:none;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.g2d .sc{justify-content:space-between;padding:9px 12px;min-height:68px}
+.g2d .sc .sl{font-size:.74em}
+.g2d .sc>b{font-size:1.22em;line-height:1.2}
+.g2d .sc>i{font-size:.68em}
+#main.scroll{overflow-y:auto}
+#main.scroll .mg{flex:none}
+#main.in-r .mg>*,#main.in-l .mg>*,#main.in-f .mg>*{animation:pop .42s var(--ease) both}
+#main .mg>*:nth-child(2){animation-delay:.04s}#main .mg>*:nth-child(3){animation-delay:.08s}#main .mg>*:nth-child(4){animation-delay:.12s}#main .mg>*:nth-child(n+5){animation-delay:.16s}
+@media (prefers-reduced-motion:reduce){#main .mg>*{animation:none!important}}
+/* split chips on the add screen */
+.pva .pvp{border:1.5px solid transparent;cursor:pointer;color:var(--sub);transition:background-color .2s,color .2s,border-color .2s}
+.pva .pvp.on{color:var(--tx);border-color:var(--pri);background:color-mix(in srgb,var(--pri) 18%,var(--chip))}
+.pva .pvp .i{width:13px;height:13px;color:var(--pri)}
+.pva .pvp.all{padding:3px 10px}
+.pva .pvp.all .i{color:inherit}
 </style></head><body><div id="app"><div id="top"></div><div id="main"></div><nav id="nav"></nav><div id="ov"></div><div id="dr"></div><div id="ts" role="status" aria-live="polite"></div></div><script>
 'use strict';
 const I={help:'<circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 2.5-3 4M12 17h.01"/>',bell:'<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.9 1.9 0 0 0 3.4 0"/>',moon:'<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>',sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',gear:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/>',link:'<path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/>',list:'<path d="M5 3h14v18l-3-2-2 2-2-2-2 2-2-2-3 2ZM9 8h6M9 12h6"/>',swap:'<path d="M7 4 3 8l4 4M3 8h14M17 20l4-4-4-4M21 16H7"/>',grid:'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',plus:'<path d="M12 5v14M5 12h14"/>',chart:'<path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/>',edit:'<path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/>',trash:'<path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/>',l:'<path d="m15 18-6-6 6-6"/>',r:'<path d="m9 18 6-6-6-6"/>',d:'<path d="m6 9 6 6 6-6"/>',ok:'<path d="m5 12 5 5L20 7"/>',x:'<path d="M18 6 6 18M6 6l12 12"/>',cam:'<path d="M4 8h3l2-3h6l2 3h3v11H4Z"/><circle cx="12" cy="13" r="3.5"/>',wifi:'<path d="M2 9a15 15 0 0 1 20 0M5 12.5a10 10 0 0 1 14 0M8.5 16a5 5 0 0 1 7 0M12 19.5h.01"/>',users:'<circle cx="9" cy="8" r="3.5"/><path d="M2 20a7 7 0 0 1 14 0M17 4.5a3.5 3.5 0 0 1 0 7M22 20a7 7 0 0 0-4-6.3"/>',user:'<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',bolt:'<path d="M13 2 4 14h7l-1 8 9-12h-7Z"/>',cart:'<circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2 3h3l2.7 12.4a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.5L21 8H6"/>',home:'<path d="m3 11 9-8 9 8M5 10v10h14V10"/>',tag:'<path d="M3 12V3h9l9 9-9 9Z"/><circle cx="7.5" cy="7.5" r="1"/>',lock:'<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',warn:'<circle cx="12" cy="12" r="10"/><path d="M12 8v5M12 16h.01"/>',layout:'<rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18M9 21V9"/>',cloud:'<path d="M17.5 19a4.5 4.5 0 1 0-1.4-8.8A6 6 0 0 0 4.5 13 3 3 0 0 0 6 19Z"/>',refresh:'<path d="M21 12a9 9 0 1 1-2.6-6.4L21 8M21 3v5h-5"/>',copy:'<rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/>'};
-/* ===== SplitLedger v2.2 ===== */
+/* ===== SplitLedger v2.4 ===== */
 /* Optional: paste your server link here so nobody has to type it. Example: 'https://yourname.github.io/splitledger' */
 const SERVER = 'https://razaulmustafa000.github.io/SplitLedger';
 const ADMIN = 'razaunar000@gmail.com';
+/* Guest preview build: opens straight into sample data, no server, nothing saved (set by web/build.py --guest) */
+const GUEST = false;
 
 const $ = s => document.querySelector(s);
 const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -306,28 +421,63 @@ var qs = '', tab = 'dash', pg = 0, cf = 'all', pf = null, sel = 'all', isub = 'c
 var _cb, _cf = 0, _pf = null, _lt = 'dash', _pp = 0;
 var F;
 function newF() {
-  F = { amt: '', desc: '', cat: V.dcat || 'Grocery', cc: '', by: me(), edit: null };
+  F = { amt: '', desc: '', cat: V.dcat || 'Grocery', cc: '', by: me(), sp: null, edit: null };
 }
 
 /* ----- money logic -----
-   One simple rule: every expense of the month is shared equally by all active members.
+   Each expense is shared equally by the people it was split between.
+   New entries (s2) remember who was picked; older entries are shared by everyone active, as before.
    Balance = what you paid - your share + payments you sent - payments you received.
    Positive = you get money back. Negative = you owe. */
 const counted = e => !!(PK[e.by] && !PK[e.by].paused);
+function parts(e, M) {
+  if (e.s2 && e.sp) { const P = String(e.sp).split(',').filter(k => M.includes(k)); if (P.length) return P; }
+  return M;
+}
 function calc() {
   const M = act(), n = M.length;
   const z = () => { const o = {}; M.forEach(k => o[k] = 0); return o; };
-  const paid = z(), sent = z(), recv = z(), cnt = z();
-  let tot = 0, held = 0, heldN = 0;
+  const paid = z(), sent = z(), recv = z(), cnt = z(), share = z(), owe = {};
+  M.forEach(k => owe[k] = z());
+  let tot = 0, held = 0, heldN = 0, part = 0;
   D.ex.forEach(e => {
     if (!counted(e)) { held += e.amt; heldN++; return; }
     tot += e.amt; paid[e.by] += e.amt; cnt[e.by]++;
+    const P = parts(e, M), each = e.amt / P.length;
+    if (P.length < n) part++;
+    P.forEach(k => { share[k] += each; if (k != e.by) owe[k][e.by] += each; });
   });
   const each = n ? tot / n : 0;
   D.pay.forEach(p => { if (paid[p.f] != null && paid[p.t] != null) { sent[p.f] += p.a; recv[p.t] += p.a; } });
   const net = {};
-  M.forEach(k => net[k] = paid[k] - each + sent[k] - recv[k]);
-  return { M, n, tot, each, paid, sent, recv, cnt, net, held, heldN, count: D.ex.length - heldN };
+  M.forEach(k => net[k] = paid[k] - share[k] + sent[k] - recv[k]);
+  return { M, n, tot, each, share, owe, part, paid, sent, recv, cnt, net, held, heldN, count: D.ex.length - heldN };
+}
+/* ----- hisab between two people -----
+   o owes me their part of what I paid for things they shared, and I owe o my part of what o paid for things I shared.
+   bal > 0: o owes me.  bal < 0: I owe o.  Payments between the two of us are counted in. */
+function pair(c, k, o) {
+  const theyPaid = c.paid[o] || 0, iPaid = c.paid[k] || 0;
+  let iSent = 0, theySent = 0, theyShared = 0, iShared = 0;
+  D.pay.forEach(p => { if (p.f == k && p.t == o) iSent += p.a; else if (p.f == o && p.t == k) theySent += p.a; });
+  D.ex.forEach(e => { if (!counted(e)) return; const P = parts(e, c.M); if (e.by == o && P.includes(k)) theyShared += e.amt; else if (e.by == k && P.includes(o)) iShared += e.amt; });
+  const iOwe = (c.owe[k] && c.owe[k][o]) || 0, theyOwe = (c.owe[o] && c.owe[o][k]) || 0;
+  return { o, theyPaid, iPaid, theyShared, iShared, iOwe, theyOwe, iSent, theySent, bal: theyOwe - iOwe + iSent - theySent };
+}
+/* everyone else, biggest open hisab first */
+function myPairs(c) {
+  const k = me();
+  if (!c.M.includes(k)) return [];
+  return c.M.filter(o => o != k).map(o => pair(c, k, o)).sort((a, b) => Math.abs(b.bal) - Math.abs(a.bal) || b.theyPaid - a.theyPaid);
+}
+/* every open hisab in the room as [payer, receiver, amount] */
+function moves(c) {
+  const out = [];
+  c.M.forEach((a, i) => c.M.slice(i + 1).forEach(b => {
+    const p = pair(c, a, b);
+    if (p.bal > .5) out.push([b, a, p.bal]); else if (p.bal < -.5) out.push([a, b, -p.bal]);
+  }));
+  return out.sort((x, y) => y[2] - x[2]);
 }
 /* fewest transfers that settle everyone */
 function tx(net) {
@@ -381,6 +531,12 @@ function ntText(n) {
   return n.tx || '';
 }
 
+function ntTitle(n) {
+  if (n.k == 'ex') return n.p == me() ? 'Expense added' : `${S1(n.p)} added an expense`;
+  if (n.k == 'pay') return 'Payment recorded';
+  return 'SplitLedger';
+}
+
 /* ----- local cache (per signed-in account) ----- */
 function saveLocal() {
   if (DEMO) return;
@@ -396,17 +552,27 @@ function wipeLocal() { ['sl_d', 'sl_m', 'sl_s', 'sl_who'].forEach(k => localStor
 /* demo with sample data (only before a server is set) */
 function demoData() {
   const t = Date.now(), mk = (k, n, e, extra) => Object.assign({ key: k, name: n, email: e, status: 'approved', approvedAt: t }, extra || {});
-  MB = { a: mk('adm', 'Raza Ul Mustafa', ADMIN), b: mk('m1', 'Arshad', 'arshad@example.com'), c: mk('m2', 'Javed', 'javed@example.com'), d: { key: 'm3', name: 'Bilal', email: 'bilal@example.com', status: 'pending' } };
-  ME = { status: 'approved', email: ADMIN, ek: 'a', key: 'adm', admin: true };
+  MB = { a: mk('adm', 'Daniel Carter', ADMIN), b: mk('m1', 'Emma Wilson', 'emma.wilson@example.com', { approvedAt: t + 1 }), c: mk('m2', 'Lucas Martin', 'lucas.martin@example.com', { approvedAt: t + 2 }), e: mk('m4', 'Sophia Lee', 'sophia.lee@example.com', { approvedAt: t + 3 }), d: { key: 'm3', name: 'Noah Brown', email: 'noah.brown@example.com', status: 'pending' }, f: { key: 'm5', name: '', email: 'olivia.green@example.com', status: 'invited' } };
+  if (!ME.key || !MB[ME.ek]) ME = { status: 'approved', email: ADMIN, ek: 'a', key: 'adm', admin: true };
   reindex();
-  const y = new Date().getFullYear(), m = new Date().getMonth(), at = d => new Date(y, m, Math.min(d, new Date().getDate())).getTime();
+  const y = new Date().getFullYear(), m = new Date().getMonth(), day = new Date().getDate(), at = d => new Date(y, m, Math.min(d, day), 12).getTime(), all = 'adm,m1,m2,m4';
   D = blank();
   D.ex = [
-    { by: 'adm', amt: 900, cat: 'Grocery', d: 'Sabzi & rashan', ts: at(3) },
-    { by: 'adm', amt: 1500, cat: 'Wi-Fi Bill', d: 'Monthly Wi-Fi', ts: at(8) },
-    { by: 'm2', amt: 1200, cat: 'Utilities', d: 'Gas cylinder', ts: at(15) },
-    { by: 'm1', amt: 600, cat: 'Grocery', d: 'Fruits & milk', ts: at(20) }
-  ].map((e, i) => Object.assign(e, { id: uid() + i, sp: 'adm,m1,m2' }));
+    { by: 'adm', amt: 1200, cat: 'Grocery', d: 'Vegetables & flour', ts: at(3) },
+    { by: 'adm', amt: 2000, cat: 'Wi-Fi Bill', d: 'Monthly Wi-Fi', ts: at(8) },
+    { by: 'm2', amt: 1600, cat: 'Utilities', d: 'Gas cylinder', ts: at(15) },
+    { by: 'm1', amt: 600, cat: 'Grocery', d: 'Coffee & milk', ts: at(18), sp: 'm1,m2', s2: 1 },
+    { by: 'm4', amt: 900, cat: 'Other', cc: 'Cleaning', d: 'Detergent & soap', ts: at(20), sp: all, s2: 1 },
+    { by: 'adm', amt: 450, cat: 'Grocery', d: 'Tea & biscuits', ts: at(22), sp: 'adm,m4', s2: 1 }
+  ].map((e, i) => Object.assign({ sp: all, s2: 1 }, e, { id: e.ts * 1000 + i }));
+  D.pay = [{ id: at(21) * 1000 + 7, f: 'm2', t: 'adm', a: 300, ts: at(21) }];
+  D.nt = D.ex.map(e => ({ id: e.id, by: e.by, k: 'ex', p: e.by, a: e.amt, d: e.d, n: e.sp.split(',').length, tx: `${S1(e.by)} added ${e.d} · ${fm(e.amt)}.` }))
+    .concat([{ id: at(21) * 1000 + 8, by: 'm2', k: 'pay', f: 'm2', t: 'adm', a: 300, tx: 'Lucas paid Daniel Rs. 300.' }]);
+  D.log = D.ex.map(e => ({ id: e.id + 1, t: e.ts, u: e.by, a: `Added expense: ${e.d} ${fm(e.amt)}` }));
+  const pm = new Date(y, m - 1, 1), pts = d => new Date(pm.getFullYear(), pm.getMonth(), d, 12).getTime();
+  const pex = [{ by: 'adm', amt: 2400, cat: 'Rent', d: 'Room rent share', ts: pts(2) }, { by: 'm1', amt: 1500, cat: 'Wi-Fi Bill', d: 'Wi-Fi', ts: pts(9) }, { by: 'm2', amt: 1800, cat: 'Grocery', d: 'Monthly groceries', ts: pts(18) }].map((e, i) => Object.assign(e, { id: e.ts * 1000 + i, sp: 'adm,m1,m2' }));
+  D.hist = [{ id: pts(28) * 1000, v: 2, m: pm.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' }), t: 5700, n: 3, mem: 3, each: 1900, p: { adm: 2400, m1: 1500, m2: 1800 }, nm: { adm: 'Daniel Carter', m1: 'Emma Wilson', m2: 'Lucas Martin' }, ex: pex, pay: [], tr: [{ f: 'm1', t: 'adm', a: 300 }, { f: 'm1', t: 'm2', a: 100 }], ts: pts(28) }];
+  D.bud = 15000;
 }
 
 /* ===== shell ===== */
@@ -419,7 +585,7 @@ const pending = () => adm() ? Object.entries(MB).filter(([, m]) => m && m.status
 const unread = () => D.nt.filter(n => n.by != me() && n.id > (V.seen[ME.email] || 0)).length + pending().length;
 function badge() {
   let t;
-  if (DEMO) t = ['off', 'DEMO', 'grid'];
+  if (DEMO) t = ['off', GUEST ? 'GUEST' : 'DEMO', 'grid'];
   else if (ME.status == 'pending') t = ['off', 'WAITING', 'lock'];
   else t = { live: ['', 'LIVE SYNC', 'bolt'], sync: ['', 'SYNCING', 'refresh'], conn: ['off', 'CONNECTING', 'cloud'], err: ['err', 'OFFLINE', 'cloud'], off: ['off', 'OFFLINE', 'cloud'] }[SY.st] || ['off', 'CONNECTING', 'cloud'];
   return `<button class="live ${t[0]}" onclick="openAcct()" aria-label="Connection status">${ic(t[2])}${t[1]}</button>`;
@@ -427,7 +593,7 @@ function badge() {
 const MENU = '<svg class="i" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10"/></svg>';
 function topbar() {
   const n = unread(), p = pending().length;
-  return `<button class="ib mn" onclick="drawer()" aria-label="Menu">${MENU}${p ? '<i class="dot"></i>' : ''}</button><button class="pill" onclick="profile()">${av(me())}<span>${esc(myName())}</span></button><div class="rt">${badge()}<button class="ib" onclick="bell()" aria-label="Notifications">${ic('bell')}${n ? `<i class="bd">${n > 9 ? '9+' : n}</i>` : ''}</button><button class="ib" onclick="moon()" aria-label="Theme">${ic(V.th == 'amoled' && V.vw != 'g' ? 'sun' : 'moon')}</button><button class="ib" onclick="settings()" aria-label="Settings">${ic('gear')}</button></div>`;
+  return `<button class="ib mn" onclick="drawer()" aria-label="Menu">${MENU}${p ? '<i class="dot"></i>' : ''}</button><div class="ttl"><b>SplitLedger</b>${badge()}</div><button class="ib" onclick="bell()" aria-label="Notifications">${ic('bell')}${n ? `<i class="bd">${n > 9 ? '9+' : n}</i>` : ''}</button>`;
 }
 function myName() { const m = MB[ME.ek]; return (m && (m.name || '').trim()) || (V.auth && V.auth.name) || String(ME.email).split('@')[0] || 'Me'; }
 const NV = [['ledger', 'Ledger', 'list'], ['debts', 'Settle Up', 'swap'], ['dash', 'Dashboard', 'grid'], ['add', 'Add', 'plus'], ['ins', 'Insights', 'chart']];
@@ -452,11 +618,13 @@ function render() {
     if (nb.length == NV.length) nb.forEach(b => b.classList.toggle('on', b.dataset.k == tab));
     else $('#nav').innerHTML = H(nav());
     if (tab == 'add') pv();
-    if (tab !== _lt) { _lt = tab; if (!_pp) try { history.pushState({ tab }, ''); } catch (e) { } }
   }
   if (anim) { main.classList.remove('in-r', 'in-l', 'in-s', 'in-f'); void main.offsetWidth; main.classList.add(anim); }
   _ltab = g ? 'gate' : tab; _vk = vk;
   _pend = 0;
+  /* the dashboard scrolls only when there are more member cards than fit on one screen */
+  main.classList.remove('scroll'); if (!g && tab == 'dash' && main.scrollHeight > main.clientHeight + 1) main.classList.add('scroll');
+  countUp();
   const m = document.querySelector('meta[name=theme-color]');
   if (m) m.content = getComputedStyle(h).getPropertyValue('--bg').trim() || '#0D100A';
 }
@@ -476,10 +644,10 @@ function go(k) {
   tab = k; pg = 0; dpg = 0; tpg = 0; mpg = 0; hpg = 0; cf = 'all'; pf = null; sel = 'all'; qs = ''; render();
 }
 function toast(m) { const t = $('#ts'); t.textContent = m; t.classList.add('show'); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('show'), 2400); }
-function ov(h) {
+function ov(h, cls) {
   const o = $('#ov'), quick = Date.now() - (o._c || 0) < 120, open = o.classList.contains('show') || quick;
   clearTimeout(o._t);
-  o.innerHTML = H(`<div class="sh${open ? ' swp' : ''}">${h}</div>`);
+  o.innerHTML = H(`<div class="sh${open ? ' swp' : ''}${cls ? ' ' + cls : ''}">${h}</div>`);
   if (quick) o.classList.add('show');
   else if (!open) { void o.offsetWidth; o.classList.add('show'); }
 }
@@ -504,7 +672,7 @@ function drawer() {
   d.innerHTML = H(`<div class="bk" onclick="closeDrawer()"></div><div class="pn" role="dialog" aria-label="Menu"><button class="dhd" onclick="closeDrawer();profile()">${av(me(), 46)}<div class="fl"><b>${esc(myName())}</b><i>${esc(ME.email || 'Demo')}</i></div><span class="cn${approved() ? '' : ' pz'}">• ${A ? 'ADMIN' : approved() ? 'MEMBER' : 'WAITING'}</span></button>
 <div class="dlab">Room</div>${it("go('members')", 'users', 'Members', p ? `<i class="dbd">${p}</i>` : `<em>${act().length}</em>`)}${it("go('history')", 'list', 'History', `<em>${D.hist.length || ''}</em>`)}${A ? it("go('admin')", 'lock', 'Admin Controls') + it("closeDrawer();logv()", 'refresh', 'Activity Log') : ''}
 <div class="dlab">App</div>${it("closeDrawer();howCalc()", 'swap', 'How the hisab works')}${it("closeDrawer();exportSheet()", 'chart', 'Export &amp; Backup')}${it("closeDrawer();settings()", 'gear', 'Settings')}${it("closeDrawer();helpOpen()", 'warn', 'Help &amp; Guide')}
-<div class="dfoot">${DEV}<button class="btn gh" onclick="closeDrawer();signOutAsk()">Sign out</button><div class="dver">SplitLedger v2.2</div></div></div>`);
+<div class="dfoot">${DEV}<button class="btn gh" onclick="closeDrawer();signOutAsk()">${DEMO ? 'Reset preview' : 'Sign out'}</button><div class="dver">SplitLedger v2.4</div></div></div>`);
   void d.offsetWidth; d.classList.add('show'); d._open = 1;
 }
 function closeDrawer() { const d = $('#dr'); if (!d || !d._open) return; d._open = 0; d.classList.remove('show'); }
@@ -526,60 +694,90 @@ function gateView() {
 
 /* ===== plain-language status ===== */
 const monthName = () => monthLabel(D.ex);
-function myMoves(c) { const k = me(); return tx(c.net).filter(([f, t]) => f == k || t == k); }
-function statusLine(c) {
-  if (!approved()) return { cls: 'mut', big: 'Waiting for approval', small: 'Your numbers appear once the admin accepts you.' };
-  const k = me(), mv = myMoves(c);
-  if (!c.M.includes(k)) return { cls: 'mut', big: 'You are paused', small: 'The admin left you out of this month’s hisab.' };
-  if (!mv.length) return { cls: 'ok', big: 'You are settled up', small: c.tot ? 'You don’t owe anyone, and nobody owes you.' : 'No expenses yet this month.' };
-  const owe = mv.filter(([f]) => f == k), get = mv.filter(([, t]) => t == k);
-  if (owe.length) {
-    const sum = owe.reduce((s, x) => s + x[2], 0);
-    return { cls: 'neg', big: owe.length == 1 ? `You owe ${S1(owe[0][1])} ${fm(sum)}` : `You owe ${fm(sum)} in total`, small: owe.length == 1 ? 'Pay this to settle the month.' : 'To ' + owe.map(x => `${S1(x[1])} ${fm(x[2])}`).join(', ') };
-  }
-  const sum = get.reduce((s, x) => s + x[2], 0);
-  return { cls: 'pos', big: get.length == 1 ? `${S1(get[0][0])} owes you ${fm(sum)}` : `You get back ${fm(sum)}`, small: get.length == 1 ? 'Collect this to settle the month.' : 'From ' + get.map(x => `${S1(x[0])} ${fm(x[2])}`).join(', ') };
-}
-const balWord = v => v > .5 ? ['pos', 'Gets back ' + fm(v)] : v < -.5 ? ['neg', 'Owes ' + fm(v)] : ['ok', 'Settled'];
+function myMoves(c) { const k = me(); return moves(c).filter(([f, t]) => f == k || t == k); }
 const signed = v => (v > .5 ? '+ ' : v < -.5 ? '- ' : '') + fm(v);
+const NM = k => k == me() ? 'You' : S1(k);
+function pairLine(p) {
+  if (p.bal < -.5) return ['neg', `You owe ${S1(p.o)} ${fm(p.bal)}`];
+  if (p.bal > .5) return ['pos', `${S1(p.o)} owes you ${fm(p.bal)}`];
+  return ['ok', 'Settled'];
+}
+/* numbers glide to their new value */
+var _cv = {};
+function countUp() {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelectorAll('[data-n]').forEach(el => {
+    const id = el.dataset.id, to = +el.dataset.n, from = _cv[id] == null ? 0 : _cv[id], pre = el.dataset.pre || '';
+    _cv[id] = to;
+    if (reduce || from == to || !id) { el.textContent = pre + fm(to); return; }
+    const t0 = performance.now(), d = 650;
+    const step = t => { const k = Math.min(1, (t - t0) / d), e = 1 - Math.pow(1 - k, 3); el.textContent = pre + fm(from + (to - from) * e); if (k < 1 && el.isConnected) requestAnimationFrame(step); };
+    el.textContent = pre + fm(from); requestAnimationFrame(step);
+  });
+}
+const num$ = (id, v, pre) => `<span data-id="${id}" data-n="${Math.round(v)}" data-pre="${pre || ''}">${pre || ''}${fm(v)}</span>`;
 
 /* ===== Dashboard ===== */
 function pick(id) {
   if (id == 'mem' || id == 'req') return go('members');
-  if (id == 'bal' || id == 'share' || id == 'pays') return go('debts');
-  sel = id; pf = id == 'me' ? me() : null; cf = 'all'; pg = 0; tab = 'ledger'; render();
+  if (id == 'owe' || id == 'get') return go('debts');
+}
+/* names shown on the split chips and in the ledger */
+const who2 = k => k == me() ? 'You' : S1(k);
+function splitLabel(P, c) { return P.length >= c.n ? `everyone (${c.n})` : P.map(who2).join(', '); }
+/* everyone in the room except me: active, paused, waiting for approval or invited */
+function others() {
+  const R = { approved: 0, pending: 1, invited: 2 };
+  return Object.entries(MB).filter(([, m]) => m && m.key && m.key != me() && R[m.status] != null)
+    .sort(([, a], [, b]) => R[a.status] - R[b.status] || (a._i == null ? 99 : a._i) - (b._i == null ? 99 : b._i) || String(a.email).localeCompare(b.email));
+}
+const mName = m => ((m.name || '').trim() || String(m.email || '').split('@')[0] || 'Member').split(/\s+/)[0];
+function youCard(c, wide) {
+  const k = me(), inRoom = c.M.includes(k), v = inRoom ? c.net[k] : 0;
+  const foot = !approved() ? ['ok', 'Waiting for the admin'] : !inRoom ? ['ok', 'Paused this month'] : v > .5 ? ['pos', 'You get back ' + fm(v)] : v < -.5 ? ['neg', 'You owe ' + fm(v)] : ['ok', 'All settled ✓'];
+  return `<button class="sc pc me" onclick="go('debts')"><div class="pch">${av(k, 26)}<b>You</b>${ic('r')}</div><div class="pcr"><span>Spent</span><b>${num$('ys', inRoom ? c.paid[k] : 0)}</b></div><div class="pcr"><span>${wide ? 'Your share' : 'Share'}</span><b>${fm(inRoom ? c.share[k] : 0)}</b></div><div class="pcf ${foot[0]}">${foot[1]}</div></button>`;
+}
+function memCard(c, ek, m, wide) {
+  const k = m.key, nm = esc(mName(m));
+  if (m.status == 'pending') return `<button class="sc pc wait" onclick="reqSheet('${ek}')"><div class="pch">${av(k, 26)}<b>${nm}</b>${ic('r')}</div><div class="pcr"><span>${wide ? 'Wants to join' : 'Request'}</span></div><div class="pcf warn">${adm() ? 'Tap to accept' : 'Request pending'}</div></button>`;
+  if (m.status == 'invited') return `<button class="sc pc wait" onclick="reqSheet('${ek}')"><div class="pch">${av(k, 26)}<b>${nm}</b>${ic('r')}</div><div class="pcr"><span>${wide ? 'Not signed in yet' : 'Not joined'}</span></div><div class="pcf ok">Invited</div></button>`;
+  const p = pair(c, me(), k), l = pairLine(p), paused = !!m.paused || !c.M.includes(k);
+  const ft = paused ? 'Paused' : p.bal < -.5 ? 'You owe ' + fm(p.bal) : p.bal > .5 ? 'Owes you ' + fm(p.bal) : 'Settled ✓';
+  return `<button class="sc pc${paused ? ' psd' : ''}" onclick="pairSheet('${k}')"><div class="pch">${av(k, 26)}<b>${nm}</b>${ic('r')}</div><div class="pcr"><span>Spent</span><b>${num$('ps' + k, p.theyPaid)}</b></div>${wide ? `<div class="pcr"><span>You give</span><b class="neg">${fm(p.iOwe)}</b></div><div class="pcr"><span>You get</span><b class="pos">${fm(p.theyOwe)}</b></div>` : ''}<div class="pcf ${paused ? 'ok' : l[0]}">${ft}</div></button>`;
+}
+function reqSheet(ek) {
+  const m = MB[ek]; if (!m) return;
+  const nm = esc((m.name || '').trim() || m.email);
+  if (m.status == 'pending') return adm()
+    ? ov(`<h3><span class="hb">${av(m.key, 30)}${nm}</span>${X}</h3><div class="note">${esc(m.email)} has signed in and is asking to join the room.</div><div class="cap"><button class="btn gh" style="flex:1" onclick="rejectM('${ek}')">Reject</button><button class="btn" style="flex:1.3" onclick="accept('${ek}')">${ic('ok')}Accept</button></div>`)
+    : toast(`${mName(m)} is waiting for the admin to accept them`);
+  toast(`${mName(m)} is invited and hasn’t signed in yet`);
 }
 function dash() {
-  const c = calc(), k = me(), on = c.M.includes(k), st = statusLine(c), v = on ? c.net[k] : 0;
+  const c = calc(), P = approved() ? myPairs(c) : [];
+  const owe = P.reduce((s, p) => s + Math.max(0, -p.bal), 0), get = P.reduce((s, p) => s + Math.max(0, p.bal), 0);
   const pc = D.bud ? Math.min(100, Math.round(c.tot / D.bud * 100)) : 0;
-  const sc = (id, i, lb, val, s, cls = '') => `<button class="sc${sel == id ? ' on' : ''}" onclick="pick('${id}')"><span class="si">${ic(i)}</span><span class="sl">${lb}</span><b class="${cls}">${val}</b><i>${s}</i></button>`;
-  const bcls = v > .5 ? 'pos' : v < -.5 ? 'neg' : '', bsub = v > .5 ? 'You get money back' : v < -.5 ? 'You need to pay' : 'Settled';
-  const six = adm() ? sc('req', 'bell', 'Join Requests', String(pending().length), pending().length ? 'Waiting for you' : 'None waiting', pending().length ? 'neg' : '')
-    : sc('pays', 'swap', 'Payments', `${fm(on ? c.sent[k] : 0)} sent`, `${fm(on ? c.recv[k] : 0)} received`);
-  return `<div class="hero"><div class="t"><span>ROOM TOTAL · ${esc(monthName().toUpperCase())}</span><span class="mp">${c.n} MEMBER${c.n == 1 ? '' : 'S'}</span></div><div class="big">${fm(c.tot)}</div><div class="hsub">${c.count} expense${c.count == 1 ? '' : 's'} · ${c.n ? `${fm(c.each)} per person` : 'no active members'}</div><button class="hst ${st.cls}" onclick="go('debts')"><span class="fl"><b>${esc(st.big)}</b><i>${esc(st.small)}</i></span>${ic('r')}</button></div>
-<div class="g6">${sc('me', 'list', 'You Paid', fm(on ? c.paid[k] : 0), `${on ? c.cnt[k] : 0} expense${on && c.cnt[k] == 1 ? '' : 's'} by you`)}${sc('share', 'users', 'Your Share', fm(on ? c.each : 0), c.n ? `Total ÷ ${c.n} members` : '—')}${sc('bal', 'swap', 'Your Balance', signed(v), bsub, bcls)}${sc('all', 'cart', 'All Expenses', fm(c.tot), `${c.count} this month`)}${sc('mem', 'users', 'Members', c.n + ' active', people().length + ' in room')}${six}</div>
-<div class="card pad" style="flex:none"><div class="bh"><b>Monthly Target Budget</b><span>${fm(c.tot)} / ${fm(D.bud)}</span></div><div class="bar"><i style="width:${pc}%;${pc >= (V.thr || 90) ? 'background:var(--r)' : ''}"></i></div><div class="sub" style="margin-top:5px">${pc}% used · ${D.bud > c.tot ? fm(D.bud - c.tot) + ' left' : 'Over budget by ' + fm(c.tot - D.bud)}</div></div>
-${nextCard(c)}`;
+  const sc = (id, i, lb, val, s, cls = '') => `<button class="sc${cls ? ' ' + cls : ''}" onclick="pick('${id}')"><span class="si">${ic(i)}</span><span class="sl">${lb}</span><b>${val}</b><i>${s}</i></button>`;
+  const O = others(), cols = O.length + 1 <= 2 ? 2 : 3, wide = cols == 2, mine = c.M.includes(me());
+  return `<div class="hero"><div class="t"><span>THIS MONTH · ALL MEMBERS</span><span class="mp">${esc(monthName().toUpperCase())}</span></div><div class="big">${num$('tot', c.tot)}</div><div class="hsub">Spent together by ${c.n} member${c.n == 1 ? '' : 's'} · ${c.count} expense${c.count == 1 ? '' : 's'}${mine ? ` · your share ${fm(c.share[me()])}` : ''}</div><div class="hbar"><i style="width:${pc}%"></i></div><div class="hsub2">${pc}% of the ${fm(D.bud)} monthly budget</div></div>
+<div class="mg c${cols}">${youCard(c, wide)}${O.map(([ek, m]) => memCard(c, ek, m, wide)).join('')}</div>
+<div class="g2d">${sc('owe', 'r', 'You Need To Pay', num$('owe', owe), owe > .5 ? 'In total, to ' + P.filter(p => p.bal < -.5).length + ' member(s)' : 'You owe nobody', 'bad')}${sc('get', 'l', 'You Will Get', num$('get', get), get > .5 ? 'In total, from ' + P.filter(p => p.bal > .5).length + ' member(s)' : 'Nobody owes you', 'good')}</div>`;
 }
-function nextCard(c) {
-  if (!approved()) return `<div class="card sync"><div class="bh" style="margin:0"><b style="display:flex;gap:6px;align-items:center">${ic('lock')}Waiting for approval</b></div><div class="note">You are signed in as ${esc(ME.email)}. The admin has been told. Everything shows 0 until the admin accepts you, then your room's ledger appears here by itself.</div></div>`;
-  const mv = myMoves(c), k = me();
-  const rows = mv.slice(0, 2).map(([f, t, a]) => f == k
-    ? `<div class="mv"><span class="mvi neg">${ic('r')}</span><div class="fl"><b>Pay ${esc(S1(t))}</b><i>${fm(a)}</i></div><button class="chip on" onclick="mp('${f}','${t}',${Math.round(a)})">I paid</button></div>`
-    : `<div class="mv"><span class="mvi pos">${ic('l')}</span><div class="fl"><b>Collect from ${esc(S1(f))}</b><i>${fm(a)}</i></div><button class="chip on" onclick="mp('${f}','${t}',${Math.round(a)})">Got it</button></div>`).join('');
-  return `<div class="card sync"><div class="bh" style="margin:0"><b style="display:flex;gap:6px;align-items:center">${ic('swap')}Your next step</b><button class="lk" onclick="howCalc()">How it’s worked out</button></div>${rows || `<div class="mv"><span class="mvi ok">${ic('ok')}</span><div class="fl"><b>Nothing to do</b><i>${c.tot ? 'You are settled up for this month.' : 'Add the first expense of the month.'}</i></div></div>`}${mv.length > 2 ? `<button class="lk" onclick="go('debts')">+${mv.length - 2} more in Settle Up</button>` : ''}</div>`;
+/* the full working between me and one person */
+function pairSheet(o) {
+  const c = calc(), p = pair(c, me(), o), l = pairLine(p), nm = esc(S1(o));
+  const line = (a, b, cls) => `<div class="kv"><span>${a}</span><b class="${cls || ''}">${b}</b></div>`;
+  const btn = p.bal < -.5 ? `<button class="btn" onclick="mp('${me()}','${o}',${Math.round(-p.bal)})">${ic('ok')}I paid ${nm} ${fm(p.bal)}</button>` : p.bal > .5 ? `<button class="btn" onclick="mp('${o}','${me()}',${Math.round(p.bal)})">${ic('ok')}${nm} paid me ${fm(p.bal)}</button>` : '';
+  ov(`<h3><span class="hb">${av(o, 30)}Your hisab with ${nm}</span>${X}</h3>
+<div class="card pad"><div class="lab">What ${nm} spent</div>${line(`${nm} spent this month`, fm(p.theyPaid))}${p.theyShared != p.theyPaid ? line('Of that, shared with you', fm(p.theyShared)) : ''}${line('Your part of it', fm(p.iOwe), 'neg')}</div>
+<div class="card pad"><div class="lab">What you spent</div>${line('You spent this month', fm(p.iPaid))}${p.iShared != p.iPaid ? line(`Of that, shared with ${nm}`, fm(p.iShared)) : ''}${line(`${nm}’s part of it`, fm(p.theyOwe), 'pos')}</div>
+${p.iSent || p.theySent ? `<div class="card pad"><div class="lab">Payments between you</div>${line(`You paid ${nm}`, fm(p.iSent))}${line(`${nm} paid you`, fm(p.theySent))}</div>` : ''}
+<div class="res ${l[0]}"><b>${esc(l[1])}</b><i>${p.bal < -.5 ? `${fm(p.iOwe)} you owe − ${fm(p.theyOwe)} ${nm} owes${p.iSent ? ' − ' + fm(p.iSent) + ' you paid' : ''}${p.theySent ? ' + ' + fm(p.theySent) + ' they paid' : ''}` : p.bal > .5 ? `${fm(p.theyOwe)} ${nm} owes − ${fm(p.iOwe)} you owe${p.theySent ? ' − ' + fm(p.theySent) + ' they paid' : ''}${p.iSent ? ' + ' + fm(p.iSent) + ' you paid' : ''}` : 'Nothing to pay either way.'}</i></div>${btn}`);
 }
-
-/* the working, with the real numbers */
-function howCalc(who) {
-  const c = calc(), k = who || me(), on = c.M.includes(k);
-  const v = on ? c.net[k] : 0, bw = balWord(v), you = k == me();
-  const line = (l, val, cls) => `<div class="kv"><span>${l}</span><b class="${cls || ''}">${val}</b></div>`;
-  const Nm = you ? 'You' : esc(S1(k));
-  ov(`<h3>${you ? 'How your balance is worked out' : esc(N(k)) + '’s hisab'}${X}</h3>
-<div class="card pad"><div class="lab">Step 1 · Everyone’s share</div>${line('Room total this month', fm(c.tot))}${line('Active members', String(c.n))}${line('Share per person (total ÷ members)', fm(c.each), 'acc')}</div>
-${on ? `<div class="card pad"><div class="lab">Step 2 · ${you ? 'Your' : Nm + '’s'} balance</div>${line(`${Nm} paid for the room`, '+ ' + fm(c.paid[k]))}${line(`Minus ${you ? 'your' : 'their'} share`, '- ' + fm(c.each))}${line(`Plus payments ${you ? 'you' : 'they'} sent`, '+ ' + fm(c.sent[k]))}${line(`Minus payments ${you ? 'you' : 'they'} received`, '- ' + fm(c.recv[k]))}<div class="kv tot"><span>Balance</span><b class="${bw[0]}">${signed(v)}</b></div><div class="sub" style="white-space:normal;margin-top:4px">${v > .5 ? `${Nm} paid more than ${you ? 'your' : 'their'} share, so ${you ? 'you get' : 'they get'} ${fm(v)} back.` : v < -.5 ? `${Nm} paid less than ${you ? 'your' : 'their'} share, so ${you ? 'you owe' : 'they owe'} ${fm(v)}.` : 'Paid exactly the share. Nothing to settle.'}</div></div>` : `<div class="note">${you ? 'You are' : esc(N(k)) + ' is'} paused and not part of this month’s hisab.</div>`}
-${c.heldN ? `<div class="note">${c.heldN} expense${c.heldN > 1 ? 's' : ''} (${fm(c.held)}) paid by paused or former members ${c.heldN > 1 ? 'are' : 'is'} not counted.</div>` : ''}`);
+/* how the hisab works, in general */
+function howCalc() {
+  const c = calc();
+  ov(`<h3>How the hisab works${X}</h3><div class="card pad"><div class="stp"><b>1</b><span>When you add an expense, pick who shares it. Everyone is picked unless you change it.</span></div><div class="stp"><b>2</b><span>The amount is split equally between the people picked: <em>amount ÷ people picked</em>. Anyone not picked pays nothing for it.</span></div><div class="stp"><b>3</b><span>Between you and each roommate, what they owe you and what you owe them cancel out. Only the difference is paid.</span></div><div class="stp"><b>4</b><span>When money is handed over, tap <em>I paid</em> or <em>Mark paid</em>. That hisab goes to zero.</span></div></div><div class="note">Example: Sara buys coffee for Rs. 600 and picks herself and you. Each part is 600 ÷ 2 = Rs. 300, so you owe Sara Rs. 300. Anyone else in the room owes nothing for the coffee.</div><div class="sub" style="white-space:normal">Tap any roommate’s card on the Dashboard to see your exact numbers with them.</div>`);
 }
 
 /* ===== Ledger ===== */
@@ -587,12 +785,12 @@ function acts(e) { return adm() ? `<div class="ac"><button onclick="edit(${e.id}
 const title = e => esc(e.d || e.cc || e.cat);
 function grow(e, c) {
   const z = !counted(e), who = e.by == me() ? 'You' : esc(S1(e.by));
-  return `<div class="li gl${z ? ' ps' : ''}"><div class="r1"><div class="ci">${ic(CI[e.cat])}</div><b class="tt">${title(e)}</b><div class="rg"><b>${fm(e.amt)}</b>${acts(e)}</div></div><div class="r2"><div><small>Paid by · ${dlab(e)}</small><div class="ab">${av(e.by, 20)}${who}</div></div><div><small>Each share</small><div class="ab">${z ? 'Not counted' : fm(e.amt / (c.n || 1))}</div></div></div></div>`;
+  return `<div class="li gl${z ? ' ps' : ''}"><div class="r1"><div class="ci">${ic(CI[e.cat])}</div><b class="tt">${title(e)}</b><div class="rg"><b>${fm(e.amt)}</b>${acts(e)}</div></div><div class="r2"><div><small>Paid by · ${dlab(e)}</small><div class="ab">${av(e.by, 20)}${who}</div></div><div><small>${z ? 'Each share' : 'Split: ' + esc(splitLabel(parts(e, c.M), c))}</small><div class="ab">${z ? 'Not counted' : fm(e.amt / parts(e, c.M).length) + ' each'}</div></div></div></div>`;
 }
 function row(e, c) {
   if (V.vw == 'g') return grow(e, c);
   const z = !counted(e);
-  return `<div class="li${z ? ' ps' : ''}"><div class="ci">${ic(CI[e.cat])}</div><div class="fl"><b>${title(e)}</b><i>${e.by == me() ? 'You' : esc(S1(e.by))} paid · ${dlab(e)}${e.cc ? ' · ' + esc(e.cc) : ''}</i><i>${z ? 'Not counted (payer paused or left)' : `${fm(e.amt / (c.n || 1))} each · split by ${c.n}`}</i></div><div class="rg"><b>${fm(e.amt)}</b>${acts(e)}</div></div>`;
+  return `<div class="li${z ? ' ps' : ''}"><div class="ci">${ic(CI[e.cat])}</div><div class="fl"><b>${title(e)}</b><i>${e.by == me() ? 'You' : esc(S1(e.by))} paid · ${dlab(e)}${e.cc ? ' · ' + esc(e.cc) : ''}</i><i>${z ? 'Not counted (payer paused or left)' : `${fm(e.amt / parts(e, c.M).length)} each · ${esc(splitLabel(parts(e, c.M), c))}`}</i></div><div class="rg"><b>${fm(e.amt)}</b>${acts(e)}</div></div>`;
 }
 function ledger() {
   const c = calc();
@@ -615,7 +813,7 @@ function del(id) {
 function edit(id) {
   if (!adm()) return deny();
   const e = getE(id); if (!e) return gone();
-  F = { amt: String(e.amt), desc: e.d || '', cat: e.cat, cc: e.cc || '', by: e.by, edit: id };
+  F = { amt: String(e.amt), desc: e.d || '', cat: e.cat, cc: e.cc || '', by: e.by, sp: e.s2 && e.sp ? String(e.sp).split(',') : null, edit: id };
   tab = 'add'; render();
 }
 
@@ -623,20 +821,23 @@ function edit(id) {
 function pager(v, n, cur) { return n > 1 ? `<div class="pg" style="margin-top:4px"><button ${cur ? '' : 'disabled'} onclick="${v}--;render()">${ic('l')}</button><span class="sub">${cur + 1} / ${n}</span><button ${cur < n - 1 ? '' : 'disabled'} onclick="${v}++;render()">${ic('r')}</button></div>` : ''; }
 function debts() {
   const c = calc();
-  const head = `<div class="hd"><b>Settle Up</b><span class="sub">${esc(monthName())} · ${fm(c.tot)} ÷ ${c.n || 0} members = ${fm(c.each)} each</span></div><div class="seg">${[['bal', 'Balances'], ['pay', `Payments${D.pay.length ? ' (' + D.pay.length + ')' : ''}`]].map(([k, l]) => `<button class="${dsub == k ? 'on' : ''}" onclick="dsub='${k}';tpg=0;dpg=0;render()">${l}</button>`).join('')}</div>`;
+  const head = `<div class="hd"><b>Settle Up</b><span class="sub">${esc(monthName())} · ${fm(c.tot)} spent by ${c.n} member${c.n == 1 ? '' : 's'}</span></div><div class="seg">${[['bal', 'My hisab'], ['all', 'Everyone'], ['pay', `Payments${D.pay.length ? ' (' + D.pay.length + ')' : ''}`]].map(([k, l]) => `<button class="${dsub == k ? 'on' : ''}" onclick="dsub='${k}';tpg=0;dpg=0;render()">${l}</button>`).join('')}</div>`;
   if (!approved()) return head + `<div class="card pad em">${ic('lock')}<br>The hisab appears once the admin accepts you.</div>`;
   if (dsub == 'pay') return head + payList();
-  const t = tx(c.net), canPay = (f, o) => adm() || me() == f || me() == o;
-  const bn = Math.max(1, Math.ceil(c.M.length / 3)), tn = Math.max(1, Math.ceil(t.length / 2));
-  dpg = Math.min(dpg, bn - 1); tpg = Math.min(tpg, tn - 1);
-  const rows = c.M.slice(dpg * 3, dpg * 3 + 3).map(k => { const v = c.net[k], w = balWord(v); return `<button class="rw brow" onclick="howCalc('${k}')">${av(k, 30)}<div class="fl"><b>${esc(N(k))}${k == me() ? ' (you)' : ''}</b><i>Paid ${fm(c.paid[k])} · Share ${fm(c.each)}</i></div><span class="bw ${w[0]}">${w[1]}</span></button>`; }).join('');
-  const moves = t.slice(tpg * 2, tpg * 2 + 2).map(([f, o, m]) => `<div class="rw">${av(f, 26)}<div class="fl"><b>${f == me() ? 'You pay' : esc(S1(f)) + ' pays'} ${o == me() ? 'you' : esc(S1(o))}</b><i>${fm(m)}</i></div>${canPay(f, o) ? `<button class="chip on" onclick="mp('${f}','${o}',${Math.round(m)})">Mark paid</button>` : ''}</div>`).join('');
-  return head + `<div><div class="lab">Everyone’s balance <span class="lh">· tap a name to see the working</span></div><div class="card pad">${rows || '<div class="em">No active members yet.</div>'}${pager('dpg', bn, dpg)}</div></div><div><div class="lab">Payments still needed</div><div class="card pad">${moves || `<div class="mv"><span class="mvi ok">${ic('ok')}</span><div class="fl"><b>Everyone is settled up</b><i>Nobody owes anything this month.</i></div></div>`}${pager('tpg', tn, tpg)}</div></div><div class="cap"><button class="btn gh" style="flex:1" onclick="howCalc()">${ic('swap')}How it works</button><button class="btn" style="flex:1.3" onclick="sm()">${ic('link')}Share summary</button></div>${c.heldN ? `<div class="sub" style="white-space:normal">${c.heldN} expense${c.heldN > 1 ? 's' : ''} by paused or former members not counted.</div>` : ''}`;
+  if (dsub == 'all') {
+    const t = moves(c), n = Math.max(1, Math.ceil(t.length / 4)); tpg = Math.min(tpg, n - 1);
+    const canPay = (f, o) => adm() || me() == f || me() == o;
+    return head + `<div class="card pad">${t.slice(tpg * 4, tpg * 4 + 4).map(([f, o, m]) => `<div class="rw">${av(f, 28)}<div class="fl"><b>${esc(NM(f))} → ${esc(NM(o))}</b><i>${f == me() ? 'You pay' : esc(S1(f)) + ' pays'} ${o == me() ? 'you' : esc(S1(o))}</i></div><b>${fm(m)}</b>${canPay(f, o) ? `<button class="chip on" onclick="mp('${f}','${o}',${Math.round(m)})">Paid</button>` : ''}</div>`).join('') || `<div class="mv"><span class="mvi ok">${ic('ok')}</span><div class="fl"><b>Everyone is settled up</b><i>Nobody owes anything this month.</i></div></div>`}${pager('tpg', n, tpg)}</div><div class="cap"><button class="btn gh" style="flex:1" onclick="howCalc()">${ic('swap')}How it works</button><button class="btn" style="flex:1.3" onclick="sm()">${ic('link')}Share summary</button></div>`;
+  }
+  const P = myPairs(c), n = Math.max(1, Math.ceil(P.length / 3)); dpg = Math.min(dpg, n - 1);
+  const owe = P.reduce((s, p) => s + Math.max(0, -p.bal), 0), get = P.reduce((s, p) => s + Math.max(0, p.bal), 0);
+  const rows = P.slice(dpg * 3, dpg * 3 + 3).map(p => { const l = pairLine(p); return `<div class="prow"><button class="prm" onclick="pairSheet('${p.o}')">${av(p.o, 32)}<div class="fl"><b>${esc(N(p.o))}</b><i>Spent ${fm(p.theyPaid)} · you give ${fm(p.iOwe)} · you get ${fm(p.theyOwe)}</i></div></button><div class="prb"><span class="bw ${l[0]}">${esc(l[1].replace(S1(p.o) + ' owes you', 'Owes you').replace('You owe ' + S1(p.o), 'You owe'))}</span>${p.bal < -.5 ? `<button class="chip on" onclick="mp('${me()}','${p.o}',${Math.round(-p.bal)})">I paid</button>` : p.bal > .5 ? `<button class="chip on" onclick="mp('${p.o}','${me()}',${Math.round(p.bal)})">Got it</button>` : ''}</div></div>`; }).join('');
+  return head + `<div class="g2"><div class="stc bad"><i>You need to pay</i><b>${fm(owe)}</b></div><div class="stc good"><i>You will get</i><b>${fm(get)}</b></div></div><div><div class="lab">Your hisab with each roommate <span class="lh">· tap for the full working</span></div><div class="card pad">${rows || `<div class="em">${c.M.includes(me()) ? 'No other members yet.' : 'You are paused this month.'}</div>`}${pager('dpg', n, dpg)}</div></div><div class="cap"><button class="btn gh" style="flex:1" onclick="howCalc()">${ic('swap')}How it works</button><button class="btn" style="flex:1.3" onclick="sm()">${ic('link')}Share summary</button></div>`;
 }
 function payList() {
   const L = D.pay.slice().sort((a, b) => b.id - a.id), n = Math.max(1, Math.ceil(L.length / 4));
   tpg = Math.min(tpg, n - 1);
-  return `<div class="card pad">${L.slice(tpg * 4, tpg * 4 + 4).map(p => `<div class="rw">${av(p.f, 28)}<div class="fl"><b>${p.f == me() ? 'You' : esc(S1(p.f))} paid ${p.t == me() ? 'you' : esc(S1(p.t))}</b><i>${p.ts ? dlab(p) : 'Earlier'}</i></div><b>${fm(p.a)}</b>${adm() ? `<button class="mini dng" onclick="delPay(${p.id})">Remove</button>` : ''}</div>`).join('') || '<div class="em">No payments recorded yet. When money changes hands, tap Mark paid in Balances.</div>'}${pager('tpg', n, tpg)}</div><div class="sub" style="white-space:normal">Payments move money between people. They change balances, not the room total.</div>`;
+  return `<div class="card pad">${L.slice(tpg * 4, tpg * 4 + 4).map(p => `<div class="rw">${av(p.f, 28)}<div class="fl"><b>${p.f == me() ? 'You' : esc(S1(p.f))} paid ${p.t == me() ? 'you' : esc(S1(p.t))}</b><i>${p.ts ? dlab(p) : 'Earlier'}</i></div><b>${fm(p.a)}</b>${adm() ? `<button class="mini dng" onclick="delPay(${p.id})">Remove</button>` : ''}</div>`).join('') || '<div class="em">No payments recorded yet. When money changes hands, tap I paid or Got it in My hisab.</div>'}${pager('tpg', n, tpg)}</div><div class="sub" style="white-space:normal">Payments move money between people. They change balances, not the room total.</div>`;
 }
 function mp(f, o, a) {
   if (needOk()) return;
@@ -657,12 +858,12 @@ function delPay(id) {
 
 /* ===== Month-end summary (WhatsApp-ready) ===== */
 function summaryText() {
-  const c = calc(), t = tx(c.net), mon = monthName(), pays = D.pay.slice().sort((a, b) => a.id - b.id), L = [];
+  const c = calc(), t = moves(c), mon = monthName(), pays = D.pay.slice().sort((a, b) => a.id - b.id), L = [];
   L.push(`*SplitLedger · ${mon} Hisab*`, '');
   L.push(`Room total: *${fm(c.tot)}* (${c.count} expense${c.count == 1 ? '' : 's'})`);
-  L.push(`Members: ${c.n} · Each share: *${fm(c.each)}*`, '');
-  L.push('*What everyone paid*');
-  c.M.forEach(k => L.push(`• ${N(k)}: ${fm(c.paid[k])}`));
+  L.push(`Members: ${c.n}`, '');
+  L.push('*Paid and share*');
+  c.M.forEach(k => L.push(`• ${N(k)}: paid ${fm(c.paid[k])}, share ${fm(c.share[k])}`));
   if (pays.length) { L.push('', '*Payments already made*'); pays.forEach(p => L.push(`• ${N(p.f)} → ${N(p.t)}: ${fm(p.a)}`)); }
   L.push('', '*Balances*');
   c.M.forEach(k => { const v = c.net[k]; L.push(`• ${N(k)}: ${v > .5 ? 'gets back ' + fm(v) : v < -.5 ? 'owes ' + fm(v) : 'settled ✅'}`); });
@@ -671,9 +872,9 @@ function summaryText() {
   return L.join('\n');
 }
 function sm() {
-  const c = calc(), t = tx(c.net), mon = monthName(), pays = D.pay.slice().sort((a, b) => a.id - b.id);
+  const c = calc(), t = moves(c), mon = monthName(), pays = D.pay.slice().sort((a, b) => a.id - b.id);
   const kv = (l, v, cls) => `<div class="kv"><span>${l}</span><b class="${cls || ''}">${v}</b></div>`;
-  ov(`<h3>Month-end summary${X}</h3><div class="sumc"><div class="sumh"><b>${esc(mon)} Hisab</b><span>${c.count} expense${c.count == 1 ? '' : 's'} · ${c.n} members</span></div>${kv('Room total', fm(c.tot))}${kv('Each share', fm(c.each), 'acc')}<div class="sl2">What everyone paid</div>${c.M.map(k => kv(esc(N(k)), fm(c.paid[k]))).join('')}${pays.length ? `<div class="sl2">Payments already made</div>${pays.map(p => kv(`${esc(S1(p.f))} → ${esc(S1(p.t))}`, fm(p.a))).join('')}` : ''}<div class="sl2">To settle the month</div>${t.length ? t.map(([f, o, m]) => kv(`<b>${esc(S1(f))}</b> pays <b>${esc(S1(o))}</b>`, fm(m), 'neg')).join('') : `<div class="sub" style="color:var(--g);font-weight:700">Everyone is settled up.</div>`}</div><div class="cap"><button class="btn gh" style="flex:1" onclick="cpSum()">${ic('copy')}Copy</button><button class="btn" style="flex:1.4" onclick="shareSum()">${ic('link')}Share on WhatsApp</button></div>`);
+  ov(`<h3>Month-end summary${X}</h3><div class="sumc"><div class="sumh"><b>${esc(mon)} Hisab</b><span>${c.count} expense${c.count == 1 ? '' : 's'} · ${c.n} members</span></div>${kv('Room total', fm(c.tot))}<div class="sl2">Paid and share</div>${c.M.map(k => kv(esc(N(k)), `${fm(c.paid[k])} <small class="sub">share ${fm(c.share[k])}</small>`)).join('')}${pays.length ? `<div class="sl2">Payments already made</div>${pays.map(p => kv(`${esc(S1(p.f))} → ${esc(S1(p.t))}`, fm(p.a))).join('')}` : ''}<div class="sl2">To settle the month</div>${t.length ? t.map(([f, o, m]) => kv(`<b>${esc(S1(f))}</b> pays <b>${esc(S1(o))}</b>`, fm(m), 'neg')).join('') : `<div class="sub" style="color:var(--g);font-weight:700">Everyone is settled up.</div>`}</div><div class="cap"><button class="btn gh" style="flex:1" onclick="cpSum()">${ic('copy')}Copy</button><button class="btn" style="flex:1.4" onclick="shareSum()">${ic('link')}Share on WhatsApp</button></div>`);
 }
 function shareSum() { shareText(summaryText()); }
 function cpSum() { copyText(summaryText()); }
@@ -699,13 +900,17 @@ function add() {
   if (!approved()) return `<div class="hd"><b>New expense</b><span class="sub">Waiting for admin approval</span></div><div class="card pad em">${ic('lock')}<br>You can add expenses once the admin accepts you.</div>`;
   const a = adm();
   if (!a || !PK[F.by]) F.by = me();
-  return `<div class="hd"><b>${F.edit ? 'Edit expense' : 'New expense'}</b><span class="sub">${F.edit ? '<button class="lk" style="display:inline" onclick="cancelEdit()">Cancel edit</button>' : 'Shared equally by everyone in the room'}</span></div><div><div class="lab">Amount (${esc(V.cur || 'Rs.')})</div><input class="amt" inputmode="decimal" placeholder="0" value="${esc(F.amt)}" oninput="F.amt=this.value;pv()" autocomplete="off"></div><div><div class="lab">What was it for?</div><input placeholder="e.g. Sabzi, rashan" maxlength="40" value="${esc(F.desc)}" oninput="F.desc=this.value" autocomplete="off"></div><div class="cap"><div style="flex:1.2;min-width:0"><div class="lab">Category</div>${F.cat == 'Other' ? `<input placeholder="Type, e.g. Fuel" maxlength="24" value="${esc(F.cc)}" oninput="F.cc=this.value" autocomplete="off">` : `<button class="fld" onclick="pc()"><span>${F.cat}</span>${ic('d')}</button>`}</div><div style="flex:1;min-width:0"><div class="lab">Paid by</div><button class="fld" ${a ? 'onclick="pb()"' : ''}><span>${esc(F.by == me() ? 'Me' : S1(F.by))}</span>${a ? ic('d') : ic('lock')}</button></div></div>${F.cat == 'Other' ? '<button class="lk" style="align-self:flex-start" onclick="pc()">Change category</button>' : ''}<div class="card pad" id="pv"></div><button class="btn" onclick="saveE()">${ic('ok')}${F.edit ? 'Update' : 'Save'} expense</button>`;
+  return `<div class="hd"><b>${F.edit ? 'Edit expense' : 'New expense'}</b><span class="sub">${F.edit ? '<button class="lk" style="display:inline" onclick="cancelEdit()">Cancel edit</button>' : 'Pick who shares it below'}</span></div><div><div class="lab">Amount (${esc(V.cur || 'Rs.')})</div><input class="amt" inputmode="decimal" placeholder="0" value="${esc(F.amt)}" oninput="F.amt=this.value;pv()" autocomplete="off"></div><div><div class="lab">What was it for?</div><input placeholder="e.g. Sabzi, rashan" maxlength="40" value="${esc(F.desc)}" oninput="F.desc=this.value" autocomplete="off"></div><div class="cap"><div style="flex:1.2;min-width:0"><div class="lab">Category</div>${F.cat == 'Other' ? `<input placeholder="Type, e.g. Fuel" maxlength="24" value="${esc(F.cc)}" oninput="F.cc=this.value" autocomplete="off">` : `<button class="fld" onclick="pc()"><span>${F.cat}</span>${ic('d')}</button>`}</div><div style="flex:1;min-width:0"><div class="lab">Paid by</div><button class="fld" ${a ? 'onclick="pb()"' : ''}><span>${esc(F.by == me() ? 'Me' : S1(F.by))}</span>${a ? ic('d') : ic('lock')}</button></div></div>${F.cat == 'Other' ? '<button class="lk" style="align-self:flex-start" onclick="pc()">Change category</button>' : ''}<div class="card pad" id="pv"></div><button class="btn" onclick="saveE()">${ic('ok')}${F.edit ? 'Update' : 'Save'} expense</button>`;
 }
 function cancelEdit() { newF(); render(); }
+/* who shares this expense: tap names to pick; everyone is picked unless changed */
+function pickedSp() { const M = act(); return F.sp ? F.sp.filter(k => M.includes(k)) : M; }
+function tsp(k) { const M = act(), S = pickedSp(); F.sp = S.includes(k) ? S.filter(x => x != k) : M.filter(x => x == k || S.includes(x)); if (F.sp.length == M.length) F.sp = null; pv(); }
+function spAll() { F.sp = null; pv(); }
 function pv() {
   const e = $('#pv'); if (!e) return;
-  const M = act(), a = num(F.amt) || 0, n = M.length || 1;
-  e.innerHTML = `<div class="pvh"><b>Split equally between ${M.length} member${M.length == 1 ? '' : 's'}</b><span>${a ? fm(a / n) + ' each' : 'Enter an amount'}</span></div><div class="pva">${M.slice(0, 6).map(k => `<span class="pvp">${av(k, 22)}${esc(k == me() ? 'You' : S1(k))}</span>`).join('')}${M.length > 6 ? `<span class="pvp">+${M.length - 6}</span>` : ''}</div>`;
+  const M = act(), S = pickedSp(), a = num(F.amt) || 0, all = S.length == M.length;
+  e.innerHTML = H(`<div class="pvh"><b>${S.length ? `Split equally between ${S.length}${all ? ' (everyone)' : ''}` : 'Pick who shares it'}</b><span>${a && S.length ? fm(a / S.length) + ' each' : S.length ? 'Enter an amount' : ''}</span></div><div class="pva"><button class="pvp all${all ? ' on' : ''}" onclick="spAll()">${ic('users')}Everyone</button>${M.map(k => `<button class="pvp${S.includes(k) ? ' on' : ''}" onclick="tsp('${k}')" aria-pressed="${S.includes(k)}">${av(k, 22)}${esc(who2(k))}${S.includes(k) ? ic('ok') : ''}</button>`).join('')}</div>`);
 }
 function saveE() {
   if (needOk()) return;
@@ -715,15 +920,17 @@ function saveE() {
   if (F.cat == 'Other' && !(F.cc || '').trim() && !F.desc.trim()) return toast('Type a category or a description');
   if (F.edit && !getE(F.edit)) { newF(); return gone(); }
   if (!act().length) return toast('There are no active members');
-  if (F.edit && !_cf) return ask('Update this expense? Everyone’s share will change.', () => { _cf = 1; saveE(); _cf = 0; });
-  const by = adm() && PK[F.by] ? F.by : me(), d = F.desc.trim(), cc = F.cat == 'Other' ? (F.cc || '').trim() : '', what = d || cc || F.cat, M = act();
+  const S = pickedSp();
+  if (!S.length) return toast('Pick at least one person to share it');
+  if (F.edit && !_cf) return ask('Update this expense? The shares will change.', () => { _cf = 1; saveE(); _cf = 0; });
+  const by = adm() && PK[F.by] ? F.by : me(), d = F.desc.trim(), cc = F.cat == 'Other' ? (F.cc || '').trim() : '', what = d || cc || F.cat, M = act(), sp = S.join(','), whoT = S.length == M.length ? 'everyone' : S.map(S1).join(', ');
   if (F.edit) {
     if (!adm()) return deny();
-    Object.assign(getE(F.edit), { amt: a, cat: F.cat, cc, d, by });
+    Object.assign(getE(F.edit), { amt: a, cat: F.cat, cc, d, by, sp, s2: 1 });
   } else {
     const id = uid();
-    D.ex.push({ id, by, amt: a, cat: F.cat, cc, d, sp: M.join(','), ts: Date.now() });
-    D.nt.push({ id, by: me(), k: 'ex', p: by, a, d: what, n: M.length, tx: `${S1(by)} added ${what} · ${fm(a)} (${fm(a / M.length)} each).` });
+    D.ex.push({ id, by, amt: a, cat: F.cat, cc, d, sp, s2: 1, ts: Date.now() });
+    D.nt.push({ id, by: me(), k: 'ex', p: by, a, d: what, n: S.length, tx: `${S1(by)} added ${what} · ${fm(a)} (${fm(a / S.length)} each, ${whoT}).` });
   }
   lg(`${F.edit ? 'Updated' : 'Added'} expense: ${what} ${fm(a)}`);
   chkBud(); newF(); save(); go('ledger'); toast('Expense saved');
@@ -743,7 +950,7 @@ function ins() {
   }).join('');
   const P = c.M.slice().sort((a, b) => c.paid[b] - c.paid[a]), mx = Math.max(1, ...P.map(k => c.paid[k]));
   const big = D.ex.filter(counted).sort((a, b) => b.amt - a.amt)[0];
-  return `<div class="hd"><b>Insights</b><span class="sub">${esc(monthName())} at a glance</span></div><div class="g3"><div class="stc"><i>Room total</i><b>${fm(c.tot)}</b></div><div class="stc"><i>Each share</i><b>${fm(c.each)}</b></div><div class="stc"><i>Biggest</i><b>${big ? fm(big.amt) : '—'}</b></div></div><div class="card pad"><div class="lab">Spending by category</div>${K.length ? `<div class="dnr"><svg viewBox="0 0 36 36" width="104" height="104" role="img" aria-label="Spending by category"><circle r="15.9" cx="18" cy="18" fill="none" stroke="var(--chip)" stroke-width="4"/><g transform="rotate(-90 18 18)">${seg}</g></svg><div class="fl">${K.map((k, i) => `<div class="lg"><span class="dt" style="background:${CC[i % CC.length]}"></span><span class="ln">${esc(k)}</span><span class="sub">${fm(T[k])}</span><b>${tot ? Math.round(T[k] / tot * 100) : 0}%</b></div>`).join('')}</div></div>` : '<div class="em">No spending yet this month.</div>'}</div><div class="card pad"><div class="lab">Who paid what</div>${P.slice(0, 4).map(k => `<div class="pbr">${av(k, 22)}<span class="ln">${esc(k == me() ? 'You' : S1(k))}</span><div class="pbt"><i style="width:${Math.round(c.paid[k] / mx * 100)}%"></i></div><b>${fm(c.paid[k])}</b></div>`).join('') || '<div class="em">No members yet.</div>'}${P.length > 4 ? `<button class="lk" onclick="go('debts')">See all ${P.length} in Settle Up</button>` : ''}</div>`;
+  return `<div class="hd"><b>Insights</b><span class="sub">${esc(monthName())} at a glance</span></div><div class="g3"><div class="stc"><i>Room total</i><b>${fm(c.tot)}</b></div><div class="stc"><i>Your share</i><b>${fm(c.M.includes(me()) ? c.share[me()] : 0)}</b></div><div class="stc"><i>Biggest</i><b>${big ? fm(big.amt) : '—'}</b></div></div><div class="card pad"><div class="lab">Spending by category</div>${K.length ? `<div class="dnr"><svg viewBox="0 0 36 36" width="104" height="104" role="img" aria-label="Spending by category"><circle r="15.9" cx="18" cy="18" fill="none" stroke="var(--chip)" stroke-width="4"/><g transform="rotate(-90 18 18)">${seg}</g></svg><div class="fl">${K.map((k, i) => `<div class="lg"><span class="dt" style="background:${CC[i % CC.length]}"></span><span class="ln">${esc(k)}</span><span class="sub">${fm(T[k])}</span><b>${tot ? Math.round(T[k] / tot * 100) : 0}%</b></div>`).join('')}</div></div>` : '<div class="em">No spending yet this month.</div>'}</div><div class="card pad"><div class="lab">Who paid what</div>${P.slice(0, 4).map(k => `<div class="pbr">${av(k, 22)}<span class="ln">${esc(k == me() ? 'You' : S1(k))}</span><div class="pbt"><i style="width:${Math.round(c.paid[k] / mx * 100)}%"></i></div><b>${fm(c.paid[k])}</b></div>`).join('') || '<div class="em">No members yet.</div>'}${P.length > 4 ? `<button class="lk" onclick="go('debts')">See all ${P.length} in Settle Up</button>` : ''}</div>`;
 }
 
 /* ===== Side-panel pages ===== */
@@ -762,14 +969,14 @@ function sb() {
 function closeAsk() {
   if (!adm()) return deny();
   if (!D.ex.length && !D.pay.length) return toast('Nothing to close yet');
-  const t = tx(calc().net);
+  const t = moves(calc());
   ask(`Close ${monthName()}? ${t.length ? t.length + ' payment(s) are still needed; they will be saved in History. ' : 'Everyone is settled up. '}Expenses and payments move to History and a fresh month starts for everyone.`, rst, 'Close month');
 }
 function rst() {
   if (!adm()) return deny();
   const c = calc(), lab = monthName(), nm = {};
   new Set(D.ex.map(e => e.by).concat(c.M, D.pay.flatMap(p => [p.f, p.t]))).forEach(k => nm[k] = N(k));
-  D.hist.push({ id: uid(), v: 2, m: lab, t: c.tot, n: D.ex.length, mem: c.n, each: c.each, p: c.paid, nm, ex: D.ex, pay: D.pay, tr: tx(c.net).map(([f, o, m]) => ({ f, t: o, a: Math.round(m) })), ts: Date.now() });
+  D.hist.push({ id: uid(), v: 2, m: lab, t: c.tot, n: D.ex.length, mem: c.n, each: c.part ? 0 : c.each, sh: c.share, p: c.paid, nm, ex: D.ex, pay: D.pay, tr: moves(c).map(([f, o, m]) => ({ f, t: o, a: Math.round(m) })), ts: Date.now() });
   D.hist.sort((a, b) => a.id - b.id); while (D.hist.length > 24) D.hist.shift();
   lg(`Closed ${lab}: ${fm(c.tot)} and ${D.ex.length} expenses archived`);
   D.ex = []; D.pay = []; D.nt = [{ id: uid(), by: me(), tx: `${S1(me())} closed ${lab}. A fresh month has started.` }]; D.ba = 0;
@@ -784,7 +991,7 @@ const arr = v => Array.isArray(v) ? v : Object.values(v || {});
 function hshow(id) {
   const x = D.hist.find(h => h.id == id); if (!x) return;
   const tr = arr(x.tr), nm = k => (x.nm && x.nm[k]) || N(k), kv = (l, v, cls) => `<div class="kv"><span>${l}</span><b class="${cls || ''}">${v}</b></div>`;
-  ov(`<h3>${esc(x.m)}${X}</h3><div class="sumc">${kv('Room total', fm(x.t))}${kv('Expenses', String(x.n))}${x.each ? kv('Each share', fm(x.each), 'acc') : ''}<div class="sl2">What everyone paid</div>${Object.keys(x.p || {}).map(k => kv(esc(nm(k)), fm(x.p[k]))).join('')}<div class="sl2">Payments needed at closing</div>${tr.length ? tr.map(t => kv(`${esc(nm(t.f).split(' ')[0])} pays ${esc(nm(t.t).split(' ')[0])}`, fm(t.a), 'neg')).join('') : '<div class="sub" style="color:var(--g);font-weight:700">Everyone was settled up.</div>'}</div>${arr(x.ex).length ? `<button class="btn gh" onclick="hcsv(${x.id})">${ic('chart')}Export this month as CSV</button>` : ''}`);
+  ov(`<h3>${esc(x.m)}${X}</h3><div class="sumc">${kv('Room total', fm(x.t))}${kv('Expenses', String(x.n))}${x.each ? kv('Each share', fm(x.each), 'acc') : ''}<div class="sl2">${x.sh ? 'Paid and share' : 'What everyone paid'}</div>${Object.keys(x.p || {}).map(k => kv(esc(nm(k)), fm(x.p[k]) + (x.sh && x.sh[k] != null ? ` <small class="sub">share ${fm(x.sh[k])}</small>` : ''))).join('')}<div class="sl2">Payments needed at closing</div>${tr.length ? tr.map(t => kv(`${esc(nm(t.f).split(' ')[0])} pays ${esc(nm(t.t).split(' ')[0])}`, fm(t.a), 'neg')).join('') : '<div class="sub" style="color:var(--g);font-weight:700">Everyone was settled up.</div>'}</div>${arr(x.ex).length ? `<button class="btn gh" onclick="hcsv(${x.id})">${ic('chart')}Export this month as CSV</button>` : ''}`);
 }
 function hcsv(id) { const x = D.hist.find(h => h.id == id); if (x) share(x.m + ' CSV', csvOf(arr(x.ex), x.nm)); }
 
@@ -862,7 +1069,7 @@ function photo(i) {
 
 /* ===== Settings ===== */
 function settings() {
-  ov(`<h3>Settings${X}</h3><div class="seg">${[['g', 'General'], ['a', 'Advanced'], ['s', 'Account'], ['u', 'Guide']].map(([k, l]) => `<button class="${stab == k ? 'on' : ''}" onclick="stab='${k}';settings()">${l}</button>`).join('')}</div>${({ g: genH, a: advH, s: acctH, u: guide })[stab]()}`);
+  ov(`<h3>Settings${X}</h3><div class="seg">${[['g', 'General'], ['a', 'Advanced'], ['s', 'Account'], ['u', 'Guide']].map(([k, l]) => `<button class="${stab == k ? 'on' : ''}" onclick="stab='${k}';settings()">${l}</button>`).join('')}</div>${({ g: genH, a: advH, s: acctH, u: guide })[stab]()}`, 'tall');
 }
 function openAcct() { stab = 's'; settings(); }
 function genH() {
@@ -877,7 +1084,7 @@ function hap(v) { V.hap = v; saveLocal(); settings(); }
 function dct() { dd('Default category', CATS.filter(c => c != 'Wi-Fi Bill').map(c => ({ k: c, l: c })), V.dcat || 'Grocery', k => { V.dcat = k; if (!F.edit) F.cat = k; saveLocal(); settings(); }); }
 function advH() {
   const a = adm(), pn = V.pn !== 0;
-  return `<div class="lab">Phone notifications</div><div class="seg"><button class="${pn ? 'on' : ''}" onclick="setPn(1)">On</button><button class="${pn ? '' : 'on'}" onclick="setPn(0)">Off</button></div><div class="sub" style="white-space:normal">${notifyHint()}</div><div class="lab">Currency label</div><div class="seg">${['Rs.', 'PKR', '$'].map(c => `<button class="${(V.cur || 'Rs.') == c ? 'on' : ''}" onclick="scu('${c}')">${c}</button>`).join('')}</div><div class="lab">Default category for new expenses</div><button class="fld" onclick="dct()"><span>${V.dcat || 'Grocery'}</span>${ic('d')}</button><div class="lab">Budget alert at</div><div class="seg">${[80, 90, 100].map(n => `<button class="${(V.thr || 90) == n ? 'on' : ''}" onclick="sth2(${n})">${n}%</button>`).join('')}</div><div class="lab">Vibration on tap</div><div class="seg"><button class="${V.hap ? 'on' : ''}" onclick="hap(1)">On</button><button class="${V.hap ? '' : 'on'}" onclick="hap(0)">Off</button></div><div class="lab">Security and data</div><button class="opt" onclick="pinui()">${ic('lock')}<b class="fl"><span>${V.pin ? 'Change or remove app lock PIN' : 'Set an app lock PIN'}</span></b></button>${a ? `<button class="opt" onclick="mraAsk()">${ic('bell')}<b class="fl"><span>Clear notifications for everyone</span></b></button>` : ''}<button class="opt" onclick="exportSheet()">${ic('chart')}<b class="fl"><span>Export &amp; Backup</span></b></button>`;
+  return `<div class="lab">Phone notifications</div><div class="seg"><button class="${pn ? 'on' : ''}" onclick="setPn(1)">On</button><button class="${pn ? '' : 'on'}" onclick="setPn(0)">Off</button></div><div class="sub" style="white-space:normal">${notifyHint()}</div>${notifyPanel()}<div class="lab">Currency label</div><div class="seg">${['Rs.', 'PKR', '$'].map(c => `<button class="${(V.cur || 'Rs.') == c ? 'on' : ''}" onclick="scu('${c}')">${c}</button>`).join('')}</div><div class="lab">Default category for new expenses</div><button class="fld" onclick="dct()"><span>${V.dcat || 'Grocery'}</span>${ic('d')}</button><div class="lab">Budget alert at</div><div class="seg">${[80, 90, 100].map(n => `<button class="${(V.thr || 90) == n ? 'on' : ''}" onclick="sth2(${n})">${n}%</button>`).join('')}</div><div class="lab">Vibration on tap</div><div class="seg"><button class="${V.hap ? 'on' : ''}" onclick="hap(1)">On</button><button class="${V.hap ? '' : 'on'}" onclick="hap(0)">Off</button></div><div class="lab">Security and data</div><button class="opt" onclick="pinui()">${ic('lock')}<b class="fl"><span>${V.pin ? 'Change or remove app lock PIN' : 'Set an app lock PIN'}</span></b></button>${a ? `<button class="opt" onclick="mraAsk()">${ic('bell')}<b class="fl"><span>Clear notifications for everyone</span></b></button>` : ''}<button class="opt" onclick="exportSheet()">${ic('chart')}<b class="fl"><span>Export &amp; Backup</span></b></button>`;
 }
 function exportSheet() {
   const a = adm(), old = localStorage.getItem('rk_d');
@@ -887,7 +1094,7 @@ function oldData() { share('Old RoomKhata data (backup text)', localStorage.getI
 function mraAsk() { if (!adm()) return deny(); ask('Clear all notifications for everyone?', mra); }
 function mra() { if (!adm()) return deny(); D.nt = []; lg('Cleared all notifications'); save(); render(); }
 function acctH() {
-  if (DEMO) return `<div class="note">This is a demo with sample data. Nothing here is saved or shared.</div><button class="btn" onclick="exitDemo()">Exit demo</button>`;
+  if (DEMO) return `<div class="note">${GUEST ? 'Guest preview' : 'Demo'} with sample data. Nothing here is saved or shared.</div><div class="lab">Look at the app as</div><div class="seg"><button class="${ME.admin ? 'on' : ''}" onclick="viewAs('admin')">Admin (Daniel)</button><button class="${ME.admin ? '' : 'on'}" onclick="viewAs('member')">Member (Emma)</button></div><button class="btn gh" onclick="resetDemo()">${ic('refresh')}Reset sample data</button>${GUEST ? '' : '<button class="btn" onclick="exitDemo()">Exit demo</button>'}`;
   const s = SY.st, lab = { live: 'Connected and up to date', sync: 'Sending changes', conn: 'Connecting', err: 'Offline', off: 'Offline' }[s] || 'Connecting';
   return `<div id="acctbox"></div><div class="card pad"><div class="rw">${av(me(), 34)}<div class="fl"><b>${esc(myName())}</b><i>${esc(ME.email)}</i></div><span class="cn${approved() ? '' : ' pz'}">• ${adm() ? 'ADMIN' : approved() ? 'MEMBER' : 'WAITING'}</span></div><div class="kv"><span>Sync</span><b class="${s == 'live' ? 'pos' : s == 'err' ? 'neg' : ''}">${approved() ? lab : 'Starts after approval'}</b></div>${s == 'err' && SY.err ? `<div class="sub" style="white-space:normal">${esc(SY.err)}</div>` : ''}<div class="kv"><span>Server</span><b style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:62%">${esc(srv().replace(/^https:\/\//, ''))}</b></div></div>${adm() ? `<div class="lab">Email alerts for join requests</div><input id="hook" placeholder="Apps Script web app URL" value="${esc(V.hook || '')}" autocomplete="off" inputmode="url"><div class="cap"><button class="btn gh" style="flex:1" onclick="saveHook()">Save</button><button class="btn gh" style="flex:1" onclick="testHook()">Send test</button></div>` : ''}<div class="cap"><button class="btn gh" style="flex:1" onclick="resync()">${ic('refresh')}Sync now</button><button class="btn gh" style="flex:1" onclick="signOutAsk()">Sign out</button></div>`;
 }
@@ -1083,7 +1290,7 @@ function onPending() {
 function onApproved() {
   const was = ME.status;
   ME.status = 'approved'; reindex(); newF(); saveLocal(); render();
-  if (was == 'pending') { toast('The admin accepted you. Welcome!'); if (document.hidden) sysNotify('SplitLedger', 'The admin accepted you. Your room’s ledger is ready.', Date.now()); }
+  if (was == 'pending') { toast('The admin accepted you. Welcome!'); sysNotify('You’re in!', 'The admin accepted you. Your room’s ledger is ready.', Date.now()); }
   watchMembers('/members');
   connect();
   natAuth();
@@ -1138,7 +1345,7 @@ function membersChanged(T) {
   if (ME.status == 'pending' && st == 'approved') return onApproved();
   if (ME.status == 'none' && st == 'invited') { ME.status = 'loading'; render(); return checkMember(); }
   if (ME.status == 'pending' && (!st || st == 'removed')) return onDenied();
-  if (adm()) { const now = pending().map(([k]) => k), fresh = pending().filter(([k]) => MS.pend && !MS.pend.includes(k)); MS.pend = now; if (fresh.length) { const who = fresh[0][1].name || fresh[0][1].email; if (document.hidden) sysNotify('New join request', `${who} wants to join your room. Open SplitLedger to accept.`, Date.now()); else { toast(`${who} wants to join`); if (V.hap && navigator.vibrate) try { navigator.vibrate([60, 60, 60]); } catch (e) { } } } }
+  if (adm()) { const now = pending().map(([k]) => k), fresh = pending().filter(([k]) => MS.pend && !MS.pend.includes(k)); MS.pend = now; if (fresh.length) { const who = fresh[0][1].name || fresh[0][1].email; sysNotify('New join request', `${who} wants to join your room. Open SplitLedger to accept.`, Date.now()); if (!document.hidden) toast(`${who} wants to join`); } }
   soft();
 }
 
@@ -1193,15 +1400,25 @@ function cancelInv(k) {
   ask(`Cancel the invite for ${m.email}?`, () => mset(k, null).then(() => { lg('Cancelled invite for ' + m.email); save(); toast('Invite cancelled'); }).catch(x => toast(x.message)), 'Cancel invite');
 }
 
-function signOutAsk() { ask('Sign out of SplitLedger on this phone? Your data stays safe on the server.', () => signOutLocal('Signed out'), 'Sign out'); }
+function signOutAsk() { if (DEMO) return ask('Reset the preview? All sample data goes back to how it started.', resetDemo, 'Reset'); ask('Sign out of SplitLedger on this phone? Your data stays safe on the server.', () => signOutLocal('Signed out'), 'Sign out'); }
 function signOutLocal(msg) {
   natOff(); stopAll(); V.auth = null; ME = { status: '', email: '', ek: '', key: '', admin: false };
   MB = {}; PK = {}; D = blank(); SY.S = null; wipeLocal(); newF(); saveLocal();
   tab = 'dash'; cl(); render(); if (msg) toast(msg);
 }
 function stopAll() { stopData(); stopMembers(); MS.path = ''; }
-function demo() { DEMO = 1; demoData(); newF(); tab = 'dash'; render(); toast('Demo mode: sample data, nothing is saved'); }
-function exitDemo() { DEMO = 0; ME = { status: '', email: '', ek: '', key: '', admin: false }; MB = {}; PK = {}; D = blank(); cl(); render(); }
+function demo() { DEMO = 1; ME = { status: '', email: '', ek: '', key: '', admin: false }; demoData(); newF(); tab = 'dash'; render(); toast(GUEST ? 'Guest preview: sample data, nothing is saved' : 'Demo mode: sample data, nothing is saved'); }
+/* guest preview: look at the app as the admin or as a member */
+function viewAs(who) {
+  if (!DEMO) return;
+  ME = who == 'admin' ? { status: 'approved', email: ADMIN, ek: 'a', key: 'adm', admin: true } : { status: 'approved', email: 'emma.wilson@example.com', ek: 'b', key: 'm1', admin: false };
+  reindex(); newF(); closeDrawer(); cl(); tab = 'dash'; render(); toast(who == 'admin' ? 'Now viewing as Daniel (admin)' : 'Now viewing as Emma (member)');
+}
+function resetDemo() { const w = ME.admin; demoData(); viewAs(w ? 'admin' : 'member'); toast('Sample data reset'); }
+function guestHello() {
+  ov(`<h3>Welcome to SplitLedger${X}</h3><div class="note">This is a <b>guest preview</b> with sample data. Tap anything and try it out: add expenses, record payments, accept a join request, close the month. Nothing is saved, and no account is needed.</div><div class="lab">Look at the app as</div><div class="seg"><button class="${ME.admin ? 'on' : ''}" onclick="viewAs('admin')">Admin (Daniel)</button><button class="${ME.admin ? '' : 'on'}" onclick="viewAs('member')">Member (Emma)</button></div><div class="sub" style="white-space:normal">You can switch any time from Menu → Settings → Account.</div><button class="btn" onclick="cl()">Start exploring</button>${DEV}`);
+}
+function exitDemo() { if (GUEST) return resetDemo(); DEMO = 0; ME = { status: '', email: '', ek: '', key: '', admin: false }; MB = {}; PK = {}; D = blank(); cl(); render(); }
 
 
 /* ===================== PHONE NOTIFICATIONS =====================
@@ -1215,13 +1432,30 @@ function natAuth() {
 function natOff() { const n = NAT(); if (n) try { n.clearAuth(); } catch (e) { } }
 function natClear() { const n = NAT(); if (n && n.clearShown) try { n.clearShown(); } catch (e) { } }
 function natSeenSet(id) { const n = NAT(); if (n) try { n.setSeen(String(id)); } catch (e) { } }
+function natStatus() { const n = NAT(); if (!n || !n.status) return null; try { return JSON.parse(n.status()); } catch (e) { return null; } }
 function notifyHint() {
   if (V.pn === 0) return 'Off. You still see everything in the bell.';
-  const n = NAT();
-  if (n) { let ok = true; try { ok = n.canNotify(); } catch (e) { } return ok ? 'On. New expenses, payments and join requests appear on your phone. While the app is closed, it checks about every 15 minutes.' : 'Blocked by the phone. Tap On again to allow, or allow SplitLedger in the phone’s notification settings.'; }
+  if (NAT()) return 'New expenses, payments and join requests appear on your phone.';
   if ('Notification' in window) return Notification.permission == 'granted' ? 'On while this page is open in the browser.' : Notification.permission == 'denied' ? 'Blocked in this browser’s settings.' : 'Tap On to allow notifications in this browser.';
   return 'This browser does not support notifications.';
 }
+/* checklist that shows exactly why notifications might not arrive */
+function notifyPanel() {
+  if (V.pn === 0) return '';
+  const st = natStatus();
+  if (!st) return `<button class="btn gh" onclick="testNotify()">${ic('bell')}Send a test notification</button>`;
+  const row = (ok, l, fix, fn) => `<div class="ck ${ok ? 'ok' : 'bad'}"><span>${ic(ok ? 'ok' : 'warn')}</span><div class="fl"><b>${l}</b>${ok ? '' : `<i>${fix}</i>`}</div>${ok || !fn ? '' : `<button class="mini ok" onclick="${fn}">Fix</button>`}</div>`;
+  const last = st.lastRun ? tm(st.lastRun) : 'not yet';
+  return `<div class="card pad">${row(st.allowed, 'Notifications allowed', 'Tap Fix and allow SplitLedger', 'fixNotify()')}${row(!st.battery, 'Battery: unrestricted', 'Needed so checks run while the app is closed', 'fixBattery()')}${row(!st.lastErr, 'Background check working', esc(st.lastErr || ''), '')}<div class="sub" style="white-space:normal;margin-top:4px">Last background check: ${last}. Also turn on <b>Autostart</b> for SplitLedger if your phone has it (Infinix, Tecno, Oppo, Vivo, Xiaomi).</div></div><button class="btn gh" onclick="testNotify()">${ic('bell')}Send a test notification</button>`;
+}
+function testNotify() {
+  const n = NAT();
+  if (n) { if (!natStatus() || natStatus().allowed) { sysNotify('SplitLedger test', 'Notifications are working on this phone. ✅', Date.now()); toast('Test sent. Check the notification bar'); } else { fixNotify(); } return; }
+  if ('Notification' in window) { Notification.requestPermission().then(p => { if (p == 'granted') sysNotify('SplitLedger test', 'Notifications are working in this browser. ✅', Date.now()); else toast('Notifications are blocked in this browser'); }); }
+  else toast('This browser does not support notifications');
+}
+function fixNotify() { const n = NAT(); if (!n) return; try { n.askNotify(); } catch (e) { } setTimeout(() => { const st = natStatus(); if (st && !st.allowed) try { n.openNotifySettings(); } catch (e) { } }, 1200); }
+function fixBattery() { const n = NAT(); if (n) try { n.askBattery(); } catch (e) { } }
 function setPn(v) {
   V.pn = v ? 1 : 0; saveLocal();
   if (v) {
@@ -1247,8 +1481,8 @@ function newNotes() {
   const fresh = D.nt.filter(n => n.id > last && n.by != me()).sort((a, b) => a.id - b.id);
   V.ns[k] = mx; saveLocal(); natSeenSet(mx);
   if (!fresh.length) return;
-  if (document.hidden) fresh.slice(-3).forEach(n => sysNotify('SplitLedger', ntText(n), n.id));
-  else { toast(ntText(fresh[fresh.length - 1])); if (V.hap && navigator.vibrate) try { navigator.vibrate(30); } catch (e) { } }
+  fresh.slice(-3).forEach(n => sysNotify(ntTitle(n), ntText(n), n.id));
+  if (!document.hidden && !NAT()) toast(ntText(fresh[fresh.length - 1]));
 }
 
 /* ===================== LIVE DATA SYNC ===================== */
@@ -1385,6 +1619,7 @@ function presence(k) {
 function resync() { if (DEMO) return; checkMember(); if (approved()) { connect(); qflush(); } toast('Syncing'); }
 window.addEventListener('online', () => { if (V.auth && !DEMO) { checkMember(); if (approved()) connect(); } });
 document.addEventListener('visibilitychange', () => {
+  if (!document.hidden && $('#ov').classList.contains('show') && stab == 'a' && $('.ck')) settings();
   if (document.hidden || !V.auth || DEMO) return;
   if (approved() && (!SY.es || SY.es.readyState == 2)) connect(); else beat();
   if (MS.path && (!MS.es || MS.es.readyState == 2)) watchMembers(MS.path);
@@ -1420,23 +1655,39 @@ document.addEventListener('keydown', e => {
   else if (e.target.id == 'nem') addM();
 });
 
-/* ===== back button ===== */
-try { history.replaceState({ tab: 'dash' }, ''); } catch (e) { }
-window.addEventListener('popstate', e => {
+/* ===== back button =====
+   One guard entry in the history catches every back press:
+   close the menu or a sheet first, then go to the Dashboard, and on the Dashboard ask before leaving. */
+function guard() { try { history.pushState({ g: 1 }, ''); } catch (e) { } }
+try { history.replaceState({ g: 0 }, ''); } catch (e) { }
+guard();
+var _exitAsk = 0;
+window.addEventListener('popstate', () => {
   const o = $('#ov'), d = $('#dr');
-  if (d && d._open) { closeDrawer(); try { history.pushState({ tab }, ''); } catch (x) { } return; }
-  if (o.classList.contains('show')) { if (!o.dataset.lk) cl(); try { history.pushState({ tab }, ''); } catch (x) { } return; }
-  _pp = 1; if (F.edit) newF();
-  tab = (e.state && e.state.tab) || 'dash'; pg = 0; cf = 'all'; pf = null; sel = 'all'; qs = '';
-  render(); _pp = 0;
+  if (o.dataset.lk) return guard();
+  if (d && d._open) { closeDrawer(); return guard(); }
+  if (o.classList.contains('show')) { if (_exitAsk) { _exitAsk = 0; cl(); return guard(); } cl(); return guard(); }
+  if ($('#app').classList.contains('gate')) return guard();
+  if (F.edit) newF();
+  if (tab != 'dash') { go('dash'); return guard(); }
+  guard(); _exitAsk = 1;
+  _cb = () => { _exitAsk = 0; cl(); exitApp(); };
+  ov(`<h3>Exit SplitLedger?${X}</h3><div class="sub" style="font-size:.95em;white-space:normal">Do you want to close the app?</div><div class="cap"><button class="btn gh" style="flex:1" onclick="cl()">No</button><button class="btn dng" style="flex:1" onclick="_cb()">Yes, exit</button></div>`);
 });
+function exitApp() {
+  if (GUEST) return toast('This is a preview, so it stays open');
+  if (window.SLNative && SLNative.exit) { try { SLNative.exit(); return; } catch (e) { } }
+  try { window.close(); } catch (e) { }
+  history.go(-2);
+}
 window.addEventListener('hashchange', takeAuth);
 
 /* ===== start ===== */
 newF();
-if (!takeAuth()) {
+if (GUEST) { demo(); setTimeout(guestHello, 700); }
+else if (!takeAuth()) {
   if (V.auth && V.cfg) start(); else render();
 }
 /* keep the server settings fresh */
-if (srv() && !DEMO) fetchCfg(srv()).then(c => { const was = cs(V.cfg); V.cfg = c; saveLocal(); if (was != cs(c)) { if (V.auth) start(); else render(); } }).catch(() => { });
+if (srv() && !DEMO && !GUEST) fetchCfg(srv()).then(c => { const was = cs(V.cfg); V.cfg = c; saveLocal(); if (was != cs(c)) { if (V.auth) start(); else render(); } }).catch(() => { });
 </script></body></html>
