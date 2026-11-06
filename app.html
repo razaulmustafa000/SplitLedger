@@ -326,10 +326,40 @@ button.mc{text-align:left}
 .pva .pvp .i{width:13px;height:13px;color:var(--pri)}
 .pva .pvp.all{padding:3px 10px}
 .pva .pvp.all .i{color:inherit}
+/* ===== v2.7: first-run app tour (coach marks) ===== */
+#tr{position:absolute;inset:0;z-index:40;display:none}
+#tr.on{display:block}
+#tr .tr-hole{position:absolute;border-radius:18px;box-shadow:0 0 0 2px var(--pri),0 0 0 9999px rgba(4,6,12,.74);transition:left .38s var(--ease),top .38s var(--ease),width .38s var(--ease),height .38s var(--ease),border-radius .38s var(--ease);pointer-events:none}
+#tr .tr-hole.none{left:50%!important;top:50%!important;width:0!important;height:0!important;box-shadow:0 0 0 9999px rgba(4,6,12,.78)}
+#tr .tr-hole::after{content:"";position:absolute;inset:-6px;border-radius:inherit;border:2px solid var(--pri);opacity:.55;animation:trp 1.6s ease-out infinite}
+#tr .tr-hole.none::after{display:none}
+@keyframes trp{0%{transform:scale(.97);opacity:.6}100%{transform:scale(1.06);opacity:0}}
+#tr .tr-card{position:absolute;left:12px;right:12px;background:var(--card);color:var(--tx);border-radius:18px;padding:14px 14px 12px;box-shadow:0 18px 50px rgba(0,0,0,.45);display:flex;flex-direction:column;gap:6px;transition:top .38s var(--ease),opacity .25s;border:1px solid var(--ln)}
+[data-v=glass] #tr .tr-card{background:#0F1B2E;color:#EAF0FA;border-color:rgba(255,255,255,.12)}
+#tr .tr-card.c{top:50%!important;transform:translateY(-50%)}
+#tr .tr-k{font-size:.72em;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--pri)}
+#tr .tr-t{font-size:1.18em;font-weight:800;letter-spacing:-.01em;line-height:1.25}
+#tr .tr-d{font-size:.95em;line-height:1.5;color:var(--sub)}
+[data-v=glass] #tr .tr-d{color:#A9B6CC}
+#tr .tr-f{display:flex;align-items:center;gap:6px;margin-top:6px}
+#tr .tr-f .tr-b:first-child:not(.go){padding-left:2px}
+#tr .tr-h{display:flex;align-items:center;gap:10px}
+#tr .tr-dots{display:flex;gap:4px;margin-left:auto}
+#tr .tr-sp{flex:1}
+#tr .tr-dots i{width:6px;height:6px;border-radius:99px;background:var(--ln);transition:width .3s,background .3s}
+#tr .tr-dots i.on{width:16px;background:var(--pri)}
+#tr .tr-b{border:0;background:transparent;color:var(--sub);font:inherit;font-weight:700;font-size:.92em;padding:9px 10px;border-radius:12px;cursor:pointer}
+#tr .tr-b.go{background:var(--pri);color:var(--on,#0D100A);padding:9px 16px}
+[data-t=olive] #tr .tr-b.go{color:#0D100A}
+#tr .tr-ar{position:absolute;width:14px;height:14px;background:inherit;border-left:1px solid var(--ln);border-top:1px solid var(--ln);transform:rotate(45deg);left:var(--ax,50%);margin-left:-7px}
+#tr .tr-card.up .tr-ar{bottom:-8px;transform:rotate(225deg)}
+#tr .tr-card.dn .tr-ar{top:-8px}
+#tr .tr-card.c .tr-ar{display:none}
+@media (prefers-reduced-motion:reduce){#tr .tr-hole,#tr .tr-card{transition:none}#tr .tr-hole::after{animation:none}}
 </style></head><body><div id="app"><div id="top"></div><div id="main"></div><nav id="nav"></nav><div id="ov"></div><div id="dr"></div><div id="ts" role="status" aria-live="polite"></div></div><script>
 'use strict';
 const I={help:'<circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 2.5-3 4M12 17h.01"/>',bell:'<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.9 1.9 0 0 0 3.4 0"/>',moon:'<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>',sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',gear:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/>',link:'<path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/>',list:'<path d="M5 3h14v18l-3-2-2 2-2-2-2 2-2-2-3 2ZM9 8h6M9 12h6"/>',swap:'<path d="M7 4 3 8l4 4M3 8h14M17 20l4-4-4-4M21 16H7"/>',grid:'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',plus:'<path d="M12 5v14M5 12h14"/>',chart:'<path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/>',edit:'<path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/>',trash:'<path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/>',l:'<path d="m15 18-6-6 6-6"/>',r:'<path d="m9 18 6-6-6-6"/>',d:'<path d="m6 9 6 6 6-6"/>',ok:'<path d="m5 12 5 5L20 7"/>',x:'<path d="M18 6 6 18M6 6l12 12"/>',cam:'<path d="M4 8h3l2-3h6l2 3h3v11H4Z"/><circle cx="12" cy="13" r="3.5"/>',wifi:'<path d="M2 9a15 15 0 0 1 20 0M5 12.5a10 10 0 0 1 14 0M8.5 16a5 5 0 0 1 7 0M12 19.5h.01"/>',users:'<circle cx="9" cy="8" r="3.5"/><path d="M2 20a7 7 0 0 1 14 0M17 4.5a3.5 3.5 0 0 1 0 7M22 20a7 7 0 0 0-4-6.3"/>',user:'<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',bolt:'<path d="M13 2 4 14h7l-1 8 9-12h-7Z"/>',cart:'<circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2 3h3l2.7 12.4a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.5L21 8H6"/>',home:'<path d="m3 11 9-8 9 8M5 10v10h14V10"/>',tag:'<path d="M3 12V3h9l9 9-9 9Z"/><circle cx="7.5" cy="7.5" r="1"/>',lock:'<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',warn:'<circle cx="12" cy="12" r="10"/><path d="M12 8v5M12 16h.01"/>',layout:'<rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18M9 21V9"/>',cloud:'<path d="M17.5 19a4.5 4.5 0 1 0-1.4-8.8A6 6 0 0 0 4.5 13 3 3 0 0 0 6 19Z"/>',refresh:'<path d="M21 12a9 9 0 1 1-2.6-6.4L21 8M21 3v5h-5"/>',copy:'<rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/>'};
-/* ===== SplitLedger v2.4 ===== */
+/* ===== SplitLedger v2.7 ===== */
 /* Optional: paste your server link here so nobody has to type it. Example: 'https://yourname.github.io/splitledger' */
 const SERVER = 'https://razaulmustafa000.github.io/SplitLedger';
 const ADMIN = 'razaunar000@gmail.com';
@@ -625,6 +655,7 @@ function render() {
   /* the dashboard scrolls only when there are more member cards than fit on one screen */
   main.classList.remove('scroll'); if (!g && tab == 'dash' && main.scrollHeight > main.clientHeight + 1) main.classList.add('scroll');
   countUp();
+  if (!g && tab == 'dash') maybeTour(); else if (TR.on && (g || tab != 'dash')) tourEnd();
   const m = document.querySelector('meta[name=theme-color]');
   if (m) m.content = getComputedStyle(h).getPropertyValue('--bg').trim() || '#0D100A';
 }
@@ -672,7 +703,7 @@ function drawer() {
   d.innerHTML = H(`<div class="bk" onclick="closeDrawer()"></div><div class="pn" role="dialog" aria-label="Menu"><button class="dhd" onclick="closeDrawer();profile()">${av(me(), 46)}<div class="fl"><b>${esc(myName())}</b><i>${esc(ME.email || 'Demo')}</i></div><span class="cn${approved() ? '' : ' pz'}">• ${A ? 'ADMIN' : approved() ? 'MEMBER' : 'WAITING'}</span></button>
 <div class="dlab">Room</div>${it("go('members')", 'users', 'Members', p ? `<i class="dbd">${p}</i>` : `<em>${act().length}</em>`)}${it("go('history')", 'list', 'History', `<em>${D.hist.length || ''}</em>`)}${A ? it("go('admin')", 'lock', 'Admin Controls') + it("closeDrawer();logv()", 'refresh', 'Activity Log') : ''}
 <div class="dlab">App</div>${it("closeDrawer();howCalc()", 'swap', 'How the hisab works')}${it("closeDrawer();exportSheet()", 'chart', 'Export &amp; Backup')}${it("closeDrawer();settings()", 'gear', 'Settings')}${it("closeDrawer();helpOpen()", 'warn', 'Help &amp; Guide')}
-<div class="dfoot">${DEV}<button class="btn gh" onclick="closeDrawer();signOutAsk()">${DEMO ? 'Reset preview' : 'Sign out'}</button><div class="dver">SplitLedger v2.4</div></div></div>`);
+<div class="dfoot">${DEV}<button class="btn gh" onclick="closeDrawer();signOutAsk()">${DEMO ? 'Reset preview' : 'Sign out'}</button><div class="dver">SplitLedger v2.7</div></div></div>`);
   void d.offsetWidth; d.classList.add('show'); d._open = 1;
 }
 function closeDrawer() { const d = $('#dr'); if (!d || !d._open) return; d._open = 0; d.classList.remove('show'); }
@@ -753,16 +784,25 @@ function reqSheet(ek) {
     : toast(`${mName(m)} is waiting for the admin to accept them`);
   toast(`${mName(m)} is invited and hasn’t signed in yet`);
 }
+/* v2.5: owner's Dashboard layout (main card + 6 cards) brought back; v2.4 money logic unchanged */
+function pairCard(p, i) {
+  if (!p) return `<div class="sc pc empty"><span class="sl">${i ? 'No other member yet' : 'No roommates yet'}</span><i>${adm() ? 'Add roommates from Members' : 'The admin adds roommates'}</i></div>`;
+  const l = pairLine(p);
+  return `<button class="sc pc" onclick="pairSheet('${p.o}')"><div class="pch">${av(p.o, 26)}<b>${esc(S1(p.o))}</b>${ic('r')}</div><div class="pcr"><span>Spent</span><b>${num$('ps' + p.o, p.theyPaid)}</b></div><div class="pcr"><span>You give</span><b class="neg">${fm(p.iOwe)}</b></div><div class="pcr"><span>You get</span><b class="pos">${fm(p.theyOwe)}</b></div>${p.iSent || p.theySent ? `<div class="pcr"><span>Paid so far</span><b>${p.iSent ? 'you ' + fm(p.iSent) : ''}${p.iSent && p.theySent ? ' · ' : ''}${p.theySent ? 'them ' + fm(p.theySent) : ''}</b></div>` : ''}<div class="pcf ${l[0]}">${p.bal < -.5 ? 'You owe ' + fm(p.bal) : p.bal > .5 ? 'Owes you ' + fm(p.bal) : 'Settled ✓'}</div></button>`;
+}
 function dash() {
   const c = calc(), P = approved() ? myPairs(c) : [];
   const owe = P.reduce((s, p) => s + Math.max(0, -p.bal), 0), get = P.reduce((s, p) => s + Math.max(0, p.bal), 0);
   const pc = D.bud ? Math.min(100, Math.round(c.tot / D.bud * 100)) : 0;
   const sc = (id, i, lb, val, s, cls = '') => `<button class="sc${cls ? ' ' + cls : ''}" onclick="pick('${id}')"><span class="si">${ic(i)}</span><span class="sl">${lb}</span><b>${val}</b><i>${s}</i></button>`;
-  const O = others(), cols = O.length + 1 <= 2 ? 2 : 3, wide = cols == 2, mine = c.M.includes(me());
-  return `<div class="hero"><div class="t"><span>THIS MONTH · ALL MEMBERS</span><span class="mp">${esc(monthName().toUpperCase())}</span></div><div class="big">${num$('tot', c.tot)}</div><div class="hsub">Spent together by ${c.n} member${c.n == 1 ? '' : 's'} · ${c.count} expense${c.count == 1 ? '' : 's'}${mine ? ` · your share ${fm(c.share[me()])}` : ''}</div><div class="hbar"><i style="width:${pc}%"></i></div><div class="hsub2">${pc}% of the ${fm(D.bud)} monthly budget</div></div>
-<div class="mg c${cols}">${youCard(c, wide)}${O.map(([ek, m]) => memCard(c, ek, m, wide)).join('')}</div>
-<div class="g2d">${sc('owe', 'r', 'You Need To Pay', num$('owe', owe), owe > .5 ? 'In total, to ' + P.filter(p => p.bal < -.5).length + ' member(s)' : 'You owe nobody', 'bad')}${sc('get', 'l', 'You Will Get', num$('get', get), get > .5 ? 'In total, from ' + P.filter(p => p.bal > .5).length + ' member(s)' : 'Nobody owes you', 'good')}</div>`;
+  let c3;
+  if (adm()) { const R = pending(); c3 = sc('req', 'bell', 'Join Requests', R.length ? R.length + ' waiting' : 'None', R.length ? esc(R.slice(0, 2).map(([, m]) => (m.name || m.email).split(/[ @]/)[0]).join(', ')) + (R.length > 2 ? ' +' + (R.length - 2) : '') : 'Nobody is waiting', R.length ? 'warn' : ''); }
+  else { const m = MB[ME.ek] || {}, st = !approved() ? 'Waiting' : m.paused ? 'Paused' : 'Active'; c3 = sc('req', 'user', 'Your Status', st, !approved() ? 'Admin has not accepted you yet' : m.paused ? 'Admin paused you this month' : 'Approved by the admin', st == 'Active' ? 'good' : 'warn'); }
+  return `<div class="hero"><div class="t"><span>THIS MONTH · ALL MEMBERS</span><span class="mp">${esc(monthName().toUpperCase())}</span></div><div class="big">${num$('tot', c.tot)}</div><div class="hsub">Spent together by ${c.n} member${c.n == 1 ? '' : 's'} · ${c.count} expense${c.count == 1 ? '' : 's'}${c.M.includes(me()) ? ` · your share ${fm(c.share[me()])}` : ''}</div><div class="hbar"><i style="width:${pc}%"></i></div><div class="hsub2">${pc}% of the ${fm(D.bud)} monthly budget</div></div>
+<div class="g6 g6b">${pairCard(P[0], 0)}${pairCard(P[1], 1)}${c3}${sc('mem', 'users', 'Members', c.n + ' active', people().length + ' in room · tap to see')}${sc('owe', 'r', 'You Need To Pay', num$('owe', owe), owe > .5 ? 'In total, to ' + P.filter(p => p.bal < -.5).length + ' member(s)' : 'You owe nobody', 'bad')}${sc('get', 'l', 'You Will Get', num$('get', get), get > .5 ? 'In total, from ' + P.filter(p => p.bal > .5).length + ' member(s)' : 'Nobody owes you', 'good')}</div>
+${P.length > 2 ? `<button class="lk mlink" onclick="go('debts')">+ ${P.length - 2} more member${P.length - 2 > 1 ? 's' : ''} · see your full hisab</button>` : ''}`;
 }
+
 /* the full working between me and one person */
 function pairSheet(o) {
   const c = calc(), p = pair(c, me(), o), l = pairLine(p), nm = esc(S1(o));
@@ -1081,10 +1121,25 @@ function sfs(k) { V.fs = k; saveLocal(); render(); settings(); }
 function scu(c) { V.cur = c; saveLocal(); render(); settings(); }
 function sth2(n) { V.thr = n; saveLocal(); if (approved()) { chkBud(); save(); } settings(); }
 function hap(v) { V.hap = v; saveLocal(); settings(); }
+/* v2.6: a soft "tick" on every tap. On by default (V.snd is 0 only when the user turns it off). */
+function snd(v) { const was = V.snd !== 0; V.snd = v; saveLocal(); settings(); if (v && !was) tick(); }
+var _ac = null;
+function tick() {
+  if (V.snd === 0) return;
+  try {
+    const A = window.AudioContext || window.webkitAudioContext; if (!A) return;
+    if (!_ac) _ac = new A();
+    if (_ac.state == 'suspended') _ac.resume();
+    const t = _ac.currentTime, o = _ac.createOscillator(), g = _ac.createGain();
+    o.type = 'triangle'; o.frequency.setValueAtTime(1900, t); o.frequency.exponentialRampToValueAtTime(900, t + .03);
+    g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(.22, t + .003); g.gain.exponentialRampToValueAtTime(.0001, t + .045);
+    o.connect(g); g.connect(_ac.destination); o.start(t); o.stop(t + .05);
+  } catch (x) { }
+}
 function dct() { dd('Default category', CATS.filter(c => c != 'Wi-Fi Bill').map(c => ({ k: c, l: c })), V.dcat || 'Grocery', k => { V.dcat = k; if (!F.edit) F.cat = k; saveLocal(); settings(); }); }
 function advH() {
   const a = adm(), pn = V.pn !== 0;
-  return `<div class="lab">Phone notifications</div><div class="seg"><button class="${pn ? 'on' : ''}" onclick="setPn(1)">On</button><button class="${pn ? '' : 'on'}" onclick="setPn(0)">Off</button></div><div class="sub" style="white-space:normal">${notifyHint()}</div>${notifyPanel()}<div class="lab">Currency label</div><div class="seg">${['Rs.', 'PKR', '$'].map(c => `<button class="${(V.cur || 'Rs.') == c ? 'on' : ''}" onclick="scu('${c}')">${c}</button>`).join('')}</div><div class="lab">Default category for new expenses</div><button class="fld" onclick="dct()"><span>${V.dcat || 'Grocery'}</span>${ic('d')}</button><div class="lab">Budget alert at</div><div class="seg">${[80, 90, 100].map(n => `<button class="${(V.thr || 90) == n ? 'on' : ''}" onclick="sth2(${n})">${n}%</button>`).join('')}</div><div class="lab">Vibration on tap</div><div class="seg"><button class="${V.hap ? 'on' : ''}" onclick="hap(1)">On</button><button class="${V.hap ? '' : 'on'}" onclick="hap(0)">Off</button></div><div class="lab">Security and data</div><button class="opt" onclick="pinui()">${ic('lock')}<b class="fl"><span>${V.pin ? 'Change or remove app lock PIN' : 'Set an app lock PIN'}</span></b></button>${a ? `<button class="opt" onclick="mraAsk()">${ic('bell')}<b class="fl"><span>Clear notifications for everyone</span></b></button>` : ''}<button class="opt" onclick="exportSheet()">${ic('chart')}<b class="fl"><span>Export &amp; Backup</span></b></button>`;
+  return `<div class="lab">Phone notifications</div><div class="seg"><button class="${pn ? 'on' : ''}" onclick="setPn(1)">On</button><button class="${pn ? '' : 'on'}" onclick="setPn(0)">Off</button></div><div class="sub" style="white-space:normal">${notifyHint()}</div>${notifyPanel()}<div class="lab">Currency label</div><div class="seg">${['Rs.', 'PKR', '$'].map(c => `<button class="${(V.cur || 'Rs.') == c ? 'on' : ''}" onclick="scu('${c}')">${c}</button>`).join('')}</div><div class="lab">Default category for new expenses</div><button class="fld" onclick="dct()"><span>${V.dcat || 'Grocery'}</span>${ic('d')}</button><div class="lab">Budget alert at</div><div class="seg">${[80, 90, 100].map(n => `<button class="${(V.thr || 90) == n ? 'on' : ''}" onclick="sth2(${n})">${n}%</button>`).join('')}</div><div class="lab">Vibration on tap</div><div class="seg"><button class="${V.hap ? 'on' : ''}" onclick="hap(1)">On</button><button class="${V.hap ? '' : 'on'}" onclick="hap(0)">Off</button></div><div class="lab">Sound on tap</div><div class="seg"><button class="${V.snd !== 0 ? 'on' : ''}" onclick="snd(1)">On</button><button class="${V.snd === 0 ? 'on' : ''}" onclick="snd(0)">Off</button></div><div class="lab">Security and data</div><button class="opt" onclick="pinui()">${ic('lock')}<b class="fl"><span>${V.pin ? 'Change or remove app lock PIN' : 'Set an app lock PIN'}</span></b></button>${a ? `<button class="opt" onclick="mraAsk()">${ic('bell')}<b class="fl"><span>Clear notifications for everyone</span></b></button>` : ''}<button class="opt" onclick="exportSheet()">${ic('chart')}<b class="fl"><span>Export &amp; Backup</span></b></button>`;
 }
 function exportSheet() {
   const a = adm(), old = localStorage.getItem('rk_d');
@@ -1101,16 +1156,16 @@ function acctH() {
 function guide() {
   const S = [
     ['Sign in', 'Tap Continue with Google. Only emails the admin added can get in. New members wait until the admin accepts them.'],
-    ['Add an expense', 'Open Add, enter the amount and what it was for, pick a category and save. Every expense is shared equally by all active members.'],
+    ['Add an expense', 'Open Add, enter the amount and what it was for, pick a category, choose who shares it (everyone by default) and save.'],
     ['Your status', 'The Dashboard tells you in one line whether you owe someone, someone owes you, or you are settled up.'],
-    ['Settle Up', 'Shows everyone’s balance and the fewest payments needed. Tap a name to see exactly how their number was worked out.'],
+    ['Settle Up', 'Shows your hisab with each roommate and every open hisab in the room. Tap a name to see exactly how the number was worked out.'],
     ['Record a payment', 'When money changes hands, tap Mark paid (or I paid / Got it on the Dashboard). Balances update for everyone.'],
-    ['The maths', 'Share = room total ÷ members. Balance = what you paid − your share + payments you sent − payments you received.'],
+    ['The maths', 'Each expense is split equally between the people who share it. Balance = what you paid − your share + payments you sent − payments you received.'],
     ['Menu', 'Tap the menu button at the top left for Members, History, Admin Controls, export and help.'],
     ['Notifications', 'New expenses and payments appear in the bell and as phone notifications. Turn them on in Settings, Advanced.'],
     ['Month end', 'The admin closes the month from Admin Controls. Everything moves to History, nothing is deleted.']
   ];
-  return S.map(([t, d], i) => `<div class="opt" style="align-items:flex-start"><span class="ci" style="width:26px;height:26px;border-radius:50%;font-weight:800">${i + 1}</span><div class="fl"><b>${t}</b><i style="white-space:normal">${esc(d)}</i></div></div>`).join('') + DEV;
+  return `<button class="btn" onclick="cl();tourStart()">${ic('grid')}Take the app tour</button>` + S.map(([t, d], i) => `<div class="opt" style="align-items:flex-start"><span class="ci" style="width:26px;height:26px;border-radius:50%;font-weight:800">${i + 1}</span><div class="fl"><b>${t}</b><i style="white-space:normal">${esc(d)}</i></div></div>`).join('') + DEV;
 }
 
 /* ===== Activity log and CSV ===== */
@@ -1416,7 +1471,7 @@ function viewAs(who) {
 }
 function resetDemo() { const w = ME.admin; demoData(); viewAs(w ? 'admin' : 'member'); toast('Sample data reset'); }
 function guestHello() {
-  ov(`<h3>Welcome to SplitLedger${X}</h3><div class="note">This is a <b>guest preview</b> with sample data. Tap anything and try it out: add expenses, record payments, accept a join request, close the month. Nothing is saved, and no account is needed.</div><div class="lab">Look at the app as</div><div class="seg"><button class="${ME.admin ? 'on' : ''}" onclick="viewAs('admin')">Admin (Daniel)</button><button class="${ME.admin ? '' : 'on'}" onclick="viewAs('member')">Member (Emma)</button></div><div class="sub" style="white-space:normal">You can switch any time from Menu → Settings → Account.</div><button class="btn" onclick="cl()">Start exploring</button>${DEV}`);
+  ov(`<h3>Welcome to SplitLedger${X}</h3><div class="note">This is a <b>guest preview</b> with sample data. Tap anything and try it out: add expenses, record payments, accept a join request, close the month. Nothing is saved, and no account is needed.</div><div class="lab">Look at the app as</div><div class="seg"><button class="${ME.admin ? 'on' : ''}" onclick="viewAs('admin')">Admin (Daniel)</button><button class="${ME.admin ? '' : 'on'}" onclick="viewAs('member')">Member (Emma)</button></div><div class="sub" style="white-space:normal">You can switch any time from Menu → Settings → Account.</div><button class="btn" onclick="cl();tourStart()">Start the app tour</button><button class="btn gh" onclick="cl()">Skip, just explore</button>${DEV}`);
 }
 function exitDemo() { if (GUEST) return resetDemo(); DEMO = 0; ME = { status: '', email: '', ek: '', key: '', admin: false }; MB = {}; PK = {}; D = blank(); cl(); render(); }
 
@@ -1646,6 +1701,7 @@ function run(c, el) {
   const el = e.target.closest && e.target.closest('[data-' + t + ']');
   if (!el || el.disabled) return;
   if (t == 'click' && V.hap && navigator.vibrate) try { navigator.vibrate(8); } catch (x) { }
+  if (t == 'click') tick();
   run(el.getAttribute('data-' + t), el);
 }));
 document.addEventListener('keydown', e => {
@@ -1654,6 +1710,86 @@ document.addEventListener('keydown', e => {
   else if (e.target.id == 'srv') setSrv();
   else if (e.target.id == 'nem') addM();
 });
+
+/* ===================== APP TOUR (v2.7) =====================
+   A short coach-mark tour over the real Dashboard, shown once per phone (V.tour = 1 after it ends or is skipped).
+   Replay: Settings → Guide → Take the app tour. It only highlights things; it never changes data. */
+var TR = { on: 0, i: 0 };
+function tourSteps() {
+  const A = adm();
+  return [
+    { t: 'Welcome to SplitLedger', d: 'A quick tour of the app. It takes under a minute, and you can skip it any time.' },
+    { s: ['.hero'], t: 'This month at a glance', d: 'What everyone spent together this month, your share, and how much of the monthly budget is used.' },
+    { s: ['.g6>:nth-child(1)'], t: 'Your hisab with a roommate', d: 'What they spent, what you give, what you get, and the result in plain words. Tap a card to see the full working and record a payment.' },
+    { s: ['.g6>:nth-child(3)'], t: A ? 'Join requests' : 'Your status', d: A ? 'People who signed in and are waiting for you. Tap to open Members and Accept or Reject them.' : 'Shows whether you are Active, Paused or still Waiting for the admin.' },
+    { s: ['.g6>:nth-child(4)'], t: 'Members', d: 'How many people share the room. Tap to see everyone.' },
+    { s: ['.g6>:nth-child(5)', '.g6>:nth-child(6)'], t: 'Your totals', d: 'You Need To Pay is what you owe everyone. You Will Get is what everyone owes you. Tap either to open Settle Up.' },
+    { s: ['#nav [data-k=add]'], t: 'Add an expense', d: 'Type the amount and what it was for, pick a category, and choose who shares it (everyone, or only some people). Everyone gets a notification.' },
+    { s: ['#nav [data-k=ledger]'], t: 'Ledger', d: 'Every expense this month. Search, filter by category, and see each person’s share.' },
+    { s: ['#nav [data-k=debts]'], t: 'Settle Up', d: 'Your hisab with each roommate. Tap I paid or Got it when money changes hands, and share the month summary on WhatsApp.' },
+    { s: ['#nav [data-k=ins]'], t: 'Insights', d: 'Charts of spending by category and who paid what.' },
+    { s: ['#top .mn'], t: 'Menu', d: 'Your profile, Members, History, ' + (A ? 'Admin Controls, ' : '') + 'Export & Backup, Settings and help.' },
+    { s: ['#top .ttl .live'], t: 'Sync status', d: 'LIVE SYNC means every phone is up to date. Tap it for details.' },
+    { s: ['#top>.ib:last-child'], t: 'Notifications', d: 'New expenses, payments and join requests show here and as phone notifications.' },
+    { t: 'You’re all set', d: 'You can take this tour again any time from Menu → Settings → Guide.' }
+  ];
+}
+function tourEl() {
+  let e = $('#tr');
+  if (!e) { e = document.createElement('div'); e.id = 'tr'; e.setAttribute('role', 'dialog'); e.setAttribute('aria-modal', 'true'); $('#app').appendChild(e); }
+  return e;
+}
+function tourOk() { return !TR.on && !$('#app').classList.contains('gate') && approved() && tab == 'dash' && !$('#ov').classList.contains('show') && !$('#ov').dataset.lk && !($('#dr') && $('#dr')._open); }
+function maybeTour() {
+  if (V.tour == 1 || TR.on || GUEST) return;
+  clearTimeout(TR.w); TR.w = setTimeout(() => { if (V.tour != 1 && tourOk()) tourStart(); }, 1100);
+}
+function tourStart() {
+  const wait = tab != 'dash' || $('#ov').classList.contains('show') || ($('#dr') && $('#dr')._open) ? 600 : 80;
+  if (tab != 'dash') go('dash'); else closeDrawer();
+  clearTimeout(TR.w); TR.w = setTimeout(() => { if ($('#ov').dataset.lk || $('#app').classList.contains('gate')) return; TR.on = 1; TR.i = 0; TR.prev = null; tourEl().classList.add('on'); tourShow(); }, wait);
+}
+function tourShow() {
+  const S = tourSteps(), e = tourEl();
+  let st = S[TR.i];
+  /* skip a step whose target is not on screen */
+  while (st && st.s && !st.s.some(q => $(q))) { TR.i++; st = S[TR.i]; }
+  if (!st) return tourEnd();
+  const last = TR.i == S.length - 1, first = TR.i == 0;
+  e.innerHTML = H(`<div class="tr-hole none"></div><div class="tr-card c"><i class="tr-ar"></i><div class="tr-h"><span class="tr-k">${first ? 'App tour' : last ? 'Done' : 'Step ' + TR.i + ' of ' + (S.length - 2)}</span><div class="tr-dots">${S.map((x, j) => `<i class="${j == TR.i ? 'on' : ''}"></i>`).join('')}</div></div><b class="tr-t">${esc(st.t)}</b><span class="tr-d">${esc(st.d)}</span><div class="tr-f">${last ? '' : '<button class="tr-b" onclick="tourEnd()">Skip</button>'}<span class="tr-sp"></span>${!first && !last ? '<button class="tr-b" onclick="tourBack()">Back</button>' : ''}<button class="tr-b go" onclick="${last ? 'tourEnd()' : 'tourNext()'}">${first ? 'Start tour' : last ? 'Got it' : 'Next'}</button></div></div>`);
+  if (TR.prev) { const h = e.querySelector('.tr-hole'); h.classList.remove('none'); Object.assign(h.style, TR.prev); void h.offsetWidth; }
+  requestAnimationFrame(tourPlace);
+}
+function tourPlace() {
+  if (!TR.on) return;
+  const S = tourSteps(), st = S[TR.i], e = tourEl(), h = e.querySelector('.tr-hole'), c = e.querySelector('.tr-card');
+  if (!h || !c) return;
+  const ar = $('#app').getBoundingClientRect();
+  if (!st || !st.s) { h.classList.add('none'); c.className = 'tr-card c'; TR.prev = null; return; }
+  let r = null;
+  st.s.forEach(q => { const el = $(q); if (!el) return; const b = el.getBoundingClientRect(); r = r ? { l: Math.min(r.l, b.left), t: Math.min(r.t, b.top), r: Math.max(r.r, b.right), b: Math.max(r.b, b.bottom) } : { l: b.left, t: b.top, r: b.right, b: b.bottom }; });
+  const pad = 6, x = r.l - ar.left - pad, y = r.t - ar.top - pad, w = r.r - r.l + pad * 2, hh = r.b - r.t + pad * 2;
+  const pos = { left: x + 'px', top: y + 'px', width: w + 'px', height: hh + 'px', borderRadius: (hh < 70 ? hh / 2 : 20) + 'px' };
+  h.classList.remove('none'); Object.assign(h.style, pos); TR.prev = pos;
+  const H0 = ar.height, ch = c.offsetHeight, below = y + hh + 12, above = y - ch - 12;
+  const dn = (below + ch < H0 - 8) && (H0 - (y + hh) >= y || above < 8);
+  c.className = 'tr-card ' + (dn ? 'dn' : 'up');
+  c.style.top = Math.max(8, Math.min(H0 - ch - 8, dn ? below : above)) + 'px';
+  const cl = c.getBoundingClientRect().left - ar.left, cx = Math.max(18, Math.min(c.offsetWidth - 18, x + w / 2 - cl));
+  c.style.setProperty('--ax', cx + 'px');
+}
+function tourNext() { TR.i++; tourShow(); }
+function tourBack() {
+  const S = tourSteps(); let j = TR.i - 1;
+  while (j > 0 && S[j].s && !S[j].s.some(q => $(q))) j--;
+  TR.i = Math.max(0, j); tourShow();
+}
+function tourEnd() {
+  TR.on = 0; TR.prev = null; clearTimeout(TR.w);
+  const e = $('#tr'); if (e) { e.classList.remove('on'); e.innerHTML = ''; }
+  if (V.tour != 1) { V.tour = 1; saveLocal(); }
+}
+window.addEventListener('resize', () => { if (TR.on) tourPlace(); });
 
 /* ===== back button =====
    One guard entry in the history catches every back press:
@@ -1664,6 +1800,7 @@ guard();
 var _exitAsk = 0;
 window.addEventListener('popstate', () => {
   const o = $('#ov'), d = $('#dr');
+  if (TR.on) { tourEnd(); return guard(); }
   if (o.dataset.lk) return guard();
   if (d && d._open) { closeDrawer(); return guard(); }
   if (o.classList.contains('show')) { if (_exitAsk) { _exitAsk = 0; cl(); return guard(); } cl(); return guard(); }
