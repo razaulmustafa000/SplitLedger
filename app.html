@@ -344,6 +344,10 @@ button.mc{text-align:left}
 #tr .tr-f{display:flex;align-items:center;gap:6px;margin-top:6px}
 #tr .tr-f .tr-b:first-child:not(.go){padding-left:2px}
 #tr .tr-h{display:flex;align-items:center;gap:10px}
+#tr .tr-n{margin-left:auto;font-size:.72em;font-weight:800;color:var(--sub)}
+#tr .tr-bar{height:4px;border-radius:99px;background:var(--ln);overflow:hidden}
+#tr .tr-bar i{display:block;height:100%;background:var(--pri);border-radius:99px;transition:width .35s var(--ease)}
+#tr .tr-card{transition:top .38s var(--ease),opacity .22s}
 #tr .tr-dots{display:flex;gap:4px;margin-left:auto}
 #tr .tr-sp{flex:1}
 #tr .tr-dots i{width:6px;height:6px;border-radius:99px;background:var(--ln);transition:width .3s,background .3s}
@@ -356,10 +360,18 @@ button.mc{text-align:left}
 #tr .tr-card.dn .tr-ar{top:-8px}
 #tr .tr-card.c .tr-ar{display:none}
 @media (prefers-reduced-motion:reduce){#tr .tr-hole,#tr .tr-card{transition:none}#tr .tr-hole::after{animation:none}}
+
+/* ===== v2.8: live date and month-end note on the main card ===== */
+.hero .hd8{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;margin-right:8px}
+.hnote{display:flex;align-items:center;gap:6px;width:100%;margin-top:7px;padding:6px 9px;border-radius:11px;border:0;font:inherit;font-size:.7em;font-weight:700;text-align:left;cursor:pointer;background:rgba(255,255,255,.92);color:#14180F}
+.hnote span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hnote .i{width:14px;height:14px;flex:none}
+.hnote.soft{background:rgba(255,255,255,.14);color:#fff}
+div.hnote.soft{cursor:default}
 </style></head><body><div id="app"><div id="top"></div><div id="main"></div><nav id="nav"></nav><div id="ov"></div><div id="dr"></div><div id="ts" role="status" aria-live="polite"></div></div><script>
 'use strict';
 const I={help:'<circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 2.5-3 4M12 17h.01"/>',bell:'<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.9 1.9 0 0 0 3.4 0"/>',moon:'<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>',sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',gear:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/>',link:'<path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/>',list:'<path d="M5 3h14v18l-3-2-2 2-2-2-2 2-2-2-3 2ZM9 8h6M9 12h6"/>',swap:'<path d="M7 4 3 8l4 4M3 8h14M17 20l4-4-4-4M21 16H7"/>',grid:'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',plus:'<path d="M12 5v14M5 12h14"/>',chart:'<path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/>',edit:'<path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/>',trash:'<path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/>',l:'<path d="m15 18-6-6 6-6"/>',r:'<path d="m9 18 6-6-6-6"/>',d:'<path d="m6 9 6 6 6-6"/>',ok:'<path d="m5 12 5 5L20 7"/>',x:'<path d="M18 6 6 18M6 6l12 12"/>',cam:'<path d="M4 8h3l2-3h6l2 3h3v11H4Z"/><circle cx="12" cy="13" r="3.5"/>',wifi:'<path d="M2 9a15 15 0 0 1 20 0M5 12.5a10 10 0 0 1 14 0M8.5 16a5 5 0 0 1 7 0M12 19.5h.01"/>',users:'<circle cx="9" cy="8" r="3.5"/><path d="M2 20a7 7 0 0 1 14 0M17 4.5a3.5 3.5 0 0 1 0 7M22 20a7 7 0 0 0-4-6.3"/>',user:'<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',bolt:'<path d="M13 2 4 14h7l-1 8 9-12h-7Z"/>',cart:'<circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2 3h3l2.7 12.4a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.5L21 8H6"/>',home:'<path d="m3 11 9-8 9 8M5 10v10h14V10"/>',tag:'<path d="M3 12V3h9l9 9-9 9Z"/><circle cx="7.5" cy="7.5" r="1"/>',lock:'<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',warn:'<circle cx="12" cy="12" r="10"/><path d="M12 8v5M12 16h.01"/>',layout:'<rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18M9 21V9"/>',cloud:'<path d="M17.5 19a4.5 4.5 0 1 0-1.4-8.8A6 6 0 0 0 4.5 13 3 3 0 0 0 6 19Z"/>',refresh:'<path d="M21 12a9 9 0 1 1-2.6-6.4L21 8M21 3v5h-5"/>',copy:'<rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/>'};
-/* ===== SplitLedger v2.7 ===== */
+/* ===== SplitLedger v2.8 ===== */
 /* Optional: paste your server link here so nobody has to type it. Example: 'https://yourname.github.io/splitledger' */
 const SERVER = 'https://razaulmustafa000.github.io/SplitLedger';
 const ADMIN = 'razaunar000@gmail.com';
@@ -546,7 +558,39 @@ function monthLabel(list) {
   return d.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
 }
 
-/* notification text written for the person reading it */
+/* ----- v2.8: live date and month -----
+   The Dashboard shows today's date and the current month from the phone's clock, and updates by itself.
+   The open hisab is never touched: it runs from its first expense until the admin closes it.
+   monthName() is that open period ("November 2026", or "Oct – Nov 2026" when an earlier month was not closed).
+   Closing still names the archive by the month most of its expenses fall in (monthLabel), exactly as before. */
+const mKey = d => d.getFullYear() * 12 + d.getMonth();
+const liveMonth = () => new Date().toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
+const liveDate = () => new Date().toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' });
+const dayKey = () => { const d = new Date(); return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate(); };
+const ymKey = () => { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0'); };
+/* earlier months that still have expenses in the open hisab (not closed yet) */
+function oldMonths() {
+  const now = mKey(new Date()), S = {};
+  D.ex.forEach(e => { if (e.ts) { const k = mKey(new Date(e.ts)); if (k < now) S[k] = 1; } });
+  return Object.keys(S).map(Number).sort((a, b) => a - b).map(k => new Date(Math.floor(k / 12), k % 12, 1).toLocaleDateString('en-GB', { month: 'long', year: 'numeric' }));
+}
+function periodName() {
+  const now = new Date(), ks = D.ex.filter(e => e.ts).map(e => mKey(new Date(e.ts)));
+  const first = ks.length ? Math.min(...ks) : mKey(now);
+  if (first >= mKey(now)) return liveMonth();
+  const a = new Date(Math.floor(first / 12), first % 12, 1), sy = a.getFullYear() == now.getFullYear();
+  return a.toLocaleDateString('en-GB', sy ? { month: 'short' } : { month: 'short', year: 'numeric' }) + ' – ' + now.toLocaleDateString('en-GB', { month: 'short', year: 'numeric' });
+}
+/* month end: days left in this month */
+function mEnd() { const d = new Date(), last = new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate(); return { left: last - d.getDate(), last, mon: d.toLocaleDateString('en-GB', { month: 'long' }) }; }
+/* did I export this month's report? (from the shared activity log, or this phone) */
+function repDone() {
+  if (V.rep == ymKey()) return true;
+  const d = new Date(), s = new Date(d.getFullYear(), d.getMonth(), 1).getTime();
+  return D.log.some(x => x.u == me() && x.t >= s && String(x.a).indexOf('Exported the month report') == 0);
+}
+const remOn = () => approved() && !!me() && mEnd().left <= 3 && !repDone();
+
 function ntText(n) {
   const nm = k => k == me() ? 'You' : S1(k);
   if (n.k == 'ex') {
@@ -655,7 +699,8 @@ function render() {
   /* the dashboard scrolls only when there are more member cards than fit on one screen */
   main.classList.remove('scroll'); if (!g && tab == 'dash' && main.scrollHeight > main.clientHeight + 1) main.classList.add('scroll');
   countUp();
-  if (!g && tab == 'dash') maybeTour(); else if (TR.on && (g || tab != 'dash')) tourEnd();
+  if (!g && tab == 'dash') maybeTour(); else if (TR.on && g) tourEnd();
+  if (!g) remind();
   const m = document.querySelector('meta[name=theme-color]');
   if (m) m.content = getComputedStyle(h).getPropertyValue('--bg').trim() || '#0D100A';
 }
@@ -703,7 +748,7 @@ function drawer() {
   d.innerHTML = H(`<div class="bk" onclick="closeDrawer()"></div><div class="pn" role="dialog" aria-label="Menu"><button class="dhd" onclick="closeDrawer();profile()">${av(me(), 46)}<div class="fl"><b>${esc(myName())}</b><i>${esc(ME.email || 'Demo')}</i></div><span class="cn${approved() ? '' : ' pz'}">• ${A ? 'ADMIN' : approved() ? 'MEMBER' : 'WAITING'}</span></button>
 <div class="dlab">Room</div>${it("go('members')", 'users', 'Members', p ? `<i class="dbd">${p}</i>` : `<em>${act().length}</em>`)}${it("go('history')", 'list', 'History', `<em>${D.hist.length || ''}</em>`)}${A ? it("go('admin')", 'lock', 'Admin Controls') + it("closeDrawer();logv()", 'refresh', 'Activity Log') : ''}
 <div class="dlab">App</div>${it("closeDrawer();howCalc()", 'swap', 'How the hisab works')}${it("closeDrawer();exportSheet()", 'chart', 'Export &amp; Backup')}${it("closeDrawer();settings()", 'gear', 'Settings')}${it("closeDrawer();helpOpen()", 'warn', 'Help &amp; Guide')}
-<div class="dfoot">${DEV}<button class="btn gh" onclick="closeDrawer();signOutAsk()">${DEMO ? 'Reset preview' : 'Sign out'}</button><div class="dver">SplitLedger v2.7</div></div></div>`);
+<div class="dfoot">${DEV}<button class="btn gh" onclick="closeDrawer();signOutAsk()">${DEMO ? 'Reset preview' : 'Sign out'}</button><div class="dver">SplitLedger v2.8</div></div></div>`);
   void d.offsetWidth; d.classList.add('show'); d._open = 1;
 }
 function closeDrawer() { const d = $('#dr'); if (!d || !d._open) return; d._open = 0; d.classList.remove('show'); }
@@ -724,7 +769,7 @@ function gateView() {
 }
 
 /* ===== plain-language status ===== */
-const monthName = () => monthLabel(D.ex);
+const monthName = () => periodName();
 function myMoves(c) { const k = me(); return moves(c).filter(([f, t]) => f == k || t == k); }
 const signed = v => (v > .5 ? '+ ' : v < -.5 ? '- ' : '') + fm(v);
 const NM = k => k == me() ? 'You' : S1(k);
@@ -798,11 +843,18 @@ function dash() {
   let c3;
   if (adm()) { const R = pending(); c3 = sc('req', 'bell', 'Join Requests', R.length ? R.length + ' waiting' : 'None', R.length ? esc(R.slice(0, 2).map(([, m]) => (m.name || m.email).split(/[ @]/)[0]).join(', ')) + (R.length > 2 ? ' +' + (R.length - 2) : '') : 'Nobody is waiting', R.length ? 'warn' : ''); }
   else { const m = MB[ME.ek] || {}, st = !approved() ? 'Waiting' : m.paused ? 'Paused' : 'Active'; c3 = sc('req', 'user', 'Your Status', st, !approved() ? 'Admin has not accepted you yet' : m.paused ? 'Admin paused you this month' : 'Approved by the admin', st == 'Active' ? 'good' : 'warn'); }
-  return `<div class="hero"><div class="t"><span>THIS MONTH · ALL MEMBERS</span><span class="mp">${esc(monthName().toUpperCase())}</span></div><div class="big">${num$('tot', c.tot)}</div><div class="hsub">Spent together by ${c.n} member${c.n == 1 ? '' : 's'} · ${c.count} expense${c.count == 1 ? '' : 's'}${c.M.includes(me()) ? ` · your share ${fm(c.share[me()])}` : ''}</div><div class="hbar"><i style="width:${pc}%"></i></div><div class="hsub2">${pc}% of the ${fm(D.bud)} monthly budget</div></div>
+  return `<div class="hero"><div class="t"><span class="hd8">${esc(liveDate().toUpperCase())}</span><span class="mp">${esc(liveMonth().toUpperCase())}</span></div><div class="big">${num$('tot', c.tot)}</div><div class="hsub">Spent together by ${c.n} member${c.n == 1 ? '' : 's'} · ${c.count} expense${c.count == 1 ? '' : 's'}${c.M.includes(me()) ? ` · your share ${fm(c.share[me()])}` : ''}</div><div class="hbar"><i style="width:${pc}%"></i></div><div class="hsub2">${pc}% of the ${fm(D.bud)} monthly budget</div>${heroNote()}</div>
 <div class="g6 g6b">${pairCard(P[0], 0)}${pairCard(P[1], 1)}${c3}${sc('mem', 'users', 'Members', c.n + ' active', people().length + ' in room · tap to see')}${sc('owe', 'r', 'You Need To Pay', num$('owe', owe), owe > .5 ? 'In total, to ' + P.filter(p => p.bal < -.5).length + ' member(s)' : 'You owe nobody', 'bad')}${sc('get', 'l', 'You Will Get', num$('get', get), get > .5 ? 'In total, from ' + P.filter(p => p.bal > .5).length + ' member(s)' : 'Nobody owes you', 'good')}</div>
 ${P.length > 2 ? `<button class="lk mlink" onclick="go('debts')">+ ${P.length - 2} more member${P.length - 2 > 1 ? 's' : ''} · see your full hisab</button>` : ''}`;
 }
 
+/* v2.8: one short line under the budget: the month-end reminder, or a month that was not closed */
+function heroNote() {
+  if (remOn()) { const m = mEnd(); return `<button class="hnote" onclick="repExport()">${ic('chart')}<span>${m.left ? m.mon + ' ends in ' + m.left + ' day' + (m.left > 1 ? 's' : '') : 'Last day of ' + m.mon} · Export report</span>${ic('r')}</button>`; }
+  const o = oldMonths();
+  if (o.length) return adm() ? `<button class="hnote soft" onclick="go('admin')">${ic('warn')}<span>${esc(o.join(', '))} not closed · tap to close</span>${ic('r')}</button>` : `<div class="hnote soft">${ic('warn')}<span>Includes ${esc(o.join(', '))} (not closed)</span></div>`;
+  return '';
+}
 /* the full working between me and one person */
 function pairSheet(o) {
   const c = calc(), p = pair(c, me(), o), l = pairLine(p), nm = esc(S1(o));
@@ -997,7 +1049,7 @@ function ins() {
 const backBtn = `<button class="bkb" onclick="go('dash')" aria-label="Back">${ic('l')}</button>`;
 function adminPage() {
   if (!adm()) return `<div class="hd"><b class="hb">${backBtn}Admin Controls</b></div><div class="card pad em">${ic('lock')}<br>Only the admin can use these controls.</div>`;
-  return `<div class="hd"><b class="hb">${backBtn}Admin Controls</b><span class="sub">Settings for the whole room</span></div><div class="card pad"><div class="lab">Monthly target budget (${esc(V.cur || 'Rs.')})</div><div class="cap"><input id="bu" inputmode="numeric" value="${D.bud}" autocomplete="off"><button class="btn" onclick="sb()">Save</button></div></div><button class="opt" onclick="go('members')">${ic('users')}<div class="fl"><b>Members and join requests</b><i>Add, accept, pause or remove roommates</i></div>${ic('r')}</button><button class="opt" onclick="logv()">${ic('refresh')}<div class="fl"><b>Activity log</b><i>Every action, who did it and when</i></div>${ic('r')}</button><button class="opt" onclick="exportSheet()">${ic('chart')}<div class="fl"><b>Export and backup</b><i>CSV, backup and restore</i></div>${ic('r')}</button><div class="card pad"><div class="lab">Month end</div><div class="sub" style="white-space:normal;margin-bottom:8px">Archives this month into History and starts a fresh month for everyone. Nothing is deleted.</div><button class="btn dng" onclick="closeAsk()">${ic('trash')}Close ${esc(monthName())}</button></div>`;
+  return `<div class="hd"><b class="hb">${backBtn}Admin Controls</b><span class="sub">Settings for the whole room</span></div><div class="card pad"><div class="lab">Monthly target budget (${esc(V.cur || 'Rs.')})</div><div class="cap"><input id="bu" inputmode="numeric" value="${D.bud}" autocomplete="off"><button class="btn" onclick="sb()">Save</button></div></div><button class="opt" onclick="go('members')">${ic('users')}<div class="fl"><b>Members and join requests</b><i>Add, accept, pause or remove roommates</i></div>${ic('r')}</button><button class="opt" onclick="logv()">${ic('refresh')}<div class="fl"><b>Activity log</b><i>Every action, who did it and when</i></div>${ic('r')}</button><button class="opt" onclick="exportSheet()">${ic('chart')}<div class="fl"><b>Export and backup</b><i>CSV, backup and restore</i></div>${ic('r')}</button><div class="card pad"><div class="lab">Month end</div><div class="sub" style="white-space:normal;margin-bottom:8px">Archives this month into History and starts a fresh month for everyone. Nothing is deleted.</div><button class="btn dng" onclick="closeAsk()">${ic('trash')}Close ${esc(monthLabel(D.ex))}</button></div>`;
 }
 function sb() {
   if (!adm()) return deny();
@@ -1010,11 +1062,11 @@ function closeAsk() {
   if (!adm()) return deny();
   if (!D.ex.length && !D.pay.length) return toast('Nothing to close yet');
   const t = moves(calc());
-  ask(`Close ${monthName()}? ${t.length ? t.length + ' payment(s) are still needed; they will be saved in History. ' : 'Everyone is settled up. '}Expenses and payments move to History and a fresh month starts for everyone.`, rst, 'Close month');
+  ask(`Close ${monthLabel(D.ex)}? ${t.length ? t.length + ' payment(s) are still needed; they will be saved in History. ' : 'Everyone is settled up. '}Expenses and payments move to History and a fresh month starts for everyone.`, rst, 'Close month');
 }
 function rst() {
   if (!adm()) return deny();
-  const c = calc(), lab = monthName(), nm = {};
+  const c = calc(), lab = monthLabel(D.ex), nm = {};
   new Set(D.ex.map(e => e.by).concat(c.M, D.pay.flatMap(p => [p.f, p.t]))).forEach(k => nm[k] = N(k));
   D.hist.push({ id: uid(), v: 2, m: lab, t: c.tot, n: D.ex.length, mem: c.n, each: c.part ? 0 : c.each, sh: c.share, p: c.paid, nm, ex: D.ex, pay: D.pay, tr: moves(c).map(([f, o, m]) => ({ f, t: o, a: Math.round(m) })), ts: Date.now() });
   D.hist.sort((a, b) => a.id - b.id); while (D.hist.length > 24) D.hist.shift();
@@ -1143,7 +1195,7 @@ function advH() {
 }
 function exportSheet() {
   const a = adm(), old = localStorage.getItem('rk_d');
-  ov(`<h3>Export &amp; Backup${X}</h3><button class="opt" onclick="csv()">${ic('chart')}<div class="fl"><b>Export this month as CSV</b><i>Opens in Excel or Google Sheets</i></div></button><button class="opt" onclick="sm()">${ic('link')}<div class="fl"><b>Month-end summary</b><i>Ready to share on WhatsApp</i></div></button>${a ? `<button class="opt" onclick="logv()">${ic('refresh')}<div class="fl"><b>Activity log</b><i>View and export every action</i></div></button>` : ''}<button class="opt" onclick="bk()">${ic('swap')}<div class="fl"><b>${a ? 'Backup and restore' : 'Backup'}</b><i>The whole ledger as text</i></div></button>${old ? `<button class="opt" onclick="oldData()">${ic('list')}<div class="fl"><b>Old RoomKhata data</b><i>From the first version of the app</i></div></button>` : ''}`);
+  ov(`<h3>Export &amp; Backup${X}</h3><button class="opt on" onclick="repExport()">${ic('list')}<div class="fl"><b>Month report</b><i>Expenses, payments, balances and who pays whom (CSV)</i></div></button><button class="opt" onclick="csv()">${ic('chart')}<div class="fl"><b>Export this month as CSV</b><i>Opens in Excel or Google Sheets</i></div></button><button class="opt" onclick="sm()">${ic('link')}<div class="fl"><b>Month-end summary</b><i>Ready to share on WhatsApp</i></div></button>${a ? `<button class="opt" onclick="logv()">${ic('refresh')}<div class="fl"><b>Activity log</b><i>View and export every action</i></div></button>` : ''}<button class="opt" onclick="bk()">${ic('swap')}<div class="fl"><b>${a ? 'Backup and restore' : 'Backup'}</b><i>The whole ledger as text</i></div></button>${old ? `<button class="opt" onclick="oldData()">${ic('list')}<div class="fl"><b>Old RoomKhata data</b><i>From the first version of the app</i></div></button>` : ''}`);
 }
 function oldData() { share('Old RoomKhata data (backup text)', localStorage.getItem('rk_d') || ''); }
 function mraAsk() { if (!adm()) return deny(); ask('Clear all notifications for everyone?', mra); }
@@ -1163,7 +1215,7 @@ function guide() {
     ['The maths', 'Each expense is split equally between the people who share it. Balance = what you paid − your share + payments you sent − payments you received.'],
     ['Menu', 'Tap the menu button at the top left for Members, History, Admin Controls, export and help.'],
     ['Notifications', 'New expenses and payments appear in the bell and as phone notifications. Turn them on in Settings, Advanced.'],
-    ['Month end', 'The admin closes the month from Admin Controls. Everything moves to History, nothing is deleted.']
+    ['Month end', 'In the last 3 days of the month the app reminds you to export the month report (Export & Backup). Not exported by the last day? It is emailed to you at 11 pm. The admin closes the month from Admin Controls; everything moves to History, nothing is deleted.']
   ];
   return `<button class="btn" onclick="cl();tourStart()">${ic('grid')}Take the app tour</button>` + S.map(([t, d], i) => `<div class="opt" style="align-items:flex-start"><span class="ci" style="width:26px;height:26px;border-radius:50%;font-weight:800">${i + 1}</span><div class="fl"><b>${t}</b><i style="white-space:normal">${esc(d)}</i></div></div>`).join('') + DEV;
 }
@@ -1182,7 +1234,51 @@ function csvOf(L, nm) {
   const n = k => (nm && nm[k]) || N(k);
   return ['Date,Paid by,Category,Description,Amount'].concat(L.slice().sort((a, b) => (a.ts || 0) - (b.ts || 0) || a.id - b.id).map(e => [dlab(e, 1), n(e.by), e.cc || e.cat, e.d || '', e.amt].map(qc).join(','))).join('\n');
 }
-function csv() { share('Expenses CSV', csvOf(D.ex)); }
+function csv() { share('Expenses CSV', csvOf(D.ex)); markRep(); }
+
+/* ===== v2.8: month report, month-end reminder, live clock =====
+   The report is the open hisab as it stands: every expense and payment, each person's balance, and who pays whom.
+   Exporting it (or the expenses CSV) is written to the activity log as "Exported the month report"; the reminder
+   stops for that person, and the month-end email (Code.gs, 11 pm on the last day) skips them. Nothing else changes. */
+function repCSV() {
+  const c = calc(), r = Math.round, q = qc, L = [];
+  const who = e => { const P = parts(e, c.M); return P.length >= c.n ? 'Everyone (' + c.n + ')' : P.map(k => N(k)).join(' + '); };
+  L.push(['SplitLedger month report'].map(q).join(','));
+  L.push(['Month', liveMonth()].map(q).join(','), ['Open hisab', periodName()].map(q).join(','), ['Made on', new Date().toLocaleString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })].map(q).join(','));
+  L.push(['Room total', r(c.tot)].map(q).join(','), ['Expenses', c.count].map(q).join(','), ['Members sharing', c.n].map(q).join(','), '');
+  L.push(q('Expenses'), ['Date', 'Paid by', 'Category', 'Description', 'Amount', 'Shared by'].map(q).join(','));
+  D.ex.slice().sort((a, b) => (a.ts || 0) - (b.ts || 0) || a.id - b.id).forEach(e => L.push([dlab(e, 1), N(e.by), e.cc || e.cat, e.d || '', e.amt, counted(e) ? who(e) : 'Not counted (payer paused or left)'].map(q).join(',')));
+  L.push('', q('Payments'), ['Date', 'From', 'To', 'Amount'].map(q).join(','));
+  D.pay.slice().sort((a, b) => a.id - b.id).forEach(p => L.push([p.ts ? dlab(p, 1) : '', N(p.f), N(p.t), p.a].map(q).join(',')));
+  L.push('', q('Balances'), ['Member', 'Paid', 'Share', 'Payments sent', 'Payments received', 'Net (+ gets back, - owes)'].map(q).join(','));
+  c.M.forEach(k => L.push([N(k), r(c.paid[k]), r(c.share[k]), r(c.sent[k]), r(c.recv[k]), r(c.net[k])].map(q).join(',')));
+  L.push('', q('To settle'), ['Who pays', 'To whom', 'Amount'].map(q).join(','));
+  const t = moves(c); t.forEach(([f, o, m]) => L.push([N(f), N(o), r(m)].map(q).join(',')));
+  if (!t.length) L.push(q('Everyone is settled up'));
+  return L.join('\n');
+}
+function repExport() { share(liveMonth() + ' report (CSV)', repCSV()); markRep(); }
+function markRep() {
+  if (!approved() || !me()) return;
+  const was = repDone();
+  V.rep = ymKey(); saveLocal();
+  if (!was) { lg('Exported the month report (' + liveMonth() + ')'); save(); }
+  natRep(); if (tab == 'dash') soft();
+}
+/* tell the phone's background check whether this month's report is done (it sends the month-end reminder) */
+function natRep() { const n = NAT(); if (n && n.setRep) try { n.setRep(repDone() ? ymKey() : ''); } catch (e) { } }
+/* web version: one browser notification a day in the last days of the month (the APK's native check does this) */
+function remind() {
+  natRep();
+  if (NAT() || !remOn() || V.remDay == dayKey()) return;
+  const m = mEnd();
+  V.remDay = dayKey(); saveLocal();
+  sysNotify(m.left ? m.mon + ' ends in ' + m.left + ' day' + (m.left > 1 ? 's' : '') : 'Last day of ' + m.mon, 'Export this month\u2019s report: Menu \u2192 Export & Backup \u2192 Month report.', 4247);
+}
+/* the date and month on screen follow the phone's clock */
+var _dk = dayKey();
+setInterval(() => { const k = dayKey(); if (k != _dk) { _dk = k; if (!$('#app').classList.contains('gate') && !TR.on) soft(); } if (!$('#app').classList.contains('gate')) remind(); }, 30000);
+document.addEventListener('visibilitychange', () => { if (!document.hidden) { const k = dayKey(); if (k != _dk) { _dk = k; if (!$('#app').classList.contains('gate') && !TR.on) soft(); } } });
 
 /* ===== Backup and restore ===== */
 function bk() {
@@ -1711,28 +1807,50 @@ document.addEventListener('keydown', e => {
   else if (e.target.id == 'nem') addM();
 });
 
-/* ===================== APP TOUR (v2.7) =====================
-   A short coach-mark tour over the real Dashboard, shown once per phone (V.tour = 1 after it ends or is skipped).
-   Replay: Settings → Guide → Take the app tour. It only highlights things; it never changes data. */
+/* ===================== APP TOUR (v2.8: the full tour) =====================
+   A coach-mark tour of the whole app, the same as the video guide: it opens each screen and sheet in turn,
+   highlights the part being explained, and comes back to the Dashboard at the end. It only shows things;
+   it never changes data. Shown once per phone (V.tour = 2 after it ends or is skipped); replay from
+   Settings → Guide → Take the app tour. Steps: { go: where to show it, s: [selectors to highlight], t, d, a: admin only, m: members only }. */
 var TR = { on: 0, i: 0 };
+const TOURV = 2;
 function tourSteps() {
-  const A = adm();
-  return [
-    { t: 'Welcome to SplitLedger', d: 'A quick tour of the app. It takes under a minute, and you can skip it any time.' },
-    { s: ['.hero'], t: 'This month at a glance', d: 'What everyone spent together this month, your share, and how much of the monthly budget is used.' },
-    { s: ['.g6>:nth-child(1)'], t: 'Your hisab with a roommate', d: 'What they spent, what you give, what you get, and the result in plain words. Tap a card to see the full working and record a payment.' },
-    { s: ['.g6>:nth-child(3)'], t: A ? 'Join requests' : 'Your status', d: A ? 'People who signed in and are waiting for you. Tap to open Members and Accept or Reject them.' : 'Shows whether you are Active, Paused or still Waiting for the admin.' },
-    { s: ['.g6>:nth-child(4)'], t: 'Members', d: 'How many people share the room. Tap to see everyone.' },
-    { s: ['.g6>:nth-child(5)', '.g6>:nth-child(6)'], t: 'Your totals', d: 'You Need To Pay is what you owe everyone. You Will Get is what everyone owes you. Tap either to open Settle Up.' },
-    { s: ['#nav [data-k=add]'], t: 'Add an expense', d: 'Type the amount and what it was for, pick a category, and choose who shares it (everyone, or only some people). Everyone gets a notification.' },
-    { s: ['#nav [data-k=ledger]'], t: 'Ledger', d: 'Every expense this month. Search, filter by category, and see each person’s share.' },
-    { s: ['#nav [data-k=debts]'], t: 'Settle Up', d: 'Your hisab with each roommate. Tap I paid or Got it when money changes hands, and share the month summary on WhatsApp.' },
-    { s: ['#nav [data-k=ins]'], t: 'Insights', d: 'Charts of spending by category and who paid what.' },
-    { s: ['#top .mn'], t: 'Menu', d: 'Your profile, Members, History, ' + (A ? 'Admin Controls, ' : '') + 'Export & Backup, Settings and help.' },
-    { s: ['#top .ttl .live'], t: 'Sync status', d: 'LIVE SYNC means every phone is up to date. Tap it for details.' },
-    { s: ['#top>.ib:last-child'], t: 'Notifications', d: 'New expenses, payments and join requests show here and as phone notifications.' },
-    { t: 'You’re all set', d: 'You can take this tour again any time from Menu → Settings → Guide.' }
+  const A = adm(), D2 = 'dash';
+  const L = [
+    { go: D2, t: 'Welcome to SplitLedger', d: 'A guided tour of the whole app: every screen and what it does. It takes about two minutes. Skip any time.' },
+    { go: D2, s: ['.hero .t'], t: 'Today’s date and month', d: 'The main card always shows today’s date and the current month, straight from your phone’s clock.' },
+    { go: D2, s: ['.hero'], t: 'This month at a glance', d: 'What everyone spent together, your own share, and how much of the monthly budget is used.' },
+    { go: D2, s: ['.g6>:nth-child(1)', '.g6>:nth-child(2)'], t: 'Roommate cards', d: 'For each roommate: what they spent, what you give, what you get, and the result in plain words.' },
+    { go: 'pair', s: ['#ov .res'], t: 'The full working', d: 'Tap a roommate’s card to see how every number is worked out, and record a payment with one button.' },
+    { go: D2, s: ['.g6>:nth-child(3)'], t: A ? 'Join requests' : 'Your status', d: A ? 'People who signed in and are waiting for you. Tap to Accept or Reject them.' : 'Shows whether you are Active, Paused or still waiting for the admin.' },
+    { go: D2, s: ['.g6>:nth-child(4)'], t: 'Members', d: 'How many people share the room. Tap to see everyone.' },
+    { go: D2, s: ['.g6>:nth-child(5)', '.g6>:nth-child(6)'], t: 'To pay and to get', d: 'You Need To Pay is your total to everyone. You Will Get is what everyone owes you.' },
+    { go: 'add', s: ['#main .amt'], t: 'Add an expense', d: 'Type the amount and what it was for, pick a category, and who paid. Then Save expense.' },
+    { go: 'add', s: ['#pv'], t: 'Who shares it?', d: 'Everyone is picked by default. Tap names to split it between only some people. Each share is worked out for you.' },
+    { go: 'ledger', s: ['#qs', '#main .chips'], t: 'Ledger', d: 'Every expense in the open hisab. Search, filter by category, and see each person’s share.' },
+    { go: 'debts:bal', s: ['#main .card.pad'], t: 'Settle Up · My hisab', d: 'Your hisab with each roommate. Tap I paid after you pay, or Got it when they pay you.' },
+    { go: 'debts:all', s: ['#main .card.pad'], t: 'Settle Up · Everyone', d: 'Every open hisab in the room: who pays whom, and how much.' },
+    { go: 'debts:pay', s: ['#main .card.pad'], t: 'Settle Up · Payments', d: 'Every payment recorded this month. ' + (A ? 'You can Remove one entered by mistake.' : 'The admin can remove one entered by mistake.') },
+    { go: 'summary', s: ['#ov .sumh'], t: 'WhatsApp summary', d: 'The month’s hisab in one clean message. Share it on WhatsApp or copy it.' },
+    { go: 'ins', s: ['#main .g3'], t: 'Insights', d: 'Quick numbers, spending by category, and who paid what, in charts.' },
+    { go: 'bell', s: ['#ov .sh h3'], t: 'Notifications', d: 'New expenses, payments and join requests show here, and as notifications on your phone.' },
+    { go: D2, s: ['#top .ttl .live'], t: 'Live sync', d: 'Every phone gets changes in a second or two. Offline? Your entries are kept and sent later by themselves.' },
+    { go: 'menu', s: ['#dr .dhd'], t: 'Menu', d: 'Your profile, Members, History, ' + (A ? 'Admin Controls, ' : '') + 'Export & Backup, Settings and help, all in one place.' },
+    { go: 'members', s: ['#main .card.pad'], t: 'Members', d: A ? 'Add a roommate by email, then Accept, Reject, Pause, Resume or Remove people.' : 'Everyone in the room and when they were last online.' },
+    { a: 1, go: 'admin', s: ['#main .card.pad'], t: 'Admin Controls', d: 'Set the monthly budget. At month end, close the month: it moves to History and nothing is deleted.' },
+    { go: 'history', s: ['#main .hd'], t: 'History', d: 'Closed months are kept here, up to 24. Tap one to see what everyone paid and export it.' },
+    { a: 1, go: 'log', s: ['#ov .sh h3'], t: 'Activity log', d: 'Every action, who did it and when. Filter by person or export it as CSV.' },
+    { go: 'profile', s: ['#ov .sh h3'], t: 'Profile', d: 'Change your photo and display name. Sign out removes the ledger from this phone; your data stays on the server.' },
+    { go: 'set:g', s: ['#ov .seg'], t: 'Look and feel', d: 'Six themes, Classic or Glass view, and Small, Normal or Large text, under Settings → General.' },
+    { go: 'set:a', s: ['#ov .seg'], t: 'Advanced settings', d: 'Notification checklist and test, currency, budget alert, vibration and the tap sound.' },
+    { go: 'pin', s: ['#ov .sh h3'], t: 'App lock PIN', d: 'Lock the app with a 4 to 6 digit PIN on this phone. It asks for it every time the app opens.' },
+    { go: 'export', s: ['#ov .opt.on'], t: 'Month report', d: 'Export this month’s report: expenses, payments, balances and who pays whom. In the last 3 days of the month the app reminds you.' },
+    { go: 'export', s: ['#ov .sh h3'], t: 'Export & Backup', d: 'Also the expenses CSV, the WhatsApp summary and a backup of the whole ledger. Not exported by the last day? It is emailed to you at 11 pm.' },
+    { go: 'set:u', s: ['#ov .sh .btn'], t: 'Take the tour again', d: 'Settings → Guide has this tour, short help steps and the developer’s contact buttons.' },
+    { go: D2, t: 'Back button', d: 'Back always brings you to the Dashboard first. On the Dashboard it asks before closing the app.' },
+    { go: D2, t: 'You’re all set', d: 'That’s the whole app. Enjoy SplitLedger!' }
   ];
+  return L.filter(x => (!x.a || A) && (!x.m || !A));
 }
 function tourEl() {
   let e = $('#tr');
@@ -1741,53 +1859,80 @@ function tourEl() {
 }
 function tourOk() { return !TR.on && !$('#app').classList.contains('gate') && approved() && tab == 'dash' && !$('#ov').classList.contains('show') && !$('#ov').dataset.lk && !($('#dr') && $('#dr')._open); }
 function maybeTour() {
-  if (V.tour == 1 || TR.on || GUEST) return;
-  clearTimeout(TR.w); TR.w = setTimeout(() => { if (V.tour != 1 && tourOk()) tourStart(); }, 1100);
+  if ((V.tour || 0) >= TOURV || TR.on || GUEST) return;
+  clearTimeout(TR.w); TR.w = setTimeout(() => { if ((V.tour || 0) < TOURV && tourOk()) tourStart(); }, 1100);
 }
 function tourStart() {
   const wait = tab != 'dash' || $('#ov').classList.contains('show') || ($('#dr') && $('#dr')._open) ? 600 : 80;
-  if (tab != 'dash') go('dash'); else closeDrawer();
-  clearTimeout(TR.w); TR.w = setTimeout(() => { if ($('#ov').dataset.lk || $('#app').classList.contains('gate')) return; TR.on = 1; TR.i = 0; TR.prev = null; tourEl().classList.add('on'); tourShow(); }, wait);
+  cl(); closeDrawer(); if (tab != 'dash') go('dash');
+  clearTimeout(TR.w); TR.w = setTimeout(() => { if ($('#ov').dataset.lk || $('#app').classList.contains('gate')) return; TR.on = 1; TR.i = 0; TR.prev = null; TR.at = ''; tourEl().classList.add('on'); tourShow(); }, wait);
+}
+/* open the screen or sheet a step talks about (only opens things, never saves anything) */
+function tourGo(w) {
+  if (w == TR.at) return 0;
+  TR.at = w;
+  const sheet = /^(pair|summary|bell|log|profile|set:.|pin|export)$/.test(w), pane = w == 'menu';
+  if (!pane) closeDrawer();
+  if (!sheet) cl();
+  const at = (k, d) => { if (k == 'debts') dsub = d; if (tab != k) go(k); else render(); };
+  if (w == 'dash') { if (tab != 'dash') go('dash'); }
+  else if (w == 'pair') { if (tab != 'dash') go('dash'); const P = myPairs(calc()); if (P[0]) pairSheet(P[0].o); }
+  else if (w == 'add') { if (tab != 'add') go('add'); }
+  else if (w == 'ledger') go('ledger');
+  else if (/^debts:/.test(w)) at('debts', w.split(':')[1]);
+  else if (w == 'summary') sm();
+  else if (w == 'ins') go('ins');
+  else if (w == 'bell') { if (tab != 'dash') go('dash'); bell(); }
+  else if (w == 'menu') { if (tab != 'dash') go('dash'); drawer(); }
+  else if (w == 'members') go('members');
+  else if (w == 'admin') go('admin');
+  else if (w == 'history') go('history');
+  else if (w == 'log') { if (tab != 'dash') go('dash'); logv(); }
+  else if (w == 'profile') profile();
+  else if (/^set:/.test(w)) { stab = w.split(':')[1]; settings(); }
+  else if (w == 'pin') pinui();
+  else if (w == 'export') exportSheet();
+  return 1;
 }
 function tourShow() {
   const S = tourSteps(), e = tourEl();
-  let st = S[TR.i];
-  /* skip a step whose target is not on screen */
-  while (st && st.s && !st.s.some(q => $(q))) { TR.i++; st = S[TR.i]; }
+  const st = S[TR.i];
   if (!st) return tourEnd();
+  const moved = tourGo(st.go || 'dash');
   const last = TR.i == S.length - 1, first = TR.i == 0;
-  e.innerHTML = H(`<div class="tr-hole none"></div><div class="tr-card c"><i class="tr-ar"></i><div class="tr-h"><span class="tr-k">${first ? 'App tour' : last ? 'Done' : 'Step ' + TR.i + ' of ' + (S.length - 2)}</span><div class="tr-dots">${S.map((x, j) => `<i class="${j == TR.i ? 'on' : ''}"></i>`).join('')}</div></div><b class="tr-t">${esc(st.t)}</b><span class="tr-d">${esc(st.d)}</span><div class="tr-f">${last ? '' : '<button class="tr-b" onclick="tourEnd()">Skip</button>'}<span class="tr-sp"></span>${!first && !last ? '<button class="tr-b" onclick="tourBack()">Back</button>' : ''}<button class="tr-b go" onclick="${last ? 'tourEnd()' : 'tourNext()'}">${first ? 'Start tour' : last ? 'Got it' : 'Next'}</button></div></div>`);
-  if (TR.prev) { const h = e.querySelector('.tr-hole'); h.classList.remove('none'); Object.assign(h.style, TR.prev); void h.offsetWidth; }
-  requestAnimationFrame(tourPlace);
+  e.innerHTML = H(`<div class="tr-hole none"></div><div class="tr-card c" style="opacity:0"><i class="tr-ar"></i><div class="tr-h"><span class="tr-k">${first ? 'App tour' : last ? 'Done' : 'Step ' + TR.i + ' of ' + (S.length - 2)}</span><span class="tr-n">${Math.round(TR.i / (S.length - 1) * 100)}%</span></div><div class="tr-bar"><i style="width:${TR.i / (S.length - 1) * 100}%"></i></div><b class="tr-t">${esc(st.t)}</b><span class="tr-d">${esc(st.d)}</span><div class="tr-f">${last ? '' : '<button class="tr-b" onclick="tourEnd()">Skip</button>'}<span class="tr-sp"></span>${!first && !last ? '<button class="tr-b" onclick="tourBack()">Back</button>' : ''}<button class="tr-b go" onclick="${last ? 'tourEnd()' : 'tourNext()'}">${first ? 'Start tour' : last ? 'Finish' : 'Next'}</button></div></div>`);
+  if (TR.prev) { const h = e.querySelector('.tr-hole'); h.classList.remove('none'); Object.assign(h.style, TR.prev); }
+  clearTimeout(TR.p); clearTimeout(TR.p2); TR.p = setTimeout(() => { tourPlace(); const c = e.querySelector('.tr-card'); if (c) c.style.opacity = ''; if (moved) TR.p2 = setTimeout(tourPlace, 420); }, moved ? 560 : 40);
 }
 function tourPlace() {
   if (!TR.on) return;
   const S = tourSteps(), st = S[TR.i], e = tourEl(), h = e.querySelector('.tr-hole'), c = e.querySelector('.tr-card');
   if (!h || !c) return;
   const ar = $('#app').getBoundingClientRect();
-  if (!st || !st.s) { h.classList.add('none'); c.className = 'tr-card c'; TR.prev = null; return; }
   let r = null;
-  st.s.forEach(q => { const el = $(q); if (!el) return; const b = el.getBoundingClientRect(); r = r ? { l: Math.min(r.l, b.left), t: Math.min(r.t, b.top), r: Math.max(r.r, b.right), b: Math.max(r.b, b.bottom) } : { l: b.left, t: b.top, r: b.right, b: b.bottom }; });
-  const pad = 6, x = r.l - ar.left - pad, y = r.t - ar.top - pad, w = r.r - r.l + pad * 2, hh = r.b - r.t + pad * 2;
+  (st && st.s || []).forEach(q => { const el = $(q); if (!el) return; const b = el.getBoundingClientRect(); if (!b.width && !b.height) return; r = r ? { l: Math.min(r.l, b.left), t: Math.min(r.t, b.top), r: Math.max(r.r, b.right), b: Math.max(r.b, b.bottom) } : { l: b.left, t: b.top, r: b.right, b: b.bottom }; });
+  if (!r) { h.classList.add('none'); h.removeAttribute('style'); c.className = 'tr-card c'; TR.prev = null; return; }
+  const pad = 6, x = Math.max(4, r.l - ar.left - pad), y = Math.max(4, r.t - ar.top - pad), w = Math.min(ar.width - 8, r.r - r.l + pad * 2), hh = Math.min(ar.height - 8, r.b - r.t + pad * 2);
   const pos = { left: x + 'px', top: y + 'px', width: w + 'px', height: hh + 'px', borderRadius: (hh < 70 ? hh / 2 : 20) + 'px' };
   h.classList.remove('none'); Object.assign(h.style, pos); TR.prev = pos;
   const H0 = ar.height, ch = c.offsetHeight, below = y + hh + 12, above = y - ch - 12;
-  const dn = (below + ch < H0 - 8) && (H0 - (y + hh) >= y || above < 8);
-  c.className = 'tr-card ' + (dn ? 'dn' : 'up');
-  c.style.top = Math.max(8, Math.min(H0 - ch - 8, dn ? below : above)) + 'px';
-  const cl = c.getBoundingClientRect().left - ar.left, cx = Math.max(18, Math.min(c.offsetWidth - 18, x + w / 2 - cl));
-  c.style.setProperty('--ax', cx + 'px');
+  const fitB = below + ch < H0 - 8, fitA = above >= 8;
+  const dn = fitB && (!fitA || H0 - (y + hh) >= y);
+  c.className = 'tr-card ' + (fitA || fitB ? (dn ? 'dn' : 'up') : 'c');
+  if (fitA || fitB) {
+    c.style.top = Math.max(8, Math.min(H0 - ch - 8, dn ? below : above)) + 'px';
+    const cl0 = c.getBoundingClientRect().left - ar.left, cx = Math.max(18, Math.min(c.offsetWidth - 18, x + w / 2 - cl0));
+    c.style.setProperty('--ax', cx + 'px');
+  } else c.style.top = '';
 }
 function tourNext() { TR.i++; tourShow(); }
-function tourBack() {
-  const S = tourSteps(); let j = TR.i - 1;
-  while (j > 0 && S[j].s && !S[j].s.some(q => $(q))) j--;
-  TR.i = Math.max(0, j); tourShow();
-}
+function tourBack() { TR.i = Math.max(0, TR.i - 1); tourShow(); }
 function tourEnd() {
-  TR.on = 0; TR.prev = null; clearTimeout(TR.w);
+  const nav = TR.at && TR.at != 'dash';
+  TR.on = 0; TR.prev = null; TR.at = ''; clearTimeout(TR.w); clearTimeout(TR.p); clearTimeout(TR.p2);
   const e = $('#tr'); if (e) { e.classList.remove('on'); e.innerHTML = ''; }
-  if (V.tour != 1) { V.tour = 1; saveLocal(); }
+  if ((V.tour || 0) < TOURV) { V.tour = TOURV; saveLocal(); }
+  if (nav) { cl(); closeDrawer(); newF(); dsub = 'bal'; if (tab != 'dash') go('dash'); }
 }
 window.addEventListener('resize', () => { if (TR.on) tourPlace(); });
 
