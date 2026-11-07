@@ -228,7 +228,8 @@ button.mc{text-align:left}
 .hero>*{position:relative;z-index:1}
 .hsub2{font-size:.68em;color:rgba(255,255,255,.75);margin-top:4px;font-weight:600}
 .hbar{height:6px;border-radius:99px;background:rgba(255,255,255,.18);overflow:hidden}
-.hbar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#fff,rgba(255,255,255,.7));transform-origin:left;animation:grow .9s var(--ease) both}
+.hbar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#fff,rgba(255,255,255,.7));transform-origin:left}
+#main.in-r .hbar i,#main.in-l .hbar i,#main.in-f .hbar i{animation:grow .9s var(--ease) both}
 @keyframes grow{from{transform:scaleX(0)}}
 /* ===== v2.3: dashboard grid ===== */
 .g6b{grid-template-rows:1.7fr 1fr 1fr}
@@ -368,10 +369,17 @@ button.mc{text-align:left}
 .hnote .i{width:14px;height:14px;flex:none}
 .hnote.soft{background:rgba(255,255,255,.14);color:#fff}
 div.hnote.soft{cursor:default}
+/* ===== v3.0: rooms ===== */
+.codebox{text-align:center;padding:16px 10px;border-radius:16px;background:var(--chip);border:1px dashed var(--pri);display:flex;flex-direction:column;gap:4px}
+.codebox .lab{margin:0}
+.codebox b{font-size:2.1em;font-weight:800;letter-spacing:.14em;color:var(--pri)}
+.dri.cur{background:var(--chip)}
+.ttl b{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gs .lk{display:inline;padding:0;margin:0;font-size:inherit;vertical-align:baseline}
 </style></head><body><div id="app"><div id="top"></div><div id="main"></div><nav id="nav"></nav><div id="ov"></div><div id="dr"></div><div id="ts" role="status" aria-live="polite"></div></div><script>
 'use strict';
 const I={help:'<circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 2.5-3 4M12 17h.01"/>',bell:'<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.9 1.9 0 0 0 3.4 0"/>',moon:'<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>',sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',gear:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/>',link:'<path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/>',list:'<path d="M5 3h14v18l-3-2-2 2-2-2-2 2-2-2-3 2ZM9 8h6M9 12h6"/>',swap:'<path d="M7 4 3 8l4 4M3 8h14M17 20l4-4-4-4M21 16H7"/>',grid:'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',plus:'<path d="M12 5v14M5 12h14"/>',chart:'<path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/>',edit:'<path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/>',trash:'<path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/>',l:'<path d="m15 18-6-6 6-6"/>',r:'<path d="m9 18 6-6-6-6"/>',d:'<path d="m6 9 6 6 6-6"/>',ok:'<path d="m5 12 5 5L20 7"/>',x:'<path d="M18 6 6 18M6 6l12 12"/>',cam:'<path d="M4 8h3l2-3h6l2 3h3v11H4Z"/><circle cx="12" cy="13" r="3.5"/>',wifi:'<path d="M2 9a15 15 0 0 1 20 0M5 12.5a10 10 0 0 1 14 0M8.5 16a5 5 0 0 1 7 0M12 19.5h.01"/>',users:'<circle cx="9" cy="8" r="3.5"/><path d="M2 20a7 7 0 0 1 14 0M17 4.5a3.5 3.5 0 0 1 0 7M22 20a7 7 0 0 0-4-6.3"/>',user:'<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',bolt:'<path d="M13 2 4 14h7l-1 8 9-12h-7Z"/>',cart:'<circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2 3h3l2.7 12.4a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.5L21 8H6"/>',home:'<path d="m3 11 9-8 9 8M5 10v10h14V10"/>',tag:'<path d="M3 12V3h9l9 9-9 9Z"/><circle cx="7.5" cy="7.5" r="1"/>',lock:'<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',warn:'<circle cx="12" cy="12" r="10"/><path d="M12 8v5M12 16h.01"/>',layout:'<rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18M9 21V9"/>',cloud:'<path d="M17.5 19a4.5 4.5 0 1 0-1.4-8.8A6 6 0 0 0 4.5 13 3 3 0 0 0 6 19Z"/>',refresh:'<path d="M21 12a9 9 0 1 1-2.6-6.4L21 8M21 3v5h-5"/>',copy:'<rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/>'};
-/* ===== SplitLedger v2.9 ===== */
+/* ===== SplitLedger v3.1 ===== */
 /* Optional: paste your server link here so nobody has to type it. Example: 'https://yourname.github.io/splitledger' */
 const SERVER = 'https://razaulmustafa000.github.io/SplitLedger';
 const ADMIN = 'razaunar000@gmail.com';
@@ -616,12 +624,12 @@ function saveLocal() {
   if (DEMO) return;
   try {
     localStorage.setItem('sl_v', JSON.stringify(V));
-    if (ME.email && approved()) { localStorage.setItem('sl_d', JSON.stringify(D)); localStorage.setItem('sl_who', ME.email); }
+    if (ME.email && approved()) { localStorage.setItem('sl_d', JSON.stringify(D)); localStorage.setItem('sl_who', ME.email); localStorage.setItem('sl_rm', V.room || ''); }
     if (ME.email) localStorage.setItem('sl_m', JSON.stringify(MB));
   } catch (e) { toast('Phone storage is full'); }
 }
 function save() { saveLocal(); qflush(); }
-function wipeLocal() { ['sl_d', 'sl_m', 'sl_s', 'sl_who'].forEach(k => localStorage.removeItem(k)); }
+function wipeLocal() { ['sl_d', 'sl_m', 'sl_s', 'sl_who', 'sl_rm'].forEach(k => localStorage.removeItem(k)); }
 
 /* demo with sample data (only before a server is set) */
 function demoData() {
@@ -667,7 +675,7 @@ function badge() {
 const MENU = '<svg class="i" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10"/></svg>';
 function topbar() {
   const n = unread(), p = pending().length;
-  return `<button class="ib mn" onclick="drawer()" aria-label="Menu">${MENU}${p ? '<i class="dot"></i>' : ''}</button><div class="ttl"><b>SplitLedger</b>${badge()}</div><button class="ib" onclick="bell()" aria-label="Notifications">${ic('bell')}${n ? `<i class="bd">${n > 9 ? '9+' : n}</i>` : ''}</button>`;
+  return `<button class="ib mn" onclick="drawer()" aria-label="Menu">${MENU}${p ? '<i class="dot"></i>' : ''}</button><div class="ttl"><b>${esc(roomTitle())}</b>${badge()}</div><button class="ib" onclick="bell()" aria-label="Notifications">${ic('bell')}${n ? `<i class="bd">${n > 9 ? '9+' : n}</i>` : ''}</button>`;
 }
 function myName() { const m = MB[ME.ek]; return (m && (m.name || '').trim()) || (V.auth && V.auth.name) || String(ME.email).split('@')[0] || 'Me'; }
 const NV = [['ledger', 'Ledger', 'list'], ['debts', 'Settle Up', 'swap'], ['dash', 'Dashboard', 'grid'], ['add', 'Add', 'plus'], ['ins', 'Insights', 'chart']];
@@ -693,7 +701,10 @@ function render() {
     else $('#nav').innerHTML = H(nav());
     if (tab == 'add') pv();
   }
-  if (anim) { main.classList.remove('in-r', 'in-l', 'in-s', 'in-f'); void main.offsetWidth; main.classList.add(anim); }
+  /* v3.1: page animations play once, on a real page change. Live updates re-draw silently (no replay = no flicker). */
+  clearTimeout(_at);
+  if (anim) { main.classList.remove('in-r', 'in-l', 'in-s', 'in-f'); void main.offsetWidth; main.classList.add(anim); _at = setTimeout(() => main.classList.remove('in-r', 'in-l', 'in-s', 'in-f'), 700); }
+  else main.classList.remove('in-r', 'in-l', 'in-s', 'in-f');
   _ltab = g ? 'gate' : tab; _vk = vk;
   _pend = 0;
   /* the dashboard scrolls only when there are more member cards than fit on one screen */
@@ -715,7 +726,9 @@ function barColor(c) {
   try { n.setBar('#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1), (r * 299 + g * 587 + b * 114) / 1000 > 150); } catch (e) { }
 }
 function topR() { if (!$('#app').classList.contains('gate')) $('#top').innerHTML = H(topbar()); }
-var _pend = 0, _ltab = 'dash', _vk = '', dsub = 'bal';
+var _pend = 0, _ltab = 'dash', _vk = '', dsub = 'bal', _at = 0, _st = 0;
+/* live data: several changes in a burst become one quiet re-draw */
+function softSoon() { clearTimeout(_st); _st = setTimeout(soft, 90); }
 function soft() {
   const a = document.activeElement;
   if (tab == 'add' || (a && /^(INPUT|TEXTAREA)$/.test(a.tagName) && a.closest('#main'))) { _pend = 1; topR(); }
@@ -752,13 +765,18 @@ function deny() { toast('Only the admin can do this'); }
 function needOk() { if (approved()) return false; toast('Waiting for admin approval'); return true; }
 
 /* ===== side panel ===== */
+function roomsList() {
+  const R = DEMO ? { demo: { n: RM.name || 'Flat 4B', a: ME.admin ? 1 : 0 }, d2: { n: 'Office lunch' }, d3: { n: 'Murree trip' } } : (V.rooms || {}), ids = Object.keys(R), cur = DEMO ? 'demo' : V.room;
+  return `<div class="rmz"><div class="dlab">Your rooms</div>` + ids.map(r => `<button class="dri${r == cur ? ' cur' : ''}" onclick="switchRoom('${r}')">${ic(r == cur ? 'home' : 'users')}<span>${esc(R[r].n || 'Room')}</span><em>${R[r].a ? 'Admin' : 'Member'}</em>${r == cur ? ic('ok') : ''}</button>`).join('') + `<button class="dri" onclick="newRoomSheet()">${ic('plus')}<span>New room or join with a code</span>${ic('r')}</button></div>`;
+}
+function newRoomSheet() { closeDrawer(); ov(`<h3>Add a room${X}</h3><button class="opt on" style="padding:14px 12px" onclick="createSheet()">${ic('plus')}<div class="fl"><b>Create a room</b><i>You'll be its admin</i></div>${ic('r')}</button><button class="opt" style="padding:14px 12px" onclick="joinSheet()">${ic('link')}<div class="fl"><b>Join with a code</b><i>Got a code from a roommate?</i></div>${ic('r')}</button>`); }
 function drawer() {
   const d = $('#dr'), A = adm(), p = pending().length;
   const it = (fn, i, l, extra) => `<button class="dri" onclick="${fn}">${ic(i)}<span>${l}</span>${extra || ''}${ic('r')}</button>`;
   d.innerHTML = H(`<div class="bk" onclick="closeDrawer()"></div><div class="pn" role="dialog" aria-label="Menu"><button class="dhd" onclick="closeDrawer();profile()">${av(me(), 46)}<div class="fl"><b>${esc(myName())}</b><i>${esc(ME.email || 'Demo')}</i></div><span class="cn${approved() ? '' : ' pz'}">• ${A ? 'ADMIN' : approved() ? 'MEMBER' : 'WAITING'}</span></button>
-<div class="dlab">Room</div>${it("go('members')", 'users', 'Members', p ? `<i class="dbd">${p}</i>` : `<em>${act().length}</em>`)}${it("go('history')", 'list', 'History', `<em>${D.hist.length || ''}</em>`)}${A ? it("go('admin')", 'lock', 'Admin Controls') + it("closeDrawer();logv()", 'refresh', 'Activity Log') : ''}
+${roomsList()}<div class="dlab">Room</div>${it("go('members')", 'users', 'Members', p ? `<i class="dbd">${p}</i>` : `<em>${act().length}</em>`)}${it("go('history')", 'list', 'History', `<em>${D.hist.length || ''}</em>`)}${A ? it("go('admin')", 'lock', 'Admin Controls') + it("closeDrawer();logv()", 'refresh', 'Activity Log') : ''}
 <div class="dlab">App</div>${it("closeDrawer();howCalc()", 'swap', 'How the hisab works')}${it("closeDrawer();exportSheet()", 'chart', 'Export &amp; Backup')}${it("closeDrawer();settings()", 'gear', 'Settings')}${it("closeDrawer();helpOpen()", 'warn', 'Help &amp; Guide')}
-<div class="dfoot">${DEV}<button class="btn gh" onclick="closeDrawer();signOutAsk()">${DEMO ? (GUEST ? 'Reset preview' : 'Exit demo') : 'Sign out'}</button><div class="dver">SplitLedger v2.9</div></div></div>`);
+<div class="dfoot">${DEV}<button class="btn gh" onclick="closeDrawer();signOutAsk()">${DEMO ? (GUEST ? 'Reset preview' : 'Exit demo') : 'Sign out'}</button><div class="dver">SplitLedger v3.1</div></div></div>`);
   void d.offsetWidth; d.classList.add('show'); d._open = 1;
 }
 function closeDrawer() { const d = $('#dr'); if (!d || !d._open) return; d._open = 0; d.classList.remove('show'); }
@@ -772,6 +790,9 @@ function gateView() {
   if (DEMO) return '';
   if (!srv() || !V.cfg) return `<div class="gw">${LOGO}<div class="gt">SplitLedger</div><div class="gs">Shared expenses for your room, settled fairly.</div><div><div class="lab">Server link from your admin</div><input id="srv" placeholder="https://yourname.github.io/splitledger" value="${esc(V.srv || SERVER)}" autocomplete="off" inputmode="url"></div><button class="btn" onclick="setSrv()">Continue</button>${SERVER ? '' : '<button class="lk" style="align-self:center" onclick="demo()">Explore a demo with sample data</button>'}${DEV}</div>`;
   if (!V.auth) return `<div class="gw">${LOGO}<div class="gt">SplitLedger</div><div class="gs">Sign in to see your room's ledger.<br>Only people invited by the admin can get in.</div><button class="gbtn" onclick="login()">${GG}Continue with Google</button>${V.lmsg ? `<div class="note">${esc(V.lmsg)}</div>` : ''}<button class="lk" style="align-self:center" onclick="demo()">Try a demo with sample data first</button><div class="gs" style="font-size:.74em">${isApp ? 'Your browser opens to sign in. When it is done, tap Open SplitLedger to come back.' : ''}</div>${SERVER ? '' : `<button class="lk" style="align-self:center" onclick="chSrv()">Change server link</button>`}${DEV}</div>`;
+  if (ME.status == 'rooms') return `<div class="gw">${LOGO}<div class="gt" style="font-size:1.5em">Welcome${V.auth.name ? ', ' + esc(V.auth.name.split(' ')[0]) : ''}</div><div class="gs">Create a room for your flat, hostel or trip,<br>or join a room with a code.</div><button class="opt on" style="padding:14px 12px" onclick="createSheet()">${ic('plus')}<div class="fl"><b>Create a room</b><i>You'll be its admin</i></div>${ic('r')}</button><button class="opt" style="padding:14px 12px" onclick="joinSheet()">${ic('link')}<div class="fl"><b>Join with a code</b><i>Got a code from a roommate?</i></div>${ic('r')}</button><div class="gs" style="font-size:.78em">Signed in as ${esc(ME.email)} · <button class="lk" onclick="signOutAsk()">Use another account</button></div>${DEV}</div>`;
+  if (ME.status == 'migrate') return `<div class="gw">${LOGO}<div class="gt" style="font-size:1.4em">Move your room to v3.0</div><div class="gs" style="white-space:normal">SplitLedger now has rooms. Your current room, with every expense, payment, member and month in History, is <b>copied</b> into a room. The copy is checked before anything switches, and the old data stays as a backup.</div><div><div class="lab">Room name</div><input id="mrn" maxlength="30" value="Our room" autocomplete="off"></div><button class="btn" id="mgo" onclick="moveRoom()">${ic('ok')}Move my room</button><div class="gs" id="mmsg" style="min-height:1.4em"></div><div class="gs" style="font-size:.78em">After this, ask everyone to update the app.</div></div>`;
+  if (ME.status == 'oldwait') return `<div class="gw">${LOGO}<div class="gt" style="font-size:1.3em">Almost there</div><div class="gs">Your admin is moving the room to the new version. Your hisab is safe. Open the app again in a little while.</div><button class="btn gh" onclick="checkMember()">${ic('refresh')}Check again</button><div class="gs" style="font-size:.78em">Signed in as ${esc(ME.email)}</div>${DEV}</div>`;
   if (ME.status == 'loading' || !ME.status) return `<div class="gw">${LOGO}<div class="gs">Checking your access…</div></div>`;
   if (ME.status == 'error') return `<div class="gw">${LOGO}<div class="gt" style="font-size:1.3em">Can't reach the server</div><div class="gs">${esc(ME.err || 'Check the internet connection and try again.')}</div><button class="btn" onclick="checkMember()">${ic('refresh')}Try again</button><button class="btn gh" onclick="signOutAsk()">Sign out</button></div>`;
   if (ME.status == 'none') return `<div class="gw">${LOGO}<div class="gt" style="font-size:1.3em">This account isn't invited</div><div class="gs">You signed in as <b>${esc(ME.email)}</b>.<br>Ask the admin to add this email in SplitLedger. This screen opens the app by itself once you are added.</div><button class="btn gh" onclick="signOutLocal()">Use another Google account</button>${DEV}</div>`;
@@ -1059,7 +1080,7 @@ function ins() {
 const backBtn = `<button class="bkb" onclick="go('dash')" aria-label="Back">${ic('l')}</button>`;
 function adminPage() {
   if (!adm()) return `<div class="hd"><b class="hb">${backBtn}Admin Controls</b></div><div class="card pad em">${ic('lock')}<br>Only the admin can use these controls.</div>`;
-  return `<div class="hd"><b class="hb">${backBtn}Admin Controls</b><span class="sub">Settings for the whole room</span></div><div class="card pad"><div class="lab">Monthly target budget (${esc(V.cur || 'Rs.')})</div><div class="cap"><input id="bu" inputmode="numeric" value="${D.bud}" autocomplete="off"><button class="btn" onclick="sb()">Save</button></div></div><button class="opt" onclick="go('members')">${ic('users')}<div class="fl"><b>Members and join requests</b><i>Add, accept, pause or remove roommates</i></div>${ic('r')}</button><button class="opt" onclick="logv()">${ic('refresh')}<div class="fl"><b>Activity log</b><i>Every action, who did it and when</i></div>${ic('r')}</button><button class="opt" onclick="exportSheet()">${ic('chart')}<div class="fl"><b>Export and backup</b><i>CSV, backup and restore</i></div>${ic('r')}</button><div class="card pad"><div class="lab">Month end</div><div class="sub" style="white-space:normal;margin-bottom:8px">Archives this month into History and starts a fresh month for everyone. Nothing is deleted.</div><button class="btn dng" onclick="closeAsk()">${ic('trash')}Close ${esc(monthLabel(D.ex))}</button></div>`;
+  return `<div class="hd"><b class="hb">${backBtn}Admin Controls</b><span class="sub">Settings for the whole room</span></div><div class="card pad"><div class="lab">Room name</div><div class="cap"><input id="rnm" maxlength="30" value="${esc(RM.name || '')}" autocomplete="off"><button class="btn" onclick="renameRoom()">Save</button></div><div class="lab" style="margin-top:8px">Monthly target budget (${esc(V.cur || 'Rs.')})</div><div class="cap"><input id="bu" inputmode="numeric" value="${D.bud}" autocomplete="off"><button class="btn" onclick="sb()">Save</button></div></div><button class="opt" onclick="go('members')">${ic('users')}<div class="fl"><b>Members and join requests</b><i>Add, accept, pause or remove roommates</i></div>${ic('r')}</button><button class="opt" onclick="logv()">${ic('refresh')}<div class="fl"><b>Activity log</b><i>Every action, who did it and when</i></div>${ic('r')}</button><button class="opt" onclick="exportSheet()">${ic('chart')}<div class="fl"><b>Export and backup</b><i>CSV, backup and restore</i></div>${ic('r')}</button><div class="card pad"><div class="lab">Month end</div><div class="sub" style="white-space:normal;margin-bottom:8px">Archives this month into History and starts a fresh month for everyone. Nothing is deleted.</div><button class="btn dng" onclick="closeAsk()">${ic('trash')}Close ${esc(monthLabel(D.ex))}</button></div>`;
 }
 function sb() {
   if (!adm()) return deny();
@@ -1115,7 +1136,7 @@ function membersPage() {
     }
     return `<div class="rw">${m.key && m.status == 'approved' ? av(m.key, 32) : `<span class="av" style="width:32px;height:32px;font-size:13px;background:var(--chip);color:var(--sub)">${ic('user')}</span>`}<div class="fl"><b>${esc((m.name || '').trim() || m.email.split('@')[0])}${k == ME.ek ? ' (you)' : ''}</b><i>${esc(m.email)}</i><div class="chs"><span class="cn${st == 'ACTIVE' || st == 'ADMIN' ? '' : ' pz'}">• ${st}</span>${pr ? `<span class="cn${pr[1] ? '' : ' pz'}">• ${pr[0]}</span>` : ''}</div></div><div class="mac">${b}</div></div>`;
   };
-  return `<div class="hd"><b class="hb">${backBtn}Members</b><span class="sub">${act().length} active${A && pending().length ? ' · ' + pending().length + ' waiting for you' : ''}</span></div>${A ? `<div class="card pad"><div class="lab">Add a roommate by email</div><div class="cap"><input id="nem" type="email" placeholder="name@gmail.com" autocomplete="off" inputmode="email"><button class="btn" onclick="addM()">Add</button></div><div class="sub" style="white-space:normal;margin-top:4px">Only added emails can sign in. You’ll get a notification to accept them.</div></div>` : ''}<div class="card pad">${L.slice(mpg * PS, mpg * PS + PS).map(rowM).join('') || '<div class="em">No members yet.</div>'}${pager('mpg', n, mpg)}</div>`;
+  return `<div class="hd"><b class="hb">${backBtn}Members</b><span class="sub">${act().length} active${A && pending().length ? ' · ' + pending().length + ' waiting for you' : ''}</span></div>${A ? `<div class="card pad"><div class="lab">Add a roommate by email</div><div class="cap"><input id="nem" type="email" placeholder="name@gmail.com" autocomplete="off" inputmode="email"><button class="btn" onclick="addM()">Add</button></div><button class="btn gh" style="margin-top:8px" onclick="inviteSheet()">${ic('link')}Invite with a code${RM.code ? ' · ' + esc(fmtCode(RM.code)) : ''}</button></div>` : ''}<div class="card pad">${L.slice(mpg * PS, mpg * PS + PS).map(rowM).join('') || '<div class="em">No members yet.</div>'}${pager('mpg', n, mpg)}</div>`;
 }
 
 /* ===== Top bar actions ===== */
@@ -1219,17 +1240,19 @@ function acctH() {
 function openPriv() { const u = (srv() || SERVER) + '/privacy.html'; if (window.SLNative) location.href = u; else window.open(u, '_blank'); }
 function delAsk() {
   if (DEMO) return toast('Not available in the demo');
-  if (adm()) return ov(`<h3>Delete account${X}</h3><div class="note">You are the room admin, so your account holds the whole room. To delete it, contact the developer from Settings → Guide (WhatsApp). Nothing has been deleted.</div><button class="btn gh" onclick="cl()">OK</button>`);
-  ask('Delete your SplitLedger account? Your sign-in, name, photo and email are removed and you leave the room. Expenses and payments you added stay in the room\u2019s records as "Former member", but someone who leaves is no longer counted in the hisab, so settle up first. This can\u2019t be undone.', delAcct, 'Delete account');
+  const own = Object.keys(V.rooms || {}).filter(r => V.rooms[r].a);
+  if (adm() || own.length) return ov(`<h3>Delete account${X}</h3><div class="note">You are the admin of a room, so your account holds that room. To delete it, contact the developer from Settings → Guide (WhatsApp). Nothing has been deleted.</div><button class="btn gh" onclick="cl()">OK</button>`);
+  ask('Delete your SplitLedger account? Your sign-in, name, photo and email are removed and you leave all your rooms. Expenses and payments you added stay in the room\u2019s records as "Former member", but someone who leaves is no longer counted in the hisab, so settle up first. This can\u2019t be undone.', delAcct, 'Delete account');
 }
 function delAcct() {
   if (DEMO || adm() || !ME.ek) return;
   toast('Deleting your account…');
   if (approved()) { lg('Deleted their account'); D.nt.push({ id: uid(), by: me(), tx: `${S1(me())} deleted their account and left the room.` }); save(); }
-  const k = me();
+  const k = me(), rooms = Object.keys(Object.assign({}, V.rooms || {}, V.room ? { [V.room]: 1 } : {}));
   setTimeout(() => {
     (k ? rest('/data/on/' + k, 'DELETE').catch(() => { }) : Promise.resolve())
-      .then(() => rest('/members/' + ME.ek, 'DELETE'))
+      .then(() => Promise.all(rooms.map(r => rest('//rooms/' + r + '/members/' + ME.ek, 'DELETE').catch(e => { if (r == V.room) throw e; }))))
+      .then(() => rest('//users/' + ME.ek, 'DELETE').catch(() => { }))
       .then(() => signOutLocal('Your account was deleted'))
       .catch(e => toast('Could not delete: ' + (e && e.message || 'try again')));
   }, 1500);
@@ -1343,6 +1366,178 @@ function pinui() {
 function pins() { const v = $('#pn').value; if (!/^\d{4,6}$/.test(v)) return toast('Use 4 to 6 digits'); V.pin = hp(v); saveLocal(); cl(); toast('PIN saved'); }
 function pinrm() { delete V.pin; saveLocal(); cl(); toast('PIN removed'); }
 
+/* ===================== ROOMS (v3.0) =====================
+   Every room lives at /rooms/{rid}: pub (name, admin email, invite code), members, data — the same shape the
+   single-room app had at the database root. /codes/{CODE} = { r: rid, n: name } lets people join with a code;
+   /users/{emailKey}/{rid} = { n: name, a: 1 if admin } lists a person's rooms. The admin of a room is whoever
+   created it (pub.admin); the creator's member key is 'adm', people who join with a code get their Firebase uid
+   as key, people invited by email get 'm…' as before. The old single room at the root is copied (never moved)
+   into a room by its admin once (moveRoom()), then /pub/moved points at the new room. */
+var RM = {};
+const RP = () => V.room ? '/rooms/' + V.room : '';
+const fmtCode = c => String(c || '').replace(/^(...)(...)$/, '$1-$2');
+const CODEA = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
+function codeStr() { const r = new Uint32Array(6); crypto.getRandomValues(r); return Array.from(r, x => CODEA[x % CODEA.length]).join(''); }
+function freshCode(n) { const c = codeStr(); return rest('//codes/' + c).then(x => x ? (n > 5 ? Promise.reject(new Error('Please try again')) : freshCode((n || 0) + 1)) : c); }
+const msgErr = m => Object.assign(new Error(m), { code: 'msg' });
+var _skip = {};
+function loadRooms() { return rest('//users/' + ME.ek).then(x => { V.rooms = x || {}; saveLocal(); return V.rooms; }); }
+function roomErr(e) { if (!V.auth) return; ME.status = 'error'; ME.err = e.code == 'denied' ? 'The server rules blocked this account. The admin should publish the newest database rules.' : e.message; render(); }
+/* which room to open after sign-in */
+function pickRoom() {
+  if (!V.auth || DEMO) return;
+  if (V.room && !_skip[V.room]) return openRoom(V.room);
+  loadRooms().then(R => {
+    const ids = Object.keys(R).filter(r => !_skip[r]);
+    if (ids.length) return openRoom(ids.find(r => R[r] && R[r].a) || ids[0]);
+    // the old single room: already copied into a room? else the owner copies it, members wait
+    return rest('//pub/moved').catch(() => null).then(rid => {
+      if (rid && !_skip[rid]) return rest('//rooms/' + rid + '/members/' + ME.ek).catch(() => null).then(m => m && m.status != 'removed' ? openRoom(rid) : showRooms());
+      return rest('//members/' + ME.ek).catch(() => null).then(m => {
+        if (m && m.key == 'adm' && ME.email == ADMIN) { ME.status = 'migrate'; return render(); }
+        if (m && m.status && m.status != 'removed' && !rid) { ME.status = 'oldwait'; return render(); }
+        showRooms();
+      });
+    });
+  }).catch(roomErr);
+}
+function showRooms() { natOff(); stopAll(); V.room = ''; RM = {}; V.rmc = null; ME.status = 'rooms'; ME.admin = false; saveLocal(); render(); }
+function openRoom(rid) {
+  if (V.room != rid) { V.room = rid; RM = {}; saveLocal(); }
+  return rest('/pub').then(p => {
+    if (!p || !p.admin) throw msgErr('This room could not be opened.');
+    RM = p; V.rmc = { name: p.name, admin: p.admin, code: p.code }; saveLocal();
+    ME.admin = !!(V.auth.ver && p.admin == ME.email);
+    const ix = (V.rooms || {})[rid];
+    if (!ix || ix.n != p.name || !!ix.a != ME.admin) rest('//users/' + ME.ek + '/' + rid, 'PUT', { n: p.name || 'Room', a: ME.admin ? 1 : null }).then(() => loadRooms()).then(() => { if (!$('#dr') || !$('#dr')._open) return; drawer(); }).catch(() => { });
+    topR(); checkMember();
+  }).catch(e => {
+    if (e.code == 'denied' || e.code == 'msg') return dropRoom(rid, 'You are not in that room anymore');
+    roomErr(e);
+  });
+}
+/* leave a room on this phone (removed, rejected or gone) and pick another */
+function dropRoom(rid, msg) {
+  _skip[rid] = 1; natOff(); stopAll(); D = blank(); MB = {}; PK = {}; SY.S = null; wipeLocal();
+  if (V.rooms) delete V.rooms[rid];
+  V.room = ''; RM = {}; V.rmc = null; ME.status = 'loading'; ME.key = ''; ME.admin = false; saveLocal(); render();
+  if (msg) toast(msg);
+  rest('//users/' + ME.ek + '/' + rid, 'DELETE').catch(() => { }).then(pickRoom);
+}
+function switchRoom(rid) {
+  if (DEMO) return toast('Not in the demo');
+  if (rid == V.room && ME.status == 'approved') { closeDrawer(); return; }
+  closeDrawer(); cl(); natOff(); stopAll(); D = blank(); MB = {}; PK = {}; SY.S = null; wipeLocal();
+  delete _skip[rid];
+  V.room = rid; RM = {}; V.rmc = null; tab = 'dash'; ME.status = 'loading'; ME.admin = false; ME.key = ''; saveLocal(); render(); openRoom(rid);
+}
+const roomTitle = () => (RM.name || (V.rmc && V.rmc.name) || 'SplitLedger');
+
+/* ----- create a room ----- */
+function createSheet() {
+  closeDrawer();
+  ov(`<h3>Create a room${X}</h3><div><div class="lab">Room name</div><input id="rn" maxlength="30" placeholder="Flat 4B, Johar Town" autocomplete="off"></div><div><div class="lab">Your name</div><input id="ryn" maxlength="24" value="${esc((V.auth && V.auth.name) || '')}" autocomplete="off"></div><div><div class="lab">Currency</div><div class="seg">${['Rs.', 'PKR', '$'].map(c => `<button class="${(V.cur || 'Rs.') == c ? 'on' : ''}" onclick="rcur('${c}')">${c}</button>`).join('')}</div></div><div class="sub" style="white-space:normal">You'll be the admin. Next, invite your roommates with a code.</div><button class="btn" onclick="createRoom()">${ic('plus')}Create room</button>`);
+}
+function rcur(c) { V.cur = c; saveLocal(); document.querySelectorAll('#ov .seg button').forEach(b => b.classList.toggle('on', b.textContent == c)); }
+function createRoom() {
+  if (DEMO) return toast('Not in the demo: sign in to create a room');
+  if (!V.auth) return;
+  const name = ($('#rn').value || '').trim().slice(0, 30), nm = ($('#ryn').value || '').trim().slice(0, 24);
+  if (!name) return toast('Type a room name');
+  const rid = rnd(12), b = $('#ov .btn:last-child'); if (b) b.disabled = true;
+  toast('Creating your room…');
+  freshCode().then(code => rest('//rooms/' + rid, 'PUT', {
+    pub: { name, admin: ME.email, code, ts: { '.sv': 'timestamp' } },
+    members: { [ME.ek]: { email: ME.email, key: 'adm', status: 'approved', role: 'admin', name: nm || (V.auth.name || '').slice(0, 24) || null, pic: V.auth.pic || null, uid: V.auth.uid || null, invitedAt: { '.sv': 'timestamp' }, approvedAt: { '.sv': 'timestamp' } } }
+  }).then(() => rest('//codes/' + code, 'PUT', { r: rid, n: name }))
+    .then(() => rest('//users/' + ME.ek + '/' + rid, 'PUT', { n: name, a: 1 })))
+    .then(() => { V.showInv = 1; V.rooms = Object.assign(V.rooms || {}, { [rid]: { n: name, a: 1 } }); cl(); switchRoom(rid); toast('Room created'); })
+    .catch(e => { if (b) b.disabled = false; toast(e.message); });
+}
+
+/* ----- join with a code ----- */
+function joinSheet() {
+  closeDrawer();
+  ov(`<h3>Join a room${X}</h3><div class="sub" style="white-space:normal">Type the code your roommate sent you.</div><input id="jc" maxlength="7" placeholder="K7P-42Q" autocomplete="off" autocapitalize="characters" style="text-align:center;font-size:1.4em;font-weight:800;letter-spacing:.14em"><button class="btn" onclick="joinRoom()">${ic('ok')}Send join request</button><div class="sub" style="white-space:normal">The room's admin accepts you, then you see the room's hisab.</div>`);
+}
+function joinRoom() {
+  if (DEMO) return toast('Not in the demo: sign in to join a room');
+  if (!V.auth) return;
+  const c = ($('#jc').value || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+  if (c.length != 6) return toast('The code has 6 letters and numbers');
+  rest('//codes/' + c).then(x => {
+    if (!x || !x.r) throw msgErr('No room has that code. Check it with your roommate.');
+    const rid = x.r;
+    const go = () => rest('//users/' + ME.ek + '/' + rid, 'PUT', { n: x.n || 'Room' }).catch(() => { }).then(() => { cl(); switchRoom(rid); });
+    if (V.rooms && V.rooms[rid]) return go();
+    return rest('//rooms/' + rid + '/members/' + ME.ek).catch(() => null).then(m => {
+      if (m && m.status == 'removed') throw msgErr('The admin removed you from this room. Ask them to add you again.');
+      if (m) return go();
+      return rest('//rooms/' + rid + '/members/' + ME.ek, 'PUT', { email: ME.email, key: V.auth.uid, uid: V.auth.uid, status: 'pending', code: c, name: (V.auth.name || '').slice(0, 24) || null, pic: V.auth.pic || null, joinedAt: { '.sv': 'timestamp' } })
+        .then(() => { V.mailOnOpen = 1; saveLocal(); return go(); });
+    });
+  }).catch(e => toast(e.code == 'denied' ? 'That code did not work. Ask the admin for a new one.' : e.message));
+}
+
+/* ----- invite (admin) ----- */
+const invText = () => `Join my room \u201c${RM.name || 'our room'}\u201d on SplitLedger. Open the app, tap Join with a code, and type ${fmtCode(RM.code)}.`;
+function inviteSheet() {
+  if (!adm()) return deny();
+  ov(`<h3>Invite roommates${X}</h3><div class="sub" style="white-space:normal">Send this code. Anyone who uses it asks to join, and you still Accept or Reject each person.</div><div class="codebox"><div class="lab">Room code</div><b>${esc(fmtCode(RM.code || '------'))}</b><span class="sub">${esc(RM.name || '')}</span></div><div class="cap"><button class="btn gh" style="flex:1" onclick="invCopy()">${ic('copy')}Copy</button><button class="btn" style="flex:1" onclick="invShare()">${ic('link')}Share on WhatsApp</button></div><button class="btn gh" onclick="newCodeAsk()">${ic('refresh')}Make a new code</button>`);
+}
+function invCopy() { copyText(invText()); }
+function invShare() { shareText(invText()); }
+function newCodeAsk() { if (DEMO) return toast('Not in the demo'); return ask('Make a new code? The old code stops working. People who already joined are not affected.', newCode, 'New code'); }
+function newCode() {
+  if (!adm() || DEMO) return;
+  const old = RM.code;
+  freshCode().then(c => rest('//codes/' + c, 'PUT', { r: V.room, n: RM.name || 'Room' }).then(() => rest('/pub', 'PATCH', { code: c })).then(() => {
+    RM.code = c; if (V.rmc) V.rmc.code = c; saveLocal();
+    if (old) rest('//codes/' + old, 'DELETE').catch(() => { });
+    lg('Made a new invite code'); save(); inviteSheet(); toast('New code ready');
+  })).catch(e => toast(e.message));
+}
+function renameRoom() {
+  if (DEMO) return toast('Not in the demo');
+  if (!adm()) return deny();
+  const n = ($('#rnm').value || '').trim().slice(0, 30);
+  if (!n) return toast('Type a room name');
+  if (n == RM.name) return toast('That is already the name');
+  rest('/pub', 'PATCH', { name: n }).then(() => {
+    if (RM.code) rest('//codes/' + RM.code, 'PUT', { r: V.room, n }).catch(() => { });
+    rest('//users/' + ME.ek + '/' + V.room, 'PUT', { n, a: 1 }).catch(() => { });
+    lg(`Renamed the room to ${n}`); RM.name = n; if (V.rmc) V.rmc.name = n; if (V.rooms && V.rooms[V.room]) V.rooms[V.room].n = n; save(); render(); toast('Room renamed');
+  }).catch(e => toast(e.message));
+}
+
+/* ----- copy the old single room into a room (the owner, once) ----- */
+function moveRoom() {
+  if (DEMO || !V.auth || ME.email != ADMIN) return;
+  const name = (($('#mrn') && $('#mrn').value) || '').trim().slice(0, 30) || 'Our room';
+  const b = $('#mgo'); if (b) b.disabled = true;
+  const say = t => { const e = $('#mmsg'); if (e) e.textContent = t; };
+  const rid = rnd(12); let M, Dd, P, code;
+  const cnt = d => ['ex', 'pay', 'nt', 'log', 'hist'].map(k => d && d[k] ? Object.keys(d[k]).length : 0).join(',');
+  say('Reading your room…');
+  Promise.all([rest('//members'), rest('//data'), rest('//pub')]).then(([m, d, p]) => {
+    M = m || {}; Dd = d || {}; P = p || {};
+    if (!M[ME.ek]) throw msgErr('Your admin record was not found. Nothing was changed.');
+    say('Copying ' + Object.keys(M).length + ' members and all data…');
+    return freshCode();
+  }).then(c => {
+    code = c;
+    return rest('//rooms/' + rid, 'PUT', { pub: { name, admin: ADMIN, code, ts: { '.sv': 'timestamp' }, hook: P.hook || null, from: 'v2' }, members: M, data: Dd });
+  }).then(() => { say('Checking the copy…'); return Promise.all([rest('//rooms/' + rid + '/members'), rest('//rooms/' + rid + '/data')]); })
+    .then(([m2, d2]) => {
+      if (Object.keys(m2 || {}).length != Object.keys(M).length || cnt(d2) != cnt(Dd) || JSON.stringify(d2) != JSON.stringify(Dd))
+        throw msgErr('The copy did not match, so nothing was switched. Your old room is untouched. Please try again.');
+      say('Copy checked. Finishing…');
+      const idx = Object.keys(M).filter(k => M[k] && M[k].status && M[k].status != 'removed').map(k => rest('//users/' + k + '/' + rid, 'PUT', { n: name, a: k == ME.ek ? 1 : null }).catch(() => { }));
+      return Promise.all(idx).then(() => rest('//codes/' + code, 'PUT', { r: rid, n: name })).then(() => rest('//pub/moved', 'PUT', rid));
+    }).then(() => { toast('Your room is ready. Nothing was lost.'); switchRoom(rid); })
+    .catch(e => { if (b) b.disabled = false; say(e.message || 'Something went wrong. Your old room is untouched.'); });
+}
+
 /* ===================== SERVER, SIGN-IN AND MEMBERS ===================== */
 const isApp = /SplitLedgerApp/.test(navigator.userAgent);
 var TOKURL = 'https://securetoken.googleapis.com/v1/token';
@@ -1405,7 +1600,8 @@ function token(force) {
 const dbu = () => V.cfg.databaseURL.replace(/\/+$/, '');
 /* REST call to the database; throws Error with .code 'denied' | 'net' | 'http' */
 function rest(path, method, body, retried) {
-  return token().then(t => fetch(dbu() + path + '.json?auth=' + encodeURIComponent(t), method ? { method, body: body === undefined ? undefined : JSON.stringify(body) } : {}))
+  const full = path.startsWith('//') ? path.slice(1) : /^\/(members|data|pub)(\/|$)/.test(path) ? RP() + path : path;
+  return token().then(t => fetch(dbu() + full + '.json?auth=' + encodeURIComponent(t), method ? { method, body: body === undefined ? undefined : JSON.stringify(body) } : {}))
     .then(r => r.text().then(txt => {
       if (r.ok) { try { return JSON.parse(txt); } catch (e) { return null; } }
       if (r.status == 401 && /expired/i.test(txt) && !retried) return token(true).then(() => rest(path, method, body, 1));
@@ -1416,8 +1612,9 @@ function rest(path, method, body, retried) {
 /* after sign-in: who is this, and what may they see */
 function start() {
   if (!V.auth || !V.cfg) return render();
-  ME = { email: V.auth.email, ek: ekey(V.auth.email), key: '', admin: V.auth.email == ADMIN && V.auth.ver, status: 'loading' };
-  if (localStorage.getItem('sl_who') == ME.email) {
+  RM = V.room && V.rmc ? Object.assign({}, V.rmc) : {};
+  ME = { email: V.auth.email, ek: ekey(V.auth.email), key: '', admin: !!(V.room && RM.admin == V.auth.email && V.auth.ver), status: 'loading' };
+  if (V.room && localStorage.getItem('sl_who') == ME.email && localStorage.getItem('sl_rm') == V.room) {
     try { MB = JSON.parse(localStorage.getItem('sl_m') || '{}') || {}; D = migrate(JSON.parse(localStorage.getItem('sl_d') || 'null')); SY.S = JSON.parse(localStorage.getItem('sl_s') || 'null'); } catch (e) { MB = {}; D = blank(); SY.S = null; }
     reindex();
     const m = MB[ME.ek];
@@ -1425,10 +1622,11 @@ function start() {
   }
   newF(); render();
   if (V.pin) lockScreen();
-  checkMember();
+  pickRoom();
 }
 function checkMember() {
   if (!V.auth) return;
+  if (!V.room || !RM.admin) return pickRoom();
   if (ME.status == 'error') { ME.status = 'loading'; render(); }
   const k = ME.ek, g = V.auth;
   const p = ME.admin
@@ -1458,13 +1656,14 @@ function checkMember() {
   });
 }
 function onDenied() {
+  if (V.room) return dropRoom(V.room, RM.name ? `You are not in “${RM.name}” anymore` : '');
   natOff(); stopAll(); D = blank(); MB = {}; PK = {}; SY.S = null; wipeLocal();
   ME.status = 'none'; ME.key = ''; render();
-  watchMembers('/members/' + ME.ek);
 }
 function onPending() {
   natOff(); stopData(); D = blank(); SY.S = null; ['sl_d', 'sl_s'].forEach(k => localStorage.removeItem(k));
   ME.status = 'pending'; reindex(); newF(); saveLocal(); render();
+  if (V.mailOnOpen) { V.mailOnOpen = 0; saveLocal(); mailAdmin(); }
   watchMembers('/members/' + ME.ek);
 }
 function onApproved() {
@@ -1474,6 +1673,7 @@ function onApproved() {
   watchMembers('/members');
   connect();
   natAuth();
+  if (V.showInv && adm()) { V.showInv = 0; saveLocal(); setTimeout(inviteSheet, 900); }
   if (!V.pa && NAT() && V.pn !== 0) { V.pa = 1; saveLocal(); setTimeout(() => { try { NAT().askNotify(); } catch (e) { } }, 1500); }
 }
 /* the member's own Apps Script hook tells the admin by email */
@@ -1492,7 +1692,7 @@ function saveHook() {
 function testHook() {
   const u = $('#hook').value.trim();
   if (!/^https:\/\/script\.google\.com\/macros\/s\/[\w-]+\/exec$/.test(u)) return toast('Paste the Apps Script web app URL first');
-  fetch(u, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ email: 'test@example.com', name: 'Test (SplitLedger)' }) }).then(() => toast('Test sent. Check ' + ADMIN)).catch(() => toast('Could not send the test'));
+  fetch(u, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ email: 'test@example.com', name: 'Test (SplitLedger)' }) }).then(() => toast('Test sent. Check ' + (RM.admin || ME.email))).catch(() => toast('Could not send the test'));
 }
 
 /* live members list (whole list for members, own record while waiting) */
@@ -1502,7 +1702,7 @@ function watchMembers(path) {
   stopMembers(); MS.path = path; MS.T = null;
   token().then(t => {
     if (MS.path != path || !V.auth) return;
-    const es = new EventSource(dbu() + path + '.json?auth=' + encodeURIComponent(t));
+    const es = new EventSource(dbu() + RP() + path + '.json?auth=' + encodeURIComponent(t));
     MS.es = es;
     const on = (type, e) => {
       let msg; try { msg = JSON.parse(e.data); } catch (x) { return; }
@@ -1545,10 +1745,10 @@ function addM() {
   const e = $('#nem').value.trim().toLowerCase();
   if (!EMRX.test(e)) return toast('Type a full email address');
   const k = ekey(e), m = MB[k];
-  if (e == ADMIN) return toast('That is the admin email');
+  if (e == RM.admin) return toast('That is the admin email');
   if (m && m.status != 'removed') return toast('This email is already on the list');
   const rec = { email: e, key: (m && m.key) || 'm' + rnd(6), status: 'invited', invitedAt: { '.sv': 'timestamp' } };
-  mset(k, rec).then(() => { lg('Invited ' + e); save(); toast('Added. They can now sign in with ' + e); }).catch(x => toast(x.message));
+  mset(k, rec).then(() => { if (!DEMO) rest('//users/' + k + '/' + V.room, 'PUT', { n: RM.name || 'Room' }).catch(() => { }); lg('Invited ' + e); save(); toast('Added. They can now sign in with ' + e); }).catch(x => toast(x.message));
 }
 function accept(k) {
   if (!adm()) return deny();
@@ -1577,17 +1777,17 @@ function pauseM(k) {
 function cancelInv(k) {
   if (!adm()) return deny();
   const m = MB[k]; if (!m) return;
-  ask(`Cancel the invite for ${m.email}?`, () => mset(k, null).then(() => { lg('Cancelled invite for ' + m.email); save(); toast('Invite cancelled'); }).catch(x => toast(x.message)), 'Cancel invite');
+  ask(`Cancel the invite for ${m.email}?`, () => mset(k, null).then(() => { if (!DEMO) rest('//users/' + k + '/' + V.room, 'DELETE').catch(() => { }); lg('Cancelled invite for ' + m.email); save(); toast('Invite cancelled'); }).catch(x => toast(x.message)), 'Cancel invite');
 }
 
 function signOutAsk() { if (DEMO && !GUEST) return exitDemo(); if (DEMO) return ask('Reset the preview? All sample data goes back to how it started.', resetDemo, 'Reset'); ask('Sign out of SplitLedger on this phone? Your data stays safe on the server.', () => signOutLocal('Signed out'), 'Sign out'); }
 function signOutLocal(msg) {
-  natOff(); stopAll(); V.auth = null; ME = { status: '', email: '', ek: '', key: '', admin: false };
+  natOff(); stopAll(); V.auth = null; V.room = ''; V.rooms = {}; RM = {}; ME = { status: '', email: '', ek: '', key: '', admin: false };
   MB = {}; PK = {}; D = blank(); SY.S = null; wipeLocal(); newF(); saveLocal();
   tab = 'dash'; cl(); render(); if (msg) toast(msg);
 }
 function stopAll() { stopData(); stopMembers(); MS.path = ''; }
-function demo() { DEMO = 1; ME = { status: '', email: '', ek: '', key: '', admin: false }; demoData(); newF(); tab = 'dash'; render(); toast(GUEST ? 'Guest preview: sample data, nothing is saved' : 'Demo mode: sample data, nothing is saved'); }
+function demo() { RM = { name: 'Flat 4B', admin: ADMIN, code: 'K7P42Q' }; DEMO = 1; ME = { status: '', email: '', ek: '', key: '', admin: false }; demoData(); newF(); tab = 'dash'; render(); toast(GUEST ? 'Guest preview: sample data, nothing is saved' : 'Demo mode: sample data, nothing is saved'); }
 /* guest preview: look at the app as the admin or as a member */
 function viewAs(who) {
   if (!DEMO) return;
@@ -1607,7 +1807,7 @@ function exitDemo() { if (GUEST) return resetDemo(); DEMO = 0; ME = { status: ''
 const NAT = () => (window.SLNative && typeof SLNative.post == 'function') ? SLNative : null;
 function natAuth() {
   const n = NAT(); if (!n || DEMO || !V.auth || !approved() || V.pn === 0 || !V.cfg) return;
-  try { n.saveAuth(JSON.stringify({ apiKey: V.cfg.apiKey, rt: V.auth.rt, db: dbu(), key: me(), email: ME.email, admin: adm() })); n.setSeen(String((V.ns && V.ns[ME.email]) || 0)); } catch (e) { }
+  try { n.saveAuth(JSON.stringify({ apiKey: V.cfg.apiKey, rt: V.auth.rt, db: dbu() + RP(), key: me(), email: ME.email, admin: adm() })); n.setSeen(String((V.ns && V.ns[ME.email]) || 0)); } catch (e) { }
 }
 function natOff() { const n = NAT(); if (n) try { n.clearAuth(); } catch (e) { } }
 function natClear() { const n = NAT(); if (n && n.clearShown) try { n.clearShown(); } catch (e) { } }
@@ -1667,7 +1867,7 @@ function newNotes() {
 
 /* ===================== LIVE DATA SYNC ===================== */
 var SY = { es: null, S: null, st: 'conn', busy: 0, fail: 0, t: 0, on: {}, hb: 0, err: '' };
-const dataUrl = () => dbu() + '/data';
+const dataUrl = () => dbu() + RP() + '/data';
 function saveS() { try { localStorage.setItem('sl_s', JSON.stringify(SY.S)); } catch (e) { } }
 function prune(v) {
   if (Array.isArray(v)) { const a = v.map(prune).filter(x => x !== undefined); return a.length ? a : undefined; }
@@ -1732,7 +1932,7 @@ function onEvent(type, e) {
   saveS(); saveLocal();
   if (SY.st != 'sync') SY.st = 'live';
   SY.fail = 0;
-  if (cs(toTree(D)) != before) soft(); else topR();
+  if (cs(toTree(D)) != before) softSoon(); else topR();
   newNotes();
   if (Object.keys(pend).length || adm()) qflush();
 }
@@ -1842,11 +2042,12 @@ document.addEventListener('keydown', e => {
    it never changes data. Shown once per phone (V.tour = 2 after it ends or is skipped); replay from
    Settings → Guide → Take the app tour. Steps: { go: where to show it, s: [selectors to highlight], t, d, a: admin only, m: members only }. */
 var TR = { on: 0, i: 0 };
-const TOURV = 2;
+const TOURV = 3;
 function tourSteps() {
   const A = adm(), D2 = 'dash';
   const L = [
     { go: D2, t: 'Welcome to SplitLedger', d: 'A guided tour of the whole app: every screen and what it does. It takes about two minutes. Skip any time.' },
+    { go: D2, s: ['#top .ttl b'], t: 'Your room', d: 'The name of the room you are in. You can be in several rooms (home, office, a trip); switch them from the menu.' },
     { go: D2, s: ['.hero .t'], t: 'Today’s date and month', d: 'The main card always shows today’s date and the current month, straight from your phone’s clock.' },
     { go: D2, s: ['.hero'], t: 'This month at a glance', d: 'What everyone spent together, your own share, and how much of the monthly budget is used.' },
     { go: D2, s: ['.g6>:nth-child(1)', '.g6>:nth-child(2)'], t: 'Roommate cards', d: 'For each roommate: what they spent, what you give, what you get, and the result in plain words.' },
@@ -1864,9 +2065,11 @@ function tourSteps() {
     { go: 'ins', s: ['#main .g3'], t: 'Insights', d: 'Quick numbers, spending by category, and who paid what, in charts.' },
     { go: 'bell', s: ['#ov .sh h3'], t: 'Notifications', d: 'New expenses, payments and join requests show here, and as notifications on your phone.' },
     { go: D2, s: ['#top .ttl .live'], t: 'Live sync', d: 'Every phone gets changes in a second or two. Offline? Your entries are kept and sent later by themselves.' },
+    { go: 'menu', s: ['#dr .rmz'], t: 'Your rooms', d: 'Every room you are in. Tap one to switch, or tap New room or join with a code to add another.' },
     { go: 'menu', s: ['#dr .dhd'], t: 'Menu', d: 'Your profile, Members, History, ' + (A ? 'Admin Controls, ' : '') + 'Export & Backup, Settings and help, all in one place.' },
     { go: 'members', s: ['#main .card.pad'], t: 'Members', d: A ? 'Add a roommate by email, then Accept, Reject, Pause, Resume or Remove people.' : 'Everyone in the room and when they were last online.' },
-    { a: 1, go: 'admin', s: ['#main .card.pad'], t: 'Admin Controls', d: 'Set the monthly budget. At month end, close the month: it moves to History and nothing is deleted.' },
+    { a: 1, go: 'invite', s: ['#ov .codebox'], t: 'Invite with a code', d: 'Share the room’s 6-character code on WhatsApp. Whoever uses it asks to join, and you still Accept or Reject them. Make a new code any time.' },
+    { a: 1, go: 'admin', s: ['#main .card.pad'], t: 'Admin Controls', d: 'Rename the room and set the monthly budget. At month end, close the month: it moves to History and nothing is deleted.' },
     { go: 'history', s: ['#main .hd'], t: 'History', d: 'Closed months are kept here, up to 24. Tap one to see what everyone paid and export it.' },
     { a: 1, go: 'log', s: ['#ov .sh h3'], t: 'Activity log', d: 'Every action, who did it and when. Filter by person or export it as CSV.' },
     { go: 'profile', s: ['#ov .sh h3'], t: 'Profile', d: 'Change your photo and display name. Sign out removes the ledger from this phone; your data stays on the server.' },
@@ -1900,7 +2103,7 @@ function tourStart() {
 function tourGo(w) {
   if (w == TR.at) return 0;
   TR.at = w;
-  const sheet = /^(pair|summary|bell|log|profile|set:.|pin|export)$/.test(w), pane = w == 'menu';
+  const sheet = /^(pair|summary|bell|log|profile|set:.|pin|export|invite)$/.test(w), pane = w == 'menu';
   if (!pane) closeDrawer();
   if (!sheet) cl();
   const at = (k, d) => { if (k == 'debts') dsub = d; if (tab != k) go(k); else render(); };
@@ -1921,6 +2124,7 @@ function tourGo(w) {
   else if (/^set:/.test(w)) { stab = w.split(':')[1]; settings(); }
   else if (w == 'pin') pinui();
   else if (w == 'export') exportSheet();
+  else if (w == 'invite') { if (tab != 'members') go('members'); inviteSheet(); }
   return 1;
 }
 function tourShow() {
