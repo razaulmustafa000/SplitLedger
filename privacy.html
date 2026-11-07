@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0D100A">
+
+<title>Privacy Policy · SplitLedger</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0}
+html,body{height:100%}
+body{font-family:'Plus Jakarta Sans',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;background:radial-gradient(120% 70% at 50% 0%,#2A3416 0%,#0D100A 60%);color:#F2F5EA;display:flex;align-items:center;justify-content:center;padding:24px}
+main{width:100%;max-width:360px;display:flex;flex-direction:column;gap:16px;text-align:center}
+.logo{width:68px;height:68px;border-radius:20px;background:#14180F;display:grid;place-items:center;margin:0 auto;box-shadow:0 10px 30px rgba(184,240,62,.15)}
+.logo svg{width:38px;height:38px}
+h1{font-size:2em;font-weight:800;letter-spacing:-.02em}
+p{color:#B4BBA6;font-size:.95em;line-height:1.5}
+button,a.btn{display:flex;align-items:center;justify-content:center;gap:10px;height:52px;border-radius:14px;font:inherit;font-weight:700;font-size:1em;cursor:pointer;text-decoration:none;border:0}
+#go{background:#fff;color:#1F1F1F;border:1px solid #DADCE0}
+#go svg{width:20px;height:20px}
+#back{background:#B8F03E;color:#0D100A}
+#msg{min-height:1.5em}
+small{color:#7E8672;font-size:.78em;line-height:1.5}
+[hidden]{display:none!important}
+
+main{max-width:680px;text-align:left;gap:12px}
+.top{display:flex;align-items:center;gap:12px}.top .logo{margin:0;width:52px;height:52px;border-radius:16px}.top .logo svg{width:30px;height:30px}
+h1{font-size:1.7em}h2{font-size:1.1em;margin-top:14px;color:#D6F78F}
+p,li{color:#C6CDB8;font-size:.96em;line-height:1.6}ul{padding-left:20px;margin:4px 0}
+a{color:#B8F03E}.card{background:#14180F;border:1px solid #2A3122;border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:10px}
+body{align-items:flex-start}small{display:block}
+</style>
+</head>
+<body>
+<main>
+<div class="top"><div class="logo"><svg viewBox="0 0 24 24"><path d="M5 3h14v18l-3-2-2 2-2-2-2 2-2-2-3 2Z" fill="#B8F03E"/><path d="M9 8h6M9 12h6M9 16h4" stroke="#14180F" stroke-width="1.9" stroke-linecap="round"/></svg></div><div><h1>Privacy Policy</h1><small>SplitLedger · effective 7 November 2026</small></div></div>
+<p>SplitLedger is an app for sharing room expenses with roommates. It is made by Raza Ul Mustafa (the developer). This page explains what the app stores, why, who can see it, and how to delete it.</p>
+<h2>What SplitLedger stores</h2>
+<ul>
+<li><b>Your Google account basics</b>: your name and email address, from Google sign-in, to know who you are and to let the room admin invite and approve you.</li>
+<li><b>A profile photo</b>, only if you choose to add one. It is resized and stored with your member record.</li>
+<li><b>What you enter</b>: expenses (amount, description, category, who paid, who shares it, date), payments between members, the monthly budget, and room settings.</li>
+<li><b>Activity</b>: a log of actions in the room (for example "Added an expense") and when you were last online, so members can follow what changed.</li>
+<li><b>On your phone only</b>: your app settings (theme, PIN as a one-way hash, notification preferences) and a copy of the room's ledger so it works offline.</li>
+</ul>
+<p>SplitLedger does <b>not</b> collect your location, contacts, files, call or SMS data, advertising IDs or device identifiers. It has no ads and no analytics or tracking tools.</p>
+<h2>Where it is kept</h2>
+<p>Room data is stored in Google Firebase (Realtime Database and Authentication), operated by Google as a service provider. All traffic is encrypted (HTTPS). Server security rules make sure only members the admin approved can read a room, and members can only change what they are allowed to.</p>
+<h2>Who can see it</h2>
+<ul>
+<li>Members of your room see the room's expenses, payments, balances, member names, emails and photos. That is the purpose of the app.</li>
+<li>The room admin can manage members and entries.</li>
+<li>If the room admin turns on email alerts, the admin's Google account sends emails (join requests, and the month-end report to members who did not export it). These go only to room members.</li>
+<li>We never sell your data or share it with advertisers or other third parties.</li>
+</ul>
+<h2>How long it is kept</h2>
+<p>Room data is kept while the room exists. Closed months are kept in History (up to 24 months). Notifications keep the last 30 and the activity log the last 300 actions.</p>
+<h2>Deleting your account and data</h2>
+<p>In the app: <b>Menu → Settings → Account → Delete my account</b>. Or on the web: <a href="delete.html">Delete my SplitLedger account</a>. This removes your sign-in record, name, email and photo from the room. Expenses and payments you added stay in the room's shared records as "Former member", because they are part of the room's accounts that other members rely on. Ask the room admin if you want them removed too. Signing out also removes the ledger copy from your phone.</p>
+<h2>Children</h2>
+<p>SplitLedger is meant for adults sharing a home. It is not directed at children under 13.</p>
+<h2>Changes</h2>
+<p>If this policy changes, the new version is posted on this page with a new date.</p>
+<h2>Contact</h2>
+<p>Raza Ul Mustafa · <a href="mailto:razaunar000@gmail.com">razaunar000@gmail.com</a> · WhatsApp +92 328 2879861 · <a href="https://rzaulmustafa.netlify.app/">rzaulmustafa.netlify.app</a></p>
+</main>
+</body>
+</html>
